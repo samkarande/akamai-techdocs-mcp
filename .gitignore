@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.pyright/
+
+# Build artifacts
+build/
+dist/
+*.whl
+*.tar.gz
+
+# Virtual environments
+.venv/
+venv/
+.env
+.env.local
+
+# uv
+# (uv.lock is committed)
+
+# Index artifacts (built locally for testing; real ones live in GitHub Releases)
+/tmp_index/
+/scratch/
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*~
