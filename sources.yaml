@@ -1,0 +1,90 @@
+# akamai-techdocs-mcp — source manifest
+#
+# This file defines which URLs the CI crawler indexes. Editing this file
+# (or merging PRs that edit it) causes the next weekly CI rebuild to
+# include the changes; users pick up the new content the next time their
+# MCP server checks for a fresh index release.
+#
+# Users do NOT crawl these URLs themselves — the GitHub Actions workflow
+# does, and publishes a prebuilt index.sqlite as a GitHub Release asset.
+#
+# Schema:
+#   schema_version   — version of this manifest schema. Bump when the
+#                      schema (not the content) changes.
+#   manifest_version — version of this manifest's content. Bump on edits.
+#   allowed_domains  — defense-in-depth allowlist. The server hard-codes
+#                      the same list; the manifest cannot widen it.
+#   sources[]        — one block per logical product / doc-set.
+#     id            — stable identifier (used in chunk metadata + tools).
+#     product       — human-readable product name.
+#     version       — doc version label (free-form, surfaced in search).
+#     domain        — which allowed_domain this source belongs to.
+#     follow_links  — if true, the crawler follows in-domain links from
+#                     the seed URLs (depth 1). Default false for safety.
+#     urls[]        — seed URLs to fetch.
+
+schema_version: 1
+manifest_version: 0.1.0
+
+allowed_domains:
+  - techdocs.akamai.com
+  - spinframework.dev
+
+sources:
+  - id: akamai-functions
+    product: Akamai Functions
+    version: latest
+    description: Akamai's serverless WebAssembly platform (built on Spin)
+    domain: techdocs.akamai.com
+    follow_links: false
+    urls:
+      # Welcome & getting started
+      - https://techdocs.akamai.com/akamai-functions/docs/welcome
+      - https://techdocs.akamai.com/akamai-functions/docs/quickstart
+      - https://techdocs.akamai.com/akamai-functions/docs/manage-accounts
+      # Tutorials
+      - https://techdocs.akamai.com/akamai-functions/docs/integrate-with-property-manager
+      - https://techdocs.akamai.com/akamai-functions/docs/stream-data-from-linode-object-store
+      - https://techdocs.akamai.com/akamai-functions/docs/query-relational-databases-mysql
+      - https://techdocs.akamai.com/akamai-functions/docs/query-relational-databases-postgresql
+      - https://techdocs.akamai.com/akamai-functions/docs/build-a-supabase-cache-proxy
+      - https://techdocs.akamai.com/akamai-functions/docs/schedule-tasks-with-cron-jobs-in-spin
+      - https://techdocs.akamai.com/akamai-functions/docs/use-the-key-value-store
+      # Manage applications
+      - https://techdocs.akamai.com/akamai-functions/docs/link-an-application
+      - https://techdocs.akamai.com/akamai-functions/docs/list-and-inspect-your-applications
+      - https://techdocs.akamai.com/akamai-functions/docs/update-an-application
+      - https://techdocs.akamai.com/akamai-functions/docs/delete-an-application
+      - https://techdocs.akamai.com/akamai-functions/docs/deploy-app-variables
+      - https://techdocs.akamai.com/akamai-functions/docs/deploy-using-github-actions
+      # Technical reference
+      - https://techdocs.akamai.com/akamai-functions/docs/aka-command-reference
+      - https://techdocs.akamai.com/akamai-functions/docs/webassembly-language-support-matrix
+      - https://techdocs.akamai.com/akamai-functions/docs/http-trigger-reference
+      - https://techdocs.akamai.com/akamai-functions/docs/related-standards
+      - https://techdocs.akamai.com/akamai-functions/docs/faq
+      - https://techdocs.akamai.com/akamai-functions/changelog
+      # Monitoring & limits
+      - https://techdocs.akamai.com/akamai-functions/docs/application-logs
+      - https://techdocs.akamai.com/akamai-functions/docs/quotas-and-limits
+
+  - id: spin-framework
+    product: Spin Framework
+    version: v3
+    description: Open-source WebAssembly application framework (upstream for Akamai Functions)
+    domain: spinframework.dev
+    follow_links: false
+    urls:
+      # Section landing pages
+      - https://spinframework.dev/v3/quickstart
+      - https://spinframework.dev/v3/writing-apps
+      - https://spinframework.dev/v3/triggers
+      - https://spinframework.dev/v3/api-guides-overview
+      - https://spinframework.dev/v3/language-support-overview
+      - https://spinframework.dev/v3/deploying
+      - https://spinframework.dev/v3/manifest-reference
+      # Language SDKs (high value for code generation)
+      - https://spinframework.dev/v3/rust-components
+      - https://spinframework.dev/v3/go-components
+      - https://spinframework.dev/v3/javascript-components
+      - https://spinframework.dev/v3/python-components
