@@ -35,3 +35,6 @@ venv/
 .DS_Store
 *.swp
 *~
+
+# Claude Code session dir
+.claude/
