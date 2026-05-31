@@ -11,7 +11,7 @@ dependencies = [
     { name = "mcp" },
 ]
 
-[package.optional-dependencies]
+[package.dev-dependencies]
 crawler = [
     { name = "beautifulsoup4" },
     { name = "markdownify" },
@@ -19,31 +19,40 @@ crawler = [
     { name = "pyyaml" },
     { name = "trafilatura" },
 ]
-
-[package.dev-dependencies]
 dev = [
+    { name = "beautifulsoup4" },
+    { name = "markdownify" },
+    { name = "playwright" },
     { name = "pyright" },
     { name = "pytest" },
+    { name = "pyyaml" },
     { name = "ruff" },
+    { name = "trafilatura" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "beautifulsoup4", marker = "extra == 'crawler'", specifier = ">=4.12" },
     { name = "httpx", specifier = ">=0.27" },
-    { name = "markdownify", marker = "extra == 'crawler'", specifier = ">=0.13" },
     { name = "mcp", specifier = ">=1.0.0" },
-    { name = "playwright", marker = "extra == 'crawler'", specifier = ">=1.45" },
-    { name = "pyyaml", marker = "extra == 'crawler'", specifier = ">=6.0" },
-    { name = "trafilatura", marker = "extra == 'crawler'", specifier = ">=1.12" },
 ]
-provides-extras = ["crawler"]
 
 [package.metadata.requires-dev]
+crawler = [
+    { name = "beautifulsoup4", specifier = ">=4.12" },
+    { name = "markdownify", specifier = ">=0.13" },
+    { name = "playwright", specifier = ">=1.45" },
+    { name = "pyyaml", specifier = ">=6.0" },
+    { name = "trafilatura", specifier = ">=1.12" },
+]
 dev = [
+    { name = "beautifulsoup4", specifier = ">=4.12" },
+    { name = "markdownify", specifier = ">=0.13" },
+    { name = "playwright", specifier = ">=1.45" },
     { name = "pyright", specifier = ">=1.1" },
     { name = "pytest", specifier = ">=8.0" },
+    { name = "pyyaml", specifier = ">=6.0" },
     { name = "ruff", specifier = ">=0.6" },
+    { name = "trafilatura", specifier = ">=1.12" },
 ]
 
 [[package]]

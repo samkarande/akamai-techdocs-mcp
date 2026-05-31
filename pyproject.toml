@@ -24,7 +24,11 @@ dependencies = [
     "httpx>=0.27",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
+# CI-only crawler dependencies. Not part of [project.dependencies] because
+# end users never run the crawler; only the GitHub Actions weekly rebuild
+# does. The dev group includes this so local tests can exercise crawler
+# modules.
 crawler = [
     "pyyaml>=6.0",
     "trafilatura>=1.12",
@@ -32,12 +36,11 @@ crawler = [
     "markdownify>=0.13",
     "playwright>=1.45",
 ]
-
-[dependency-groups]
 dev = [
     "pytest>=8.0",
     "ruff>=0.6",
     "pyright>=1.1",
+    {include-group = "crawler"},
 ]
 
 [project.scripts]
