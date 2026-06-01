@@ -1,0 +1,203 @@
+name: Release
+
+# Manual / tag-driven release workflow.
+#
+# Two ways to cut a release:
+#
+#   1. Tag-driven (preferred for shipping):
+#        git tag v0.1.0
+#        git push origin v0.1.0
+#      → workflow runs against the tag, version is taken from the tag name.
+#
+#   2. Manual via workflow_dispatch:
+#        gh workflow run release.yml -f version=0.1.0
+#      → workflow creates the tag and release for you.
+#
+# Distinct from build-index.yml: that one auto-publishes weekly with
+# date-based `index-YYYY-MM-DD` tags whenever the docs have new
+# content; this one publishes code releases on demand with semantic
+# `vMAJOR.MINOR.PATCH` tags. Both attach (wheel + index) so users can
+# install either kind via `uv tool install <release-url>/...whl`.
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version (e.g. 0.1.0 — no v prefix)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.event.inputs.version || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Determine version and tag
+        id: ver
+        run: |
+          set -euo pipefail
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+            TAG="v${VERSION}"
+          else
+            TAG="${{ github.ref_name }}"
+            VERSION="${TAG#v}"
+          fi
+          # Reject obvious garbage early.
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][a-zA-Z0-9.+-]+)?$ ]]; then
+            echo "::error::version $VERSION is not PEP 440 compatible"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "Building $TAG (wheel version $VERSION)"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Set up Python from .python-version
+        run: uv python install
+
+      - name: Set pyproject.toml version to ${{ steps.ver.outputs.version }}
+        # Edits in place but is NOT committed back to the repo. The
+        # ephemeral change only exists in the runner so `uv build`
+        # produces a properly-named wheel for this release.
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os, re
+          version = os.environ["VERSION"]
+          p = "pyproject.toml"
+          text = open(p).read()
+          new = re.sub(
+              r'^version = "[^"]+"',
+              f'version = "{version}"',
+              text,
+              count=1,
+              flags=re.MULTILINE,
+          )
+          assert new != text, "did not find version line to replace"
+          open(p, "w").write(new)
+          print(f"pyproject.toml version -> {version}")
+          PY
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+
+      - name: Install dependencies (incl. crawler group)
+        run: uv sync --group crawler
+
+      - name: Install Playwright Chromium
+        run: uv run playwright install --with-deps chromium
+
+      - name: Build index
+        run: uv run python -m crawler.build_index --verbose
+
+      - name: Build wheel
+        run: uv build --wheel
+
+      - name: Compute SHA256s
+        id: hash
+        run: |
+          set -euo pipefail
+          cd dist
+          sha256sum index.sqlite > index.sqlite.sha256
+          sha256sum akamai_techdocs_mcp-*.whl > akamai_techdocs_mcp.whl.sha256
+          WHEEL=$(ls akamai_techdocs_mcp-*.whl)
+          echo "wheel=$WHEEL" >> "$GITHUB_OUTPUT"
+          echo "wheel_sha=$(cut -d' ' -f1 akamai_techdocs_mcp.whl.sha256)" >> "$GITHUB_OUTPUT"
+          echo "wheel_size=$(stat -c%s "$WHEEL")" >> "$GITHUB_OUTPUT"
+          echo "index_sha=$(cut -d' ' -f1 index.sqlite.sha256)" >> "$GITHUB_OUTPUT"
+          echo "index_size=$(stat -c%s index.sqlite)" >> "$GITHUB_OUTPUT"
+
+      - name: Run tests against the built wheel
+        # Belt-and-braces sanity check: install the just-built wheel
+        # into a throwaway uv tool venv and make sure the entry point
+        # starts (the bundled index is auto-discovered).
+        run: |
+          set -euo pipefail
+          uv tool install --reinstall ./dist/akamai_techdocs_mcp-*.whl
+          # Server runs on stdio; give it a moment to import + open
+          # the index, then SIGTERM. A clean exit code (0 or 143)
+          # means startup succeeded.
+          timeout 5s akamai-techdocs-mcp || code=$?
+          if [ "${code:-0}" != "0" ] && [ "${code:-0}" != "124" ] && [ "${code:-0}" != "143" ]; then
+            echo "::error::installed wheel failed to start (exit $code)"
+            exit 1
+          fi
+          echo "Installed wheel starts cleanly."
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ steps.ver.outputs.tag }}
+          VERSION: ${{ steps.ver.outputs.version }}
+          WHEEL: ${{ steps.hash.outputs.wheel }}
+          WHEEL_SHA: ${{ steps.hash.outputs.wheel_sha }}
+          WHEEL_SIZE: ${{ steps.hash.outputs.wheel_size }}
+          INDEX_SHA: ${{ steps.hash.outputs.index_sha }}
+          INDEX_SIZE: ${{ steps.hash.outputs.index_size }}
+        run: |
+          set -euo pipefail
+          NOTES_FILE="$(mktemp)"
+          cat > "$NOTES_FILE" <<EOF
+          Release ${TAG}.
+
+          **Installable wheel**
+          - File: \`${WHEEL}\`
+          - Size: ${WHEEL_SIZE} bytes
+          - SHA256: \`${WHEEL_SHA}\`
+
+          **Bundled index**
+          - Size: ${INDEX_SIZE} bytes
+          - SHA256: \`${INDEX_SHA}\`
+
+          ### Install (pinned)
+
+          \`\`\`
+          uv tool install --reinstall \\
+            https://github.com/${REPO}/releases/download/${TAG}/${WHEEL}
+          \`\`\`
+
+          ### Install (zero-install, always latest main)
+
+          \`\`\`
+          uvx --from git+https://github.com/${REPO} akamai-techdocs-mcp
+          \`\`\`
+          EOF
+
+          ASSETS=(
+            "dist/${WHEEL}"
+            dist/akamai_techdocs_mcp.whl.sha256
+            dist/index.sqlite
+            dist/index.sqlite.sha256
+          )
+
+          # workflow_dispatch path: tag doesn't exist yet — gh creates it
+          # from the current commit. tag push path: tag already exists.
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "::warning::release $TAG already exists; replacing assets"
+            gh release upload "$TAG" "${ASSETS[@]}" --clobber
+            gh release edit "$TAG" --notes-file "$NOTES_FILE"
+          else
+            gh release create "$TAG" "${ASSETS[@]}" \
+              --title "$TAG" \
+              --notes-file "$NOTES_FILE" \
+              --target "$GITHUB_SHA"
+          fi

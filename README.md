@@ -203,6 +203,33 @@ file (it starts with `_`, treated as hidden after a CVE backport).
 The repo-root `conftest.py` puts `src/` on `sys.path` for tests as a
 local workaround. Wheels (what users install) are unaffected.
 
+## Cutting a release
+
+Two workflows publish to GitHub Releases:
+
+- **[`build-index.yml`](.github/workflows/build-index.yml)** runs every
+  Monday at 06:00 UTC (and on demand via `workflow_dispatch`). It
+  rebuilds `index.sqlite`, packages a wheel with that index, and
+  publishes both under a date-based tag like `index-2026-06-08`. This
+  is what keeps installed copies' documentation fresh.
+
+- **[`release.yml`](.github/workflows/release.yml)** is for cutting a
+  versioned code release. Two ways to trigger it:
+
+  ```sh
+  # Tag-driven (preferred)
+  git tag v0.1.0
+  git push origin v0.1.0
+
+  # Or manual via the GitHub UI / CLI
+  gh workflow run release.yml -f version=0.1.0
+  ```
+
+  It builds an index, builds a wheel whose filename includes the
+  version (`akamai_techdocs_mcp-0.1.0-py3-none-any.whl`), and creates
+  a release named `v0.1.0`. The pyproject version is edited in the
+  runner only; the repo itself stays untouched.
+
 ## Auto-update
 
 When the server starts, it checks GitHub Releases for a newer
