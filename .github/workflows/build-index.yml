@@ -1,0 +1,131 @@
+name: Build index
+
+# Runs the crawler against sources.yaml and publishes the resulting
+# index.sqlite as a GitHub Release. The MCP server's auto-updater
+# (in users' installs) polls the "Releases" feed and downloads the
+# newest index file into the user's cache directory on next startup.
+#
+# Triggers:
+#   - schedule: every Monday 06:00 UTC (weekly refresh)
+#   - workflow_dispatch: manual run, useful after editing sources.yaml
+#
+# Release format:
+#   tag:        index-YYYY-MM-DD (UTC date the build started)
+#   assets:     index.sqlite, index.sqlite.sha256
+#   prerelease: false
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write   # required for creating Releases + uploading assets
+
+concurrency:
+  # Only one index-build at a time, but don't cancel an in-flight build
+  # (it does live network crawls and we'd rather get one full run than
+  # interrupt a partial one).
+  group: build-index
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Set up Python from .python-version
+        run: uv python install
+
+      - name: Install dependencies (incl. crawler group)
+        run: uv sync --group crawler
+
+      - name: Install Playwright Chromium
+        run: uv run playwright install --with-deps chromium
+
+      - name: Build index from sources.yaml
+        run: uv run python -m crawler.build_index --verbose
+
+      - name: Compute SHA256 of index.sqlite
+        id: hash
+        run: |
+          cd dist
+          sha256sum index.sqlite > index.sqlite.sha256
+          echo "sha256=$(cut -d' ' -f1 index.sqlite.sha256)" >> "$GITHUB_OUTPUT"
+          echo "size=$(stat -c%s index.sqlite)" >> "$GITHUB_OUTPUT"
+
+      - name: Determine release tag
+        id: tag
+        run: echo "tag=index-$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+
+      - name: Summarize index contents
+        id: summary
+        run: |
+          uv run python <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import sqlite3
+          c = sqlite3.connect("dist/index.sqlite")
+          c.row_factory = sqlite3.Row
+          meta = {r["key"]: r["value"] for r in c.execute("SELECT key, value FROM meta")}
+          src_rows = c.execute(
+              "SELECT sources.product, sources.version, "
+              "COUNT(urls.id) AS urls, "
+              "SUM(CASE WHEN urls.tombstoned=1 THEN 1 ELSE 0 END) AS tombstoned "
+              "FROM sources LEFT JOIN urls ON urls.source_id = sources.id "
+              "GROUP BY sources.id ORDER BY sources.product"
+          ).fetchall()
+          n_chunks = c.execute("SELECT COUNT(*) FROM chunks").fetchone()[0]
+          print("## Index built")
+          print(f"- schema_version: {meta.get('schema_version')}")
+          print(f"- manifest_version: {meta.get('manifest_version')}")
+          print(f"- manifest_sha: `{meta.get('manifest_sha', '')[:12]}…`")
+          print(f"- built_at: {meta.get('built_at')}")
+          print(f"- total chunks: {n_chunks}")
+          print()
+          print("| Product | Version | URLs | Tombstoned |")
+          print("|---|---|---:|---:|")
+          for r in src_rows:
+              print(f"| {r['product']} | {r['version']} | {r['urls']} | {r['tombstoned']} |")
+          PY
+
+      - name: Create or update release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag.outputs.tag }}
+          SHA: ${{ steps.hash.outputs.sha256 }}
+          SIZE: ${{ steps.hash.outputs.size }}
+        run: |
+          set -euo pipefail
+          NOTES_FILE="$(mktemp)"
+          cat > "$NOTES_FILE" <<EOF
+          Weekly automated index build.
+
+          - Built at: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+          - Size: ${SIZE} bytes
+          - SHA256: \`${SHA}\`
+
+          The akamai-techdocs MCP server downloads this asset on next
+          startup if it's newer than the currently installed index.
+          EOF
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG exists; replacing assets."
+            gh release upload "$TAG" \
+              dist/index.sqlite dist/index.sqlite.sha256 \
+              --clobber
+            gh release edit "$TAG" --notes-file "$NOTES_FILE"
+          else
+            echo "Creating release $TAG."
+            gh release create "$TAG" \
+              dist/index.sqlite dist/index.sqlite.sha256 \
+              --title "Index $(date -u +%Y-%m-%d)" \
+              --notes-file "$NOTES_FILE"
+          fi
