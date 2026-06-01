@@ -22,26 +22,51 @@ new URLs to that file is the primary way to extend coverage.
 Call `list_sources` from any MCP client to see exactly what's in the
 shipped index, including `url_count` and `last_crawled_at`.
 
-## Install (from local source for now)
+## Install
 
-You need [`uv`](https://docs.astral.sh/uv/) installed.
+You need [`uv`](https://docs.astral.sh/uv/) installed. Pick whichever
+of these matches how you want to run the server.
+
+### Option 1 — `uvx`, no install (recommended for trying it out)
+
+Point your MCP client at `uvx` and let it fetch + cache on each launch:
 
 ```sh
-# 1. Build the prebuilt index (run once, ~10s for Spin docs)
-uv run python -m crawler.build_index
+uvx --from git+https://github.com/samkarande/akamai-techdocs-mcp akamai-techdocs-mcp
+```
 
-# 2. Build a wheel that bundles the index
-uv build --wheel
+Wheels built this way ship without a bundled index; the server's
+auto-updater downloads `index.sqlite` from the latest GitHub Release
+on first run.
 
-# 3. Install the CLI tool globally
-uv tool install --reinstall ./dist/akamai_techdocs_mcp-*.whl
+### Option 2 — pinned install from a GitHub Release
+
+The [`build-index.yml`](.github/workflows/build-index.yml) workflow
+attaches an installable wheel (with the freshly built index baked in)
+to every weekly release. Install the latest:
+
+```sh
+uv tool install --reinstall \
+  https://github.com/samkarande/akamai-techdocs-mcp/releases/latest/download/akamai_techdocs_mcp-0.0.1-py3-none-any.whl
 ```
 
 That puts `akamai-techdocs-mcp` on your PATH (typically
-`~/.local/bin/akamai-techdocs-mcp`). Verify:
+`~/.local/bin/akamai-techdocs-mcp`).
+
+### Option 3 — local build from source (developer flow)
 
 ```sh
-which akamai-techdocs-mcp
+git clone https://github.com/samkarande/akamai-techdocs-mcp.git
+cd akamai-techdocs-mcp
+
+# 1. Build the prebuilt index (run once, ~10s for Spin docs).
+uv run python -m crawler.build_index
+
+# 2. Build a wheel that bundles the index.
+uv build --wheel
+
+# 3. Install the CLI tool globally.
+uv tool install --reinstall ./dist/akamai_techdocs_mcp-*.whl
 ```
 
 ## Wire it into your AI client
@@ -49,7 +74,26 @@ which akamai-techdocs-mcp
 ### Claude Desktop
 
 Edit `~/Library/Application Support/Claude/claude_desktop_config.json`
-(macOS) or the platform equivalent:
+(macOS) or the platform equivalent.
+
+**If you used Option 1 (uvx, no install):**
+
+```json
+{
+  "mcpServers": {
+    "akamai-techdocs": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/samkarande/akamai-techdocs-mcp",
+        "akamai-techdocs-mcp"
+      ]
+    }
+  }
+}
+```
+
+**If you used Option 2 or 3 (installed wheel):**
 
 ```json
 {
@@ -62,14 +106,23 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json`
 ```
 
 If `akamai-techdocs-mcp` isn't on Claude Desktop's PATH, use the
-absolute path from `which` instead.
+absolute path from `which akamai-techdocs-mcp` instead.
 
 Fully quit and reopen Claude Desktop.
 
 ### Claude Code
 
+If installed (Options 2/3):
+
 ```sh
 claude mcp add akamai-techdocs -- akamai-techdocs-mcp
+```
+
+Or zero-install (Option 1):
+
+```sh
+claude mcp add akamai-techdocs -- \
+  uvx --from git+https://github.com/samkarande/akamai-techdocs-mcp akamai-techdocs-mcp
 ```
 
 ### Cursor / other MCP clients

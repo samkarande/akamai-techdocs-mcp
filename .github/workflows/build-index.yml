@@ -55,13 +55,21 @@ jobs:
       - name: Build index from sources.yaml
         run: uv run python -m crawler.build_index --verbose
 
-      - name: Compute SHA256 of index.sqlite
+      - name: Build wheel with bundled index
+        run: uv build --wheel
+
+      - name: Compute SHA256s
         id: hash
         run: |
           cd dist
           sha256sum index.sqlite > index.sqlite.sha256
+          sha256sum akamai_techdocs_mcp-*.whl > akamai_techdocs_mcp.whl.sha256
           echo "sha256=$(cut -d' ' -f1 index.sqlite.sha256)" >> "$GITHUB_OUTPUT"
           echo "size=$(stat -c%s index.sqlite)" >> "$GITHUB_OUTPUT"
+          wheel_file=$(ls akamai_techdocs_mcp-*.whl)
+          echo "wheel=$wheel_file" >> "$GITHUB_OUTPUT"
+          echo "wheel_sha=$(cut -d' ' -f1 akamai_techdocs_mcp.whl.sha256)" >> "$GITHUB_OUTPUT"
+          echo "wheel_size=$(stat -c%s "$wheel_file")" >> "$GITHUB_OUTPUT"
 
       - name: Determine release tag
         id: tag
@@ -99,33 +107,59 @@ jobs:
       - name: Create or update release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
           TAG: ${{ steps.tag.outputs.tag }}
           SHA: ${{ steps.hash.outputs.sha256 }}
           SIZE: ${{ steps.hash.outputs.size }}
+          WHEEL: ${{ steps.hash.outputs.wheel }}
+          WHEEL_SHA: ${{ steps.hash.outputs.wheel_sha }}
+          WHEEL_SIZE: ${{ steps.hash.outputs.wheel_size }}
         run: |
           set -euo pipefail
           NOTES_FILE="$(mktemp)"
           cat > "$NOTES_FILE" <<EOF
           Weekly automated index build.
 
-          - Built at: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+          **Index**
           - Size: ${SIZE} bytes
           - SHA256: \`${SHA}\`
 
-          The akamai-techdocs MCP server downloads this asset on next
-          startup if it's newer than the currently installed index.
+          **Installable wheel** (bundles this index)
+          - Size: ${WHEEL_SIZE} bytes
+          - SHA256: \`${WHEEL_SHA}\`
+
+          ### Install
+
+          \`\`\`
+          uv tool install --reinstall \\
+            https://github.com/${REPO}/releases/latest/download/${WHEEL}
+          \`\`\`
+
+          Or run directly without install:
+
+          \`\`\`
+          uvx --from git+https://github.com/${REPO} akamai-techdocs-mcp
+          \`\`\`
+
+          The MCP server's built-in auto-updater downloads the index
+          asset on subsequent starts if a newer release exists, so an
+          installed wheel keeps its data fresh without re-installing.
           EOF
+
+          ASSETS=(
+            dist/index.sqlite
+            dist/index.sqlite.sha256
+            "dist/${WHEEL}"
+            dist/akamai_techdocs_mcp.whl.sha256
+          )
 
           if gh release view "$TAG" >/dev/null 2>&1; then
             echo "Release $TAG exists; replacing assets."
-            gh release upload "$TAG" \
-              dist/index.sqlite dist/index.sqlite.sha256 \
-              --clobber
+            gh release upload "$TAG" "${ASSETS[@]}" --clobber
             gh release edit "$TAG" --notes-file "$NOTES_FILE"
           else
             echo "Creating release $TAG."
-            gh release create "$TAG" \
-              dist/index.sqlite dist/index.sqlite.sha256 \
+            gh release create "$TAG" "${ASSETS[@]}" \
               --title "Index $(date -u +%Y-%m-%d)" \
               --notes-file "$NOTES_FILE"
           fi
