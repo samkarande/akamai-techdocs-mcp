@@ -1,0 +1,24 @@
+spin_manifest_version = 2
+
+[application]
+name = "weather-by-zip"
+version = "0.1.0"
+authors = ["samir.karande@gmail.com"]
+description = "Return current weather for a US zip code"
+
+[[trigger.http]]
+route = "/..."
+component = "weather-by-zip"
+
+[component.weather-by-zip]
+source = "target/weather-by-zip.wasm"
+exclude_files = ["**/node_modules"]
+# A component may only reach hosts listed here, otherwise fetch() raises
+# "Destination not allowed".
+allowed_outbound_hosts = [
+    "https://api.zippopotam.us",
+    "https://api.open-meteo.com",
+]
+
+[component.weather-by-zip.build]
+command = "npm run build"
