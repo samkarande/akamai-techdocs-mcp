@@ -1,10 +1,4 @@
-def main() -> None:
-    raise SystemExit(
-        "akamai-techdocs-mcp: server not yet implemented. "
-        "This is a skeleton install — server, crawler, and index download "
-        "will be wired up in subsequent commits."
-    )
-
+from akamai_techdocs_mcp.server import main
 
 if __name__ == "__main__":
     main()
