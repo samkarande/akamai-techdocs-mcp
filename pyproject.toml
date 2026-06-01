@@ -58,6 +58,15 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/akamai_techdocs_mcp"]
 
+# Bundle the prebuilt SQLite index into the wheel so installs work
+# offline-first. The crawler writes dist/index.sqlite; this force-include
+# rule copies it to akamai_techdocs_mcp/data/index.sqlite inside the
+# wheel, where IndexHandle's resolve_index_path() finds it via
+# importlib.resources. Build fails cleanly if dist/index.sqlite is
+# missing (run `uv run python -m crawler.build_index` first).
+[tool.hatch.build.targets.wheel.force-include]
+"dist/index.sqlite" = "akamai_techdocs_mcp/data/index.sqlite"
+
 [tool.ruff]
 line-length = 100
 target-version = "py311"

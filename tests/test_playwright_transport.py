@@ -14,32 +14,37 @@ from crawler.fetcher import Transport
 from crawler.playwright_transport import PlaywrightTransport
 
 
-def _chromium_available() -> bool:
+@pytest.fixture(scope="session")
+def chromium_available() -> bool:
+    """Probe for a usable Chromium once per test session.
+
+    Doing this lazily (at first fixture use, not at module import) keeps
+    `pytest --ignore=tests/test_playwright_transport.py` and
+    `pytest -k "not playwright"` from launching Chromium during
+    collection — a previous module-level probe stalled the suite when
+    multiple pytest runs queued up.
+    """
     try:
         from playwright.sync_api import sync_playwright
-    except ImportError:
-        return False
-    try:
+
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            browser.close()
+            p.chromium.launch(headless=True).close()
         return True
     except Exception:
         return False
 
 
-needs_browser = pytest.mark.skipif(
-    not _chromium_available(),
-    reason="Chromium not installed; run `uv run playwright install chromium`",
-)
+def _require_chromium(available: bool) -> None:
+    if not available:
+        pytest.skip("Chromium not installed; run `uv run playwright install chromium`")
 
 
 def test_satisfies_transport_protocol() -> None:
     assert isinstance(PlaywrightTransport(), Transport)
 
 
-@needs_browser
-def test_fetches_example_com_via_real_browser() -> None:
+def test_fetches_example_com_via_real_browser(chromium_available: bool) -> None:
+    _require_chromium(chromium_available)
     with PlaywrightTransport() as transport:
         status, headers, html = transport.get(
             "https://example.com", headers={}, timeout=15.0
@@ -49,9 +54,9 @@ def test_fetches_example_com_via_real_browser() -> None:
     assert any(k.lower() == "content-type" for k in headers)
 
 
-@needs_browser
-def test_context_manager_reuses_browser() -> None:
+def test_context_manager_reuses_browser(chromium_available: bool) -> None:
     """Both fetches inside one `with` block share the same browser."""
+    _require_chromium(chromium_available)
     with PlaywrightTransport() as transport:
         s1, _, h1 = transport.get("https://example.com", headers={}, timeout=15.0)
         s2, _, h2 = transport.get("https://example.com", headers={}, timeout=15.0)
