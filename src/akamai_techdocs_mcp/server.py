@@ -19,6 +19,7 @@ from typing import Any
 from mcp.server.fastmcp import FastMCP
 
 from akamai_techdocs_mcp.index import IndexHandle
+from akamai_techdocs_mcp.updater import maybe_update
 
 mcp: FastMCP = FastMCP("akamai-techdocs")
 
@@ -84,6 +85,13 @@ def list_sources() -> dict[str, Any]:
 
 
 def main() -> None:
+    # Best-effort: pull a newer index release from GitHub if there is
+    # one. Never raises; if the network is unavailable or the repo has
+    # no releases, we fall through to whatever index is already on disk
+    # (user cache or bundled wheel data). The new file lands in the
+    # user cache and resolve_index_path() finds it ahead of the bundled
+    # copy on the very next get_index() call.
+    maybe_update()
     # Open the index eagerly so the server fails fast with a clear
     # error rather than starting up and erroring on the first tool call.
     get_index()

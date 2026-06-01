@@ -72,11 +72,13 @@ def test_tools_registered_on_fastmcp(server_with_index) -> None:
 def test_main_opens_index_eagerly(server_with_index, monkeypatch: pytest.MonkeyPatch) -> None:
     """main() should open the index before starting the MCP run loop.
 
-    We patch ``mcp.run`` to a no-op so we don't actually start the
-    server, then assert the global _index handle is non-None after
-    main() returns.
+    We patch ``mcp.run`` to a no-op (so the server doesn't actually
+    start) and ``maybe_update`` to a no-op (so the test doesn't hit
+    the real GitHub API), then assert the global _index handle is
+    non-None after main() returns.
     """
     server_with_index._index = None
     monkeypatch.setattr(server_with_index.mcp, "run", lambda: None)
+    monkeypatch.setattr(server_with_index, "maybe_update", lambda *a, **kw: None)
     server_with_index.main()
     assert server_with_index._index is not None

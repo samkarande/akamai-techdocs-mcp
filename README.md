@@ -150,16 +150,40 @@ file (it starts with `_`, treated as hidden after a CVE backport).
 The repo-root `conftest.py` puts `src/` on `sys.path` for tests as a
 local workaround. Wheels (what users install) are unaffected.
 
+## Auto-update
+
+When the server starts, it checks GitHub Releases for a newer
+`index-YYYY-MM-DD` tag than what's already in your local cache
+(`~/.cache/akamai-techdocs-mcp/`). If one exists, it downloads
+`index.sqlite` + `index.sqlite.sha256`, verifies the checksum,
+validates the schema, and atomically swaps the file into place.
+
+- The update is **best-effort**: any failure (offline, rate-limited,
+  schema mismatch, etc.) logs to stderr and falls back to whatever
+  index is already on disk. Server startup never blocks on it for
+  more than a few seconds.
+- A newly downloaded index **takes effect on the next server
+  restart** — your MCP client (Claude Desktop / Code) restarts the
+  server when it relaunches, which is usually enough.
+- Set `AKAMAI_MCP_OFFLINE=1` in the server's environment to skip
+  the check entirely.
+- Point at a different repo's releases with
+  `AKAMAI_MCP_RELEASES_REPO=owner/repo`.
+
+The weekly [`build-index.yml`](.github/workflows/build-index.yml)
+workflow is what produces those releases; users running the installed
+wheel pick up fresh content automatically.
+
 ## Known limitations
 
 - **Akamai techdocs are not currently indexed** — see "What's indexed"
   above. Akamai's Bot Manager blocks even real headless Chromium with
   HTTP 403. Practical paths: (a) get a UA allowlist via Akamai contacts,
   (b) wait for an alternate doc source.
-- **No auto-update yet** — the bundled index in your installed wheel
-  is whatever was current when the wheel was built. The weekly
-  GitHub Release + server-side download flow is planned (deferred
-  task) but not yet wired up.
+- **Hot-swap of a freshly downloaded index isn't supported.** The
+  running server keeps the old SQLite connection open; the new file
+  is visible only on the next start. For most MCP clients this is a
+  non-issue since they restart the server on app relaunch.
 
 ## License
 
