@@ -67,10 +67,21 @@ class Transport(Protocol):
 
 
 class HttpxTransport:
-    """Plain HTTPS via httpx. Suitable for sites without bot protection."""
+    """Plain HTTPS via httpx. Suitable for sites without bot protection.
+
+    Implements no-op context-manager methods so the crawler driver can
+    use ``with transport:`` uniformly regardless of which transport it
+    selected for a given source.
+    """
 
     def __init__(self, *, user_agent: str = DEFAULT_USER_AGENT) -> None:
         self._user_agent = user_agent
+
+    def __enter__(self) -> HttpxTransport:
+        return self
+
+    def __exit__(self, *args: object) -> None:
+        return None
 
     def get(
         self, url: str, headers: dict[str, str], timeout: float
