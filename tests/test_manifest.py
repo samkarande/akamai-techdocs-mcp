@@ -30,7 +30,15 @@ def test_loads_real_sources_yaml() -> None:
     assert "techdocs.akamai.com" in m.allowed_domains
     assert "spinframework.dev" in m.allowed_domains
     source_ids = {s.id for s in m.sources}
-    assert source_ids == {"akamai-functions", "spin-framework"}
+    assert source_ids == {
+        "akamai-functions",
+        "spin-framework",
+        "linode-api",
+        "linode-api-spec",
+        "keda",
+        "karpenter",
+        "terraform-modules",
+    }
     af = next(s for s in m.sources if s.id == "akamai-functions")
     assert af.product == "Akamai Functions"
     assert af.domain == "techdocs.akamai.com"

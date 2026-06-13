@@ -24,11 +24,15 @@
 #     urls[]        — seed URLs to fetch.
 
 schema_version: 1
-manifest_version: 0.1.0
+manifest_version: 0.2.0
 
 allowed_domains:
   - techdocs.akamai.com
   - spinframework.dev
+  - raw.githubusercontent.com
+  - keda.sh
+  - karpenter.sh
+  - developer.hashicorp.com
 
 sources:
   - id: akamai-functions
@@ -88,3 +92,60 @@ sources:
       - https://spinframework.dev/v3/go-components
       - https://spinframework.dev/v3/javascript-components
       - https://spinframework.dev/v3/python-components
+
+  - id: linode-api
+    product: Linode API
+    version: latest
+    description: Linode (Akamai) API reference for common provisioning workflows
+    domain: techdocs.akamai.com
+    follow_links: false
+    urls:
+      # Linode instance creation
+      - https://techdocs.akamai.com/linode-api/reference/create-a-linode-using-a-public-image
+      - https://techdocs.akamai.com/linode-api/reference/create-a-linode-using-a-private-image
+      - https://techdocs.akamai.com/linode-api/reference/create-a-linode-using-a-backup
+      # Access keys
+      - https://techdocs.akamai.com/linode-api/reference/create-an-unlimited-access-key
+      - https://techdocs.akamai.com/linode-api/reference/create-a-limited-access-key
+      # Managed databases
+      - https://techdocs.akamai.com/linode-api/reference/post-databases-mysql-instances
+      # Kubernetes (LKE)
+      - https://techdocs.akamai.com/linode-api/reference/post-lke-cluster
+      - https://techdocs.akamai.com/linode-api/reference/get-lke-cluster-node
+      - https://techdocs.akamai.com/linode-api/reference/get-lke-cluster-api-endpoints
+
+  - id: linode-api-spec
+    product: Linode API
+    version: development
+    description: Linode API OpenAPI specification (raw upstream source)
+    domain: raw.githubusercontent.com
+    follow_links: false
+    urls:
+      - https://raw.githubusercontent.com/linode/linode-api-docs/refs/heads/development/openapi.json
+
+  - id: keda
+    product: KEDA
+    version: "2.20"
+    description: Kubernetes Event-driven Autoscaling — deployment reference
+    domain: keda.sh
+    follow_links: false
+    urls:
+      - https://keda.sh/docs/2.20/deploy/
+
+  - id: karpenter
+    product: Karpenter
+    version: latest
+    description: Kubernetes node autoscaler — getting started guide
+    domain: karpenter.sh
+    follow_links: false
+    urls:
+      - https://karpenter.sh/docs/getting-started/
+
+  - id: terraform-modules
+    product: Terraform
+    version: latest
+    description: HashiCorp Terraform — modules tutorial
+    domain: developer.hashicorp.com
+    follow_links: false
+    urls:
+      - https://developer.hashicorp.com/terraform/tutorials/modules

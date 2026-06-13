@@ -32,6 +32,7 @@ from crawler.fetcher import (
     fetch,
 )
 from crawler.manifest import Source, load_manifest
+from crawler.openapi import parse_openapi
 from crawler.parser import parse_html
 from crawler.writer import IndexWriter
 
@@ -125,7 +126,9 @@ def _crawl_one(
     counts[result.outcome.value] = counts.get(result.outcome.value, 0) + 1
 
     if result.outcome is FetchOutcome.OK and result.html is not None:
-        parsed = parse_html(result.html)
+        # OpenAPI specs are JSON, not HTML; try that renderer first and
+        # fall back to HTML parsing when the body isn't a spec.
+        parsed = parse_openapi(result.html) or parse_html(result.html)
         chunks = chunk_markdown(parsed.markdown, page_title=parsed.title)
     else:
         parsed = None
