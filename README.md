@@ -1,26 +1,41 @@
 # akamai-techdocs-mcp
 
 An MCP server that gives AI assistants (Claude Desktop, Claude Code,
-Cursor, …) full-text search across Akamai Functions and Spin Framework
-documentation, plus the ability to fetch entire doc pages by URL.
+Cursor, …) full-text search across Akamai Cloud (Linode) and Akamai
+Functions documentation, plus the ability to fetch entire doc pages by
+URL.
 
 The server ships with a prebuilt SQLite index of the docs, so it works
-offline immediately after install. A weekly CI job rebuilds the index
-from the URLs declared in [`sources.yaml`](./sources.yaml) — adding
-new URLs to that file is the primary way to extend coverage.
+offline immediately after install. A CI job rebuilds the index from the
+URLs declared in [`sources.yaml`](./sources.yaml) — adding new URLs to
+that file is the primary way to extend coverage.
 
-## What's indexed
+## Sources included
 
-- **Spin Framework v3** — quickstart, writing apps, triggers, language
-  guides (Rust / Go / JS / Python), manifest reference, deployment.
-- **Akamai Functions** — declared in `sources.yaml`, but currently
-  blocked by Akamai's Bot Manager on `techdocs.akamai.com` (HTTP 403
-  even via headless Chromium). Resolving that is a separate
-  conversation; for now Spin docs (the upstream foundation of
-  Akamai Functions) carry most of the code-gen value.
+Roughly 1,500 searchable chunks across:
+
+- **Linode API** — the full OpenAPI specification (~449 operations:
+  Linodes, LKE, Managed Databases, Object Storage, VPCs, NodeBalancers,
+  Firewalls, DNS, account/billing, and more).
+- **Linode open-source projects** — READMEs for every non-fork repo in
+  [github.com/linode](https://github.com/linode) (91 repos): SDKs
+  (`linodego`, `linode_api4-python`), the Linode CLI, IaC providers
+  (Terraform, Ansible, Packer), Kubernetes/LKE operators (cloud
+  controller manager, CSI/COSI drivers, Cluster API, Karpenter), the
+  Akamai App Platform (APL), AI quickstarts, and more.
+- **Spin Framework v3** — the WebAssembly app framework upstream of
+  Akamai Functions (quickstart, triggers, language guides, manifest
+  reference, deployment).
+- **Ecosystem references** — KEDA (event-driven autoscaling), Karpenter
+  (node autoscaling), and a HashiCorp Terraform modules tutorial.
 
 Call `list_sources` from any MCP client to see exactly what's in the
 shipped index, including `url_count` and `last_crawled_at`.
+
+> Note: hand-written docs on `techdocs.akamai.com` are not indexed —
+> Akamai's Bot Manager returns HTTP 403 to crawlers (local and CI
+> alike). The Linode API content is sourced from the upstream OpenAPI
+> spec on GitHub instead.
 
 ## Install
 
@@ -41,13 +56,14 @@ on first run.
 
 ### Option 2 — pinned install from a GitHub Release
 
-The [`build-index.yml`](.github/workflows/build-index.yml) workflow
-attaches an installable wheel (with the freshly built index baked in)
-to every weekly release. Install the latest:
+Every release attaches an installable wheel with the freshly built
+index baked in. Grab the wheel URL from the
+[latest release](https://github.com/samkarande/akamai-techdocs-mcp/releases/latest)
+and install it (the filename includes the version):
 
 ```sh
 uv tool install --reinstall \
-  https://github.com/samkarande/akamai-techdocs-mcp/releases/latest/download/akamai_techdocs_mcp-0.0.1-py3-none-any.whl
+  https://github.com/samkarande/akamai-techdocs-mcp/releases/download/<tag>/akamai_techdocs_mcp-<version>-py3-none-any.whl
 ```
 
 That puts `akamai-techdocs-mcp` on your PATH (typically
@@ -133,14 +149,34 @@ Same shape — `command: akamai-techdocs-mcp`, no args, no env vars.
 
 In your assistant, ask things like:
 
-- *"Use the akamai-techdocs MCP to look up how to write a Spin
-  component in Rust."*
+- *"Use akamai-techdocs to look up the Linode API call to create an LKE
+  Kubernetes cluster."*
+- *"Search akamai-techdocs for the `linode_object_storage_bucket`
+  Terraform resource."*
+- *"How do I create an instance with the linodego Go SDK? Check
+  akamai-techdocs."*
+- *"Look up how to write a Spin component in Rust."*
 - *"List the products indexed by akamai-techdocs."*
-- *"Search akamai-techdocs for `spin.toml` manifest structure."*
-- *"Get the full doc at <https://spinframework.dev/v3/triggers>."*
 
 Each result includes the source URL so the model can (and should) cite
 it back in answers.
+
+## Examples
+
+The [`examples/`](./examples) directory holds worked, copy-pasteable
+solutions to common Akamai Cloud tasks. Each example is its own folder
+containing the originating natural-language **prompt** (`prompt.txt`),
+runnable code, and a README explaining the design.
+
+| # | Example | Stack |
+|---|---|---|
+| 1 | [`01-nodebalancer-vpc-apache`](./examples/01-nodebalancer-vpc-apache) | Terraform — Apache web tier (2× nano) behind a NodeBalancer in a new VPC |
+| 2 | [`02-object-storage-private-bucket`](./examples/02-object-storage-private-bucket) | Terraform — a private (non-public) Object Storage bucket |
+| 3 | [`03-managed-mysql-database`](./examples/03-managed-mysql-database) | Terraform — a Managed MySQL 8 database |
+
+These were produced by prompting an assistant wired to this MCP server;
+the `prompt.txt` in each folder is the exact request. They are reference
+code — review before applying to a real account.
 
 ## Tools the server exposes
 
@@ -160,9 +196,10 @@ is observable.
 
 ## Adding URLs to the index
 
-Edit [`sources.yaml`](./sources.yaml). Open a PR. The (still-to-be-set-up)
-weekly CI workflow will rebuild the index with your URLs included; users
-get the new content on their next refresh — no package upgrade required.
+Edit [`sources.yaml`](./sources.yaml). Open a PR. The weekly CI workflow
+([`build-index.yml`](.github/workflows/build-index.yml)) rebuilds the
+index with your URLs included; users get the new content on their next
+refresh — no package upgrade required.
 
 Constraints enforced by the manifest loader:
 
@@ -232,8 +269,8 @@ Two workflows publish to GitHub Releases:
 
 ## Auto-update
 
-When the server starts, it checks GitHub Releases for a newer
-`index-YYYY-MM-DD` tag than what's already in your local cache
+When the server starts, it checks GitHub Releases for a release newer
+(by publish time) than what's already in your local cache
 (`~/.cache/akamai-techdocs-mcp/`). If one exists, it downloads
 `index.sqlite` + `index.sqlite.sha256`, verifies the checksum,
 validates the schema, and atomically swaps the file into place.
@@ -256,10 +293,10 @@ wheel pick up fresh content automatically.
 
 ## Known limitations
 
-- **Akamai techdocs are not currently indexed** — see "What's indexed"
-  above. Akamai's Bot Manager blocks even real headless Chromium with
-  HTTP 403. Practical paths: (a) get a UA allowlist via Akamai contacts,
-  (b) wait for an alternate doc source.
+- **`techdocs.akamai.com` is not indexed** — see "Sources included"
+  above. Akamai's Bot Manager returns HTTP 403 to crawlers (local and
+  CI), so Linode API content comes from the upstream OpenAPI spec on
+  GitHub instead.
 - **Hot-swap of a freshly downloaded index isn't supported.** The
   running server keeps the old SQLite connection open; the new file
   is visible only on the next start. For most MCP clients this is a
