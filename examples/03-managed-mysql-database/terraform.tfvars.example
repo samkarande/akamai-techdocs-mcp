@@ -1,0 +1,17 @@
+# Copy to terraform.tfvars and fill in. Do NOT commit your real tfvars.
+
+# Either set this, or export LINODE_TOKEN in your shell and leave it empty.
+linode_token = ""
+
+# Newark, NJ — historically "us-east-1".
+region = "us-east"
+
+# MySQL 8 on the Shared 4GB plan.
+engine        = "mysql/8"
+database_type = "g6-standard-2"
+
+label        = "example3-mysql"
+cluster_size = 1
+
+# Restrict who can connect. Replace with your client IP(s).
+allow_list = ["203.0.113.10/32"]

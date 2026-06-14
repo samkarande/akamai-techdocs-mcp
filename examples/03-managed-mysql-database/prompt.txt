@@ -1,0 +1,1 @@
+create a managed mysql database with 4GB storage, choose appropriate linode size in us-east-1 region
