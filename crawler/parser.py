@@ -99,3 +99,40 @@ def _clean_markdown(md: str) -> str:
     md = _BLANK_RUN.sub("\n\n", md)
     stripped = md.strip()
     return stripped + "\n" if stripped else ""
+
+
+# Leading YAML front matter and HTML comments in raw Markdown sources.
+_FRONT_MATTER = re.compile(r"\A---\n.*?\n---\n", re.DOTALL)
+_HTML_COMMENT = re.compile(r"<!--.*?-->", re.DOTALL)
+_ATX_HEADING = re.compile(r"^#{1,6}\s+(.+?)\s*#*\s*$")
+_FENCE = re.compile(r"^\s{0,3}(```|~~~)")
+
+
+def parse_markdown(text: str) -> ParsedPage:
+    """Prepare a raw Markdown document (e.g. a GitHub README) for chunking.
+
+    The chunker already understands ATX headings and fenced code, so for
+    Markdown we keep the source nearly as-is — only stripping YAML front
+    matter and HTML comments — rather than round-tripping it through the
+    HTML parser, which would flatten the heading structure the chunker
+    relies on.
+    """
+    body = _FRONT_MATTER.sub("", text, count=1)
+    body = _HTML_COMMENT.sub("", body)
+    title = _first_markdown_heading(body)
+    md = _clean_markdown(body)
+    return ParsedPage(title=title, markdown=md, char_count=len(md))
+
+
+def _first_markdown_heading(md: str) -> str:
+    in_fence = False
+    for line in md.splitlines():
+        if _FENCE.match(line):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        m = _ATX_HEADING.match(line.strip())
+        if m:
+            return m.group(1).strip()
+    return ""

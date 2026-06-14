@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from textwrap import dedent
 
-from crawler.parser import parse_html
+from crawler.parser import parse_html, parse_markdown
 
 
 def _wrap(body: str, title: str = "Example Doc") -> str:
@@ -152,3 +152,69 @@ def test_collapses_excessive_blank_lines() -> None:
     page = parse_html(html)
     # No run of 3+ consecutive newlines in cleaned output.
     assert "\n\n\n" not in page.markdown
+
+
+# --- parse_markdown (raw README / Markdown sources) -------------------------
+
+
+def test_markdown_title_from_first_heading_and_preserves_structure() -> None:
+    md = dedent(
+        """\
+        # My Project
+
+        Intro text.
+
+        ## Install
+
+        ```bash
+        go get example.com/x
+        ```
+        """
+    )
+    page = parse_markdown(md)
+    assert page.title == "My Project"
+    # Heading structure is kept verbatim for the chunker to split on.
+    assert "# My Project" in page.markdown
+    assert "## Install" in page.markdown
+    assert "go get example.com/x" in page.markdown
+
+
+def test_markdown_strips_front_matter_and_html_comments() -> None:
+    md = dedent(
+        """\
+        ---
+        title: Ignored
+        weight: 3
+        ---
+        <!-- a comment -->
+        # Real Title
+
+        Body.
+        """
+    )
+    page = parse_markdown(md)
+    assert "title: Ignored" not in page.markdown
+    assert "a comment" not in page.markdown
+    assert page.title == "Real Title"
+
+
+def test_markdown_ignores_heading_inside_code_fence_for_title() -> None:
+    md = dedent(
+        """\
+        Some preamble.
+
+        ```
+        # not a heading
+        ```
+
+        # Actual Heading
+        """
+    )
+    page = parse_markdown(md)
+    assert page.title == "Actual Heading"
+
+
+def test_markdown_without_heading_has_empty_title() -> None:
+    page = parse_markdown("Just a paragraph, no headings.\n")
+    assert page.title == ""
+    assert "Just a paragraph" in page.markdown

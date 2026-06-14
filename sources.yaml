@@ -27,10 +27,9 @@
 #     urls[]        — seed URLs to fetch.
 
 schema_version: 1
-manifest_version: 0.2.1
+manifest_version: 0.3.0
 
 allowed_domains:
-  - techdocs.akamai.com
   - spinframework.dev
   - raw.githubusercontent.com
   - keda.sh
@@ -38,43 +37,6 @@ allowed_domains:
   - developer.hashicorp.com
 
 sources:
-  - id: akamai-functions
-    product: Akamai Functions
-    version: latest
-    description: Akamai's serverless WebAssembly platform (built on Spin)
-    domain: techdocs.akamai.com
-    follow_links: false
-    urls:
-      # Welcome & getting started
-      - https://techdocs.akamai.com/akamai-functions/docs/welcome
-      - https://techdocs.akamai.com/akamai-functions/docs/quickstart
-      - https://techdocs.akamai.com/akamai-functions/docs/manage-accounts
-      # Tutorials
-      - https://techdocs.akamai.com/akamai-functions/docs/integrate-with-property-manager
-      - https://techdocs.akamai.com/akamai-functions/docs/stream-data-from-linode-object-store
-      - https://techdocs.akamai.com/akamai-functions/docs/query-relational-databases-mysql
-      - https://techdocs.akamai.com/akamai-functions/docs/query-relational-databases-postgresql
-      - https://techdocs.akamai.com/akamai-functions/docs/build-a-supabase-cache-proxy
-      - https://techdocs.akamai.com/akamai-functions/docs/schedule-tasks-with-cron-jobs-in-spin
-      - https://techdocs.akamai.com/akamai-functions/docs/use-the-key-value-store
-      # Manage applications
-      - https://techdocs.akamai.com/akamai-functions/docs/link-an-application
-      - https://techdocs.akamai.com/akamai-functions/docs/list-and-inspect-your-applications
-      - https://techdocs.akamai.com/akamai-functions/docs/update-an-application
-      - https://techdocs.akamai.com/akamai-functions/docs/delete-an-application
-      - https://techdocs.akamai.com/akamai-functions/docs/deploy-app-variables
-      - https://techdocs.akamai.com/akamai-functions/docs/deploy-using-github-actions
-      # Technical reference
-      - https://techdocs.akamai.com/akamai-functions/docs/aka-command-reference
-      - https://techdocs.akamai.com/akamai-functions/docs/webassembly-language-support-matrix
-      - https://techdocs.akamai.com/akamai-functions/docs/http-trigger-reference
-      - https://techdocs.akamai.com/akamai-functions/docs/related-standards
-      - https://techdocs.akamai.com/akamai-functions/docs/faq
-      - https://techdocs.akamai.com/akamai-functions/changelog
-      # Monitoring & limits
-      - https://techdocs.akamai.com/akamai-functions/docs/application-logs
-      - https://techdocs.akamai.com/akamai-functions/docs/quotas-and-limits
-
   - id: spin-framework
     product: Spin Framework
     version: v3
@@ -95,27 +57,6 @@ sources:
       - https://spinframework.dev/v3/go-components
       - https://spinframework.dev/v3/javascript-components
       - https://spinframework.dev/v3/python-components
-
-  - id: linode-api
-    product: Linode API
-    version: latest
-    description: Linode (Akamai) API reference for common provisioning workflows
-    domain: techdocs.akamai.com
-    follow_links: false
-    urls:
-      # Linode instance creation
-      - https://techdocs.akamai.com/linode-api/reference/create-a-linode-using-a-public-image
-      - https://techdocs.akamai.com/linode-api/reference/create-a-linode-using-a-private-image
-      - https://techdocs.akamai.com/linode-api/reference/create-a-linode-using-a-backup
-      # Access keys
-      - https://techdocs.akamai.com/linode-api/reference/create-an-unlimited-access-key
-      - https://techdocs.akamai.com/linode-api/reference/create-a-limited-access-key
-      # Managed databases
-      - https://techdocs.akamai.com/linode-api/reference/post-databases-mysql-instances
-      # Kubernetes (LKE)
-      - https://techdocs.akamai.com/linode-api/reference/post-lke-cluster
-      - https://techdocs.akamai.com/linode-api/reference/get-lke-cluster-node
-      - https://techdocs.akamai.com/linode-api/reference/get-lke-cluster-api-endpoints
 
   - id: linode-api-spec
     product: Linode API
@@ -153,3 +94,105 @@ sources:
     follow_links: false
     urls:
       - https://developer.hashicorp.com/terraform/tutorials/modules
+
+  - id: linode-github
+    product: Linode GitHub
+    version: latest
+    description: README docs for Linode's open-source projects (raw markdown)
+    domain: raw.githubusercontent.com
+    follow_links: false
+    transport: curl
+    # All non-fork repos in the github.com/linode org that have a README,
+    # resolved to raw README on each repo's default branch.
+    urls:
+      - https://raw.githubusercontent.com/linode/Marketplace-Apps/master/readme.md
+      - https://raw.githubusercontent.com/linode/TOD-test-report-processor/main/README.md
+      - https://raw.githubusercontent.com/linode/TOD-test-report-uploader/main/README.md
+      - https://raw.githubusercontent.com/linode/aclp-collector/main/README.md
+      - https://raw.githubusercontent.com/linode/action-linode-cli/v1/README.md
+      - https://raw.githubusercontent.com/linode/agreements/master/README.md
+      - https://raw.githubusercontent.com/linode/ai-operators/main/README.md
+      - https://raw.githubusercontent.com/linode/ai-quickstart-anythingllm/main/README.md
+      - https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-120b/main/README.md
+      - https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-20b/main/README.md
+      - https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss/main/README.md
+      - https://raw.githubusercontent.com/linode/ai-quickstart-mistral/main/README.md
+      - https://raw.githubusercontent.com/linode/ai-quickstart-n8n/main/README.md
+      - https://raw.githubusercontent.com/linode/ai-quickstart-nvidia-nemotron-nano-9b-v2/main/README.md
+      - https://raw.githubusercontent.com/linode/ai-quickstart-qwen3-14b-fp8/main/README.md
+      - https://raw.githubusercontent.com/linode/ai/main/README.md
+      - https://raw.githubusercontent.com/linode/ansible-specdoc-example/main/README.md
+      - https://raw.githubusercontent.com/linode/ansible-specdoc/main/README.md
+      - https://raw.githubusercontent.com/linode/ansible_linode/dev/README.md
+      - https://raw.githubusercontent.com/linode/apl-announcements/main/README.md
+      - https://raw.githubusercontent.com/linode/apl-api/main/README.md
+      - https://raw.githubusercontent.com/linode/apl-charts/main/README.md
+      - https://raw.githubusercontent.com/linode/apl-cli/main/README.md
+      - https://raw.githubusercontent.com/linode/apl-clients/main/README.md
+      - https://raw.githubusercontent.com/linode/apl-console/main/README.md
+      - https://raw.githubusercontent.com/linode/apl-core/main/README.md
+      - https://raw.githubusercontent.com/linode/apl-docs/main/README.md
+      - https://raw.githubusercontent.com/linode/apl-examples/main/README.md
+      - https://raw.githubusercontent.com/linode/apl-github-test/main/README.md
+      - https://raw.githubusercontent.com/linode/apl-nodejs-helloworld/main/README.md
+      - https://raw.githubusercontent.com/linode/apl-tasks/main/README.md
+      - https://raw.githubusercontent.com/linode/arpproxy/master/README.md
+      - https://raw.githubusercontent.com/linode/beginners-guide-to-devops-tools/main/README.md
+      - https://raw.githubusercontent.com/linode/certwrangler/main/README.md
+      - https://raw.githubusercontent.com/linode/cli/master/README.md
+      - https://raw.githubusercontent.com/linode/cloud-firewall-controller/main/README.md
+      - https://raw.githubusercontent.com/linode/cluster-api-provider-linode/main/README.md
+      - https://raw.githubusercontent.com/linode/dbaas-lke-acl-sync/main/README.md
+      - https://raw.githubusercontent.com/linode/design-language-system/main/README.md
+      - https://raw.githubusercontent.com/linode/developers/development/README.md
+      - https://raw.githubusercontent.com/linode/dhcpd-unnumbered/master/README.md
+      - https://raw.githubusercontent.com/linode/dhcpd6-unnumbered/master/README.md
+      - https://raw.githubusercontent.com/linode/docker-machine-driver-linode/main/README.md
+      - https://raw.githubusercontent.com/linode/docker-volume-linode/main/README.md
+      - https://raw.githubusercontent.com/linode/docs-cloud-projects/main/README.md
+      - https://raw.githubusercontent.com/linode/docs-scripts/master/README.md
+      - https://raw.githubusercontent.com/linode/docs/develop/README.md
+      - https://raw.githubusercontent.com/linode/dx-e2e-test-scripts/main/README.md
+      - https://raw.githubusercontent.com/linode/eslint-plugin-cloud-manager/main/README.md
+      - https://raw.githubusercontent.com/linode/go-metadata/main/README.md
+      - https://raw.githubusercontent.com/linode/k8s-node-decorator/main/README.md
+      - https://raw.githubusercontent.com/linode/karpenter-provider-linode/main/README.md
+      - https://raw.githubusercontent.com/linode/konnectivity/main/README.md
+      - https://raw.githubusercontent.com/linode/kontainer-engine-driver-lke/main/README.md
+      - https://raw.githubusercontent.com/linode/kubeseal-encrypt/main/README.md
+      - https://raw.githubusercontent.com/linode/lelastic/master/README.md
+      - https://raw.githubusercontent.com/linode/linode-api-docs/development/README.md
+      - https://raw.githubusercontent.com/linode/linode-api-openapi/main/README.md
+      - https://raw.githubusercontent.com/linode/linode-blockstorage-csi-driver/main/README.md
+      - https://raw.githubusercontent.com/linode/linode-cli/dev/README.md
+      - https://raw.githubusercontent.com/linode/linode-cloud-controller-manager/main/README.md
+      - https://raw.githubusercontent.com/linode/linode-cosi-driver/main/README.md
+      - https://raw.githubusercontent.com/linode/linode-doc-template/master/README.md
+      - https://raw.githubusercontent.com/linode/linode-hackathons/main/README.md
+      - https://raw.githubusercontent.com/linode/linode-hugo-theme/master/README.md
+      - https://raw.githubusercontent.com/linode/linode-k8s-e2e-tests/master/README.md
+      - https://raw.githubusercontent.com/linode/linode-react-components/develop/README.md
+      - https://raw.githubusercontent.com/linode/linode_api4-python/dev/README.rst
+      - https://raw.githubusercontent.com/linode/linodego/main/README.md
+      - https://raw.githubusercontent.com/linode/lke-ai-conformance/main/README.md
+      - https://raw.githubusercontent.com/linode/lke-enterprise/main/README.md
+      - https://raw.githubusercontent.com/linode/lke-sintel-demo/master/README.md
+      - https://raw.githubusercontent.com/linode/longview/master/README.md
+      - https://raw.githubusercontent.com/linode/manager/develop/README.md
+      - https://raw.githubusercontent.com/linode/mcp-cluster-api/main/README.md
+      - https://raw.githubusercontent.com/linode/ndproxy/master/README.md
+      - https://raw.githubusercontent.com/linode/packer-builder-linode/master/README.md
+      - https://raw.githubusercontent.com/linode/packer-plugin-linode/dev/README.md
+      - https://raw.githubusercontent.com/linode/provider-ceph/main/README.md
+      - https://raw.githubusercontent.com/linode/provider-linode/main/README.md
+      - https://raw.githubusercontent.com/linode/py-metadata/main/README.md
+      - https://raw.githubusercontent.com/linode/rad-unnumbered/master/README.md
+      - https://raw.githubusercontent.com/linode/rag-datasets/main/README.md
+      - https://raw.githubusercontent.com/linode/rancher-ui-driver-linode/main/README.md
+      - https://raw.githubusercontent.com/linode/splunk-addon-linode/main/README.md
+      - https://raw.githubusercontent.com/linode/styles/master/README.md
+      - https://raw.githubusercontent.com/linode/terraform-linode-dcos/master/README.md
+      - https://raw.githubusercontent.com/linode/terraform-linode-k8s/master/README.md
+      - https://raw.githubusercontent.com/linode/terraform-provider-linode/dev/README.md
+      - https://raw.githubusercontent.com/linode/ui-cluster-driver-lke/main/README.md
+      - https://raw.githubusercontent.com/linode/velero-plugin/main/README.md

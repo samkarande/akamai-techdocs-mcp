@@ -22,6 +22,7 @@ import sys
 from datetime import UTC, datetime
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
+from urllib.parse import urlparse
 
 from crawler.chunker import chunk_markdown
 from crawler.fetcher import (
@@ -34,8 +35,12 @@ from crawler.fetcher import (
 )
 from crawler.manifest import Source, load_manifest
 from crawler.openapi import parse_openapi
-from crawler.parser import parse_html
+from crawler.parser import ParsedPage, parse_html, parse_markdown
 from crawler.writer import IndexWriter
+
+# URL path suffixes whose bodies are already Markdown / plain text and
+# should skip the HTML parser (which would flatten heading structure).
+_MARKDOWN_SUFFIXES = (".md", ".markdown", ".mdx", ".rst", ".txt")
 
 # Map source domain -> transport class. Domains not listed here fall
 # back to HttpxTransport.
@@ -122,6 +127,17 @@ def _safe_transport(transport: Transport):  # type: ignore[no-untyped-def]
         yield None
 
 
+def _parse_body(url: str, body: str) -> ParsedPage:
+    """Pick a parser by content shape: OpenAPI JSON, Markdown, else HTML."""
+    spec = parse_openapi(body)
+    if spec is not None:
+        return spec
+    path = urlparse(url).path.lower()
+    if path.endswith(_MARKDOWN_SUFFIXES):
+        return parse_markdown(body)
+    return parse_html(body)
+
+
 def _crawl_one(
     writer: IndexWriter,
     source: Source,
@@ -135,9 +151,7 @@ def _crawl_one(
     counts[result.outcome.value] = counts.get(result.outcome.value, 0) + 1
 
     if result.outcome is FetchOutcome.OK and result.html is not None:
-        # OpenAPI specs are JSON, not HTML; try that renderer first and
-        # fall back to HTML parsing when the body isn't a spec.
-        parsed = parse_openapi(result.html) or parse_html(result.html)
+        parsed = _parse_body(url, result.html)
         chunks = chunk_markdown(parsed.markdown, page_title=parsed.title)
     else:
         parsed = None

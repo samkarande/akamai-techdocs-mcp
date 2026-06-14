@@ -27,23 +27,26 @@ def test_loads_real_sources_yaml() -> None:
     m = load_manifest(SOURCES_YAML)
     assert isinstance(m, Manifest)
     assert m.schema_version == 1
-    assert "techdocs.akamai.com" in m.allowed_domains
+    assert "raw.githubusercontent.com" in m.allowed_domains
     assert "spinframework.dev" in m.allowed_domains
+    # The WAF-blocked techdocs source/domain was retired in favor of
+    # GitHub README sources.
+    assert "techdocs.akamai.com" not in m.allowed_domains
     source_ids = {s.id for s in m.sources}
     assert source_ids == {
-        "akamai-functions",
         "spin-framework",
-        "linode-api",
         "linode-api-spec",
         "keda",
         "karpenter",
         "terraform-modules",
+        "linode-github",
     }
-    af = next(s for s in m.sources if s.id == "akamai-functions")
-    assert af.product == "Akamai Functions"
-    assert af.domain == "techdocs.akamai.com"
-    assert len(af.urls) > 20
-    assert all(u.startswith("https://techdocs.akamai.com/") for u in af.urls)
+    gh = next(s for s in m.sources if s.id == "linode-github")
+    assert gh.domain == "raw.githubusercontent.com"
+    assert gh.transport == "curl"
+    assert len(gh.urls) >= 30  # full linode org README set
+    assert len(set(gh.urls)) == len(gh.urls)  # no duplicates
+    assert all(u.startswith("https://raw.githubusercontent.com/linode/") for u in gh.urls)
 
 
 def test_returns_immutable_dataclasses() -> None:
