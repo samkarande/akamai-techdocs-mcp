@@ -41,7 +41,6 @@ import httpx
 from akamai_techdocs_mcp.index import (
     EXPECTED_SCHEMA_VERSION,
     USER_CACHE_DIR,
-    USER_CACHE_PATH,
 )
 
 DEFAULT_REPO = "samkarande/akamai-techdocs-mcp"
@@ -61,6 +60,7 @@ class UpdateError(RuntimeError):
 @dataclass(frozen=True, slots=True)
 class _ReleaseInfo:
     tag: str
+    published_at: str
     index_url: str
     sha256_url: str
 
@@ -70,6 +70,7 @@ class _LocalIndexMeta:
     tag: str
     sha256: str
     installed_at: str
+    published_at: str = ""
 
 
 def maybe_update(
@@ -88,12 +89,13 @@ def maybe_update(
 
     Never raises. Logs each failure path to stderr.
     """
-    if os.environ.get(ENV_OFFLINE):
-        return USER_CACHE_PATH if USER_CACHE_PATH.exists() else None
-
     cache_dir = cache_dir or USER_CACHE_DIR
     cache_index = cache_dir / INDEX_ASSET
     cache_meta = cache_dir / "index-meta.json"
+
+    if os.environ.get(ENV_OFFLINE):
+        return cache_index if cache_index.exists() else None
+
     target_repo = repo or os.environ.get(ENV_REPO, DEFAULT_REPO)
 
     try:
@@ -124,10 +126,16 @@ def maybe_update(
                     return cache_index if cache_index.exists() else None
 
                 local = _read_local_meta(cache_meta)
+                # Compare by release publish time (ISO-8601, lexically
+                # sortable), not the tag string: tag schemes can be mixed
+                # (e.g. "v0.1.3" vs "index-2026-06-21") and string-compare
+                # would wrongly treat a newer dated index as older.
                 if (
                     local is not None
                     and cache_index.exists()
-                    and local.tag >= release.tag
+                    and local.published_at
+                    and release.published_at
+                    and local.published_at >= release.published_at
                 ):
                     return cache_index
 
@@ -174,6 +182,7 @@ def _fetch_latest_release(
         )
     return _ReleaseInfo(
         tag=tag,
+        published_at=str(data.get("published_at") or ""),
         index_url=assets[INDEX_ASSET],
         sha256_url=assets[SHA_ASSET],
     )
@@ -214,6 +223,7 @@ def _install_release(
                 tag=release.tag,
                 sha256=expected_sha,
                 installed_at=_now_iso(),
+                published_at=release.published_at,
             ),
         )
     finally:
@@ -271,6 +281,9 @@ def _read_local_meta(path: Path) -> _LocalIndexMeta | None:
             tag=str(data["tag"]),
             sha256=str(data["sha256"]),
             installed_at=str(data["installed_at"]),
+            # Optional: absent in caches written by older versions. An
+            # empty value forces one re-download to migrate the metadata.
+            published_at=str(data.get("published_at", "")),
         )
     except (OSError, ValueError, KeyError):
         return None
@@ -279,7 +292,12 @@ def _read_local_meta(path: Path) -> _LocalIndexMeta | None:
 def _write_local_meta(path: Path, meta: _LocalIndexMeta) -> None:
     path.write_text(
         json.dumps(
-            {"tag": meta.tag, "sha256": meta.sha256, "installed_at": meta.installed_at},
+            {
+                "tag": meta.tag,
+                "sha256": meta.sha256,
+                "installed_at": meta.installed_at,
+                "published_at": meta.published_at,
+            },
             indent=2,
         )
     )

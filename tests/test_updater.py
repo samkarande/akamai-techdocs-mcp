@@ -26,6 +26,8 @@ from tests.test_index import _build_tiny_index
 
 NEW_TAG = "index-2026-06-08"
 OLD_TAG = "index-2026-05-25"
+NEW_PUBLISHED = "2026-06-08T10:00:00Z"
+OLD_PUBLISHED = "2026-05-25T10:00:00Z"
 
 INDEX_URL = f"https://example.invalid/releases/{NEW_TAG}/{INDEX_ASSET}"
 SHA_URL = f"https://example.invalid/releases/{NEW_TAG}/{SHA_ASSET}"
@@ -34,13 +36,19 @@ RELEASE_API_URL = (
 )
 
 
-def _release_json(tag: str = NEW_TAG, *, with_index: bool = True, with_sha: bool = True) -> dict:
+def _release_json(
+    tag: str = NEW_TAG,
+    *,
+    published_at: str = NEW_PUBLISHED,
+    with_index: bool = True,
+    with_sha: bool = True,
+) -> dict:
     assets = []
     if with_index:
         assets.append({"name": INDEX_ASSET, "browser_download_url": INDEX_URL})
     if with_sha:
         assets.append({"name": SHA_ASSET, "browser_download_url": SHA_URL})
-    return {"tag_name": tag, "assets": assets}
+    return {"tag_name": tag, "published_at": published_at, "assets": assets}
 
 
 def _make_index_bytes(tmp_path: Path) -> bytes:
@@ -114,51 +122,59 @@ def test_downloads_new_release_when_cache_missing(
     meta = json.loads((cache_dir / "index-meta.json").read_text())
     assert meta["tag"] == NEW_TAG
     assert meta["sha256"] == hashlib.sha256(index_bytes).hexdigest()
+    assert meta["published_at"] == NEW_PUBLISHED
 
 
-def test_skips_when_local_tag_is_already_newer_or_equal(
-    cache_dir: Path, tmp_path: Path
-) -> None:
-    cache_dir.mkdir(parents=True)
-    index_bytes = _make_index_bytes(tmp_path)
+def _write_cache(cache_dir: Path, index_bytes: bytes, meta: dict) -> None:
+    cache_dir.mkdir(parents=True, exist_ok=True)
     (cache_dir / INDEX_ASSET).write_bytes(index_bytes)
-    (cache_dir / "index-meta.json").write_text(
-        json.dumps(
-            {
-                "tag": NEW_TAG,  # exactly equal to what's "available"
-                "sha256": hashlib.sha256(index_bytes).hexdigest(),
-                "installed_at": "2026-06-08T00:00:00Z",
-            }
-        )
-    )
-    download_counter = {"index": 0}
+    (cache_dir / "index-meta.json").write_text(json.dumps(meta))
+
+
+def _counting_client(release: dict) -> tuple[httpx.Client, dict]:
+    counter = {"index": 0}
 
     def handler(request: httpx.Request) -> httpx.Response:
         if str(request.url) == RELEASE_API_URL:
-            return httpx.Response(200, json=_release_json())
+            return httpx.Response(200, json=release)
         if str(request.url) == INDEX_URL:
-            download_counter["index"] += 1
+            counter["index"] += 1
         return httpx.Response(404)
 
-    client = httpx.Client(transport=httpx.MockTransport(handler))
+    return httpx.Client(transport=httpx.MockTransport(handler)), counter
+
+
+def test_skips_when_local_published_at_is_newer_or_equal(
+    cache_dir: Path, tmp_path: Path
+) -> None:
+    index_bytes = _make_index_bytes(tmp_path)
+    _write_cache(
+        cache_dir,
+        index_bytes,
+        {
+            "tag": NEW_TAG,
+            "sha256": hashlib.sha256(index_bytes).hexdigest(),
+            "installed_at": "2026-06-08T00:00:00Z",
+            "published_at": NEW_PUBLISHED,  # equal to what's "available"
+        },
+    )
+    client, counter = _counting_client(_release_json())
     result = maybe_update(cache_dir=cache_dir, client=client)
     assert result == cache_dir / INDEX_ASSET
-    # Did NOT re-download the index.
-    assert download_counter["index"] == 0
+    assert counter["index"] == 0  # did NOT re-download
 
 
-def test_upgrades_when_local_tag_older(cache_dir: Path, tmp_path: Path) -> None:
-    cache_dir.mkdir(parents=True)
+def test_upgrades_when_local_published_at_older(cache_dir: Path, tmp_path: Path) -> None:
     old_bytes = b"stale-not-a-real-sqlite"
-    (cache_dir / INDEX_ASSET).write_bytes(old_bytes)
-    (cache_dir / "index-meta.json").write_text(
-        json.dumps(
-            {
-                "tag": OLD_TAG,
-                "sha256": hashlib.sha256(old_bytes).hexdigest(),
-                "installed_at": "2026-05-25T00:00:00Z",
-            }
-        )
+    _write_cache(
+        cache_dir,
+        old_bytes,
+        {
+            "tag": OLD_TAG,
+            "sha256": hashlib.sha256(old_bytes).hexdigest(),
+            "installed_at": "2026-05-25T00:00:00Z",
+            "published_at": OLD_PUBLISHED,
+        },
     )
     new_bytes = _make_index_bytes(tmp_path)
     client = _client_with_routes(
@@ -171,6 +187,61 @@ def test_upgrades_when_local_tag_older(cache_dir: Path, tmp_path: Path) -> None:
     out = maybe_update(cache_dir=cache_dir, client=client)
     assert out is not None
     assert out.read_bytes() == new_bytes  # swapped
+
+
+def test_upgrades_across_mixed_tag_schemes(cache_dir: Path, tmp_path: Path) -> None:
+    # Regression: a cached "v0.1.3" (lexically > "index-...") must not block
+    # a newer dated index release. Freshness is decided by published_at.
+    old_bytes = b"stale-not-a-real-sqlite"
+    _write_cache(
+        cache_dir,
+        old_bytes,
+        {
+            "tag": "v0.1.3",
+            "sha256": hashlib.sha256(old_bytes).hexdigest(),
+            "installed_at": OLD_PUBLISHED,
+            "published_at": OLD_PUBLISHED,
+        },
+    )
+    new_bytes = _make_index_bytes(tmp_path)
+    client = _client_with_routes(
+        {
+            RELEASE_API_URL: httpx.Response(
+                200, json=_release_json("index-2026-06-21", published_at=NEW_PUBLISHED)
+            ),
+            INDEX_URL: httpx.Response(200, content=new_bytes),
+            SHA_URL: httpx.Response(200, text=_sha_text(new_bytes)),
+        }
+    )
+    out = maybe_update(cache_dir=cache_dir, client=client)
+    assert out is not None
+    assert out.read_bytes() == new_bytes  # upgraded despite higher local tag string
+
+
+def test_migrates_cache_without_published_at(cache_dir: Path, tmp_path: Path) -> None:
+    # A cache written by an older version lacks published_at; the updater
+    # should re-download once and backfill it.
+    index_bytes = _make_index_bytes(tmp_path)
+    _write_cache(
+        cache_dir,
+        index_bytes,
+        {
+            "tag": NEW_TAG,
+            "sha256": hashlib.sha256(index_bytes).hexdigest(),
+            "installed_at": "2026-06-08T00:00:00Z",
+        },
+    )
+    client = _client_with_routes(
+        {
+            RELEASE_API_URL: httpx.Response(200, json=_release_json()),
+            INDEX_URL: httpx.Response(200, content=index_bytes),
+            SHA_URL: httpx.Response(200, text=_sha_text(index_bytes)),
+        }
+    )
+    out = maybe_update(cache_dir=cache_dir, client=client)
+    assert out is not None
+    meta = json.loads((cache_dir / "index-meta.json").read_text())
+    assert meta["published_at"] == NEW_PUBLISHED
 
 
 def test_sha_mismatch_rejects_download(
