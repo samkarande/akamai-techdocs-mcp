@@ -1,0 +1,12 @@
+# Copy to terraform.tfvars and fill in. Do NOT commit your real tfvars.
+
+# Either set this, or export LINODE_TOKEN in your shell and leave it empty.
+linode_token = ""
+
+# Newark, NJ — historically the "us-east-1" Object Storage cluster.
+region = "us-east"
+
+bucket_label = "raw-images"
+
+# Keep the bucket non-public.
+acl = "private"

@@ -1,0 +1,1 @@
+create object store named raw-images in us-east-1 region. make the object store non public.
