@@ -1,0 +1,9 @@
+#cloud-config
+# Installs Apache and serves a simple page identifying the backend instance.
+# ${hostname} is substituted by Terraform's templatefile() at plan time.
+package_update: true
+packages:
+  - apache2
+runcmd:
+  - bash -c "echo '<html><body><h1>Hello from ${hostname}</h1><p>Served by Apache on Akamai Cloud (Linode), behind a NodeBalancer inside a VPC.</p></body></html>' > /var/www/html/index.html"
+  - systemctl enable --now apache2

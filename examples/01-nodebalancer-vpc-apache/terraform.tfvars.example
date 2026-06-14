@@ -1,0 +1,17 @@
+# Copy to terraform.tfvars and fill in. Do NOT commit your real tfvars.
+
+# Either set this, or export LINODE_TOKEN in your shell and leave it empty.
+linode_token = ""
+
+# Linode usernames whose saved SSH keys should be installed on the instances.
+# Manage keys at https://cloud.linode.com/profile/keys
+authorized_users = ["your-linode-username"]
+
+# Washington, DC. Confirm the exact id with `linode-cli regions list`.
+region = "us-iad"
+
+# Shared CPU Nanode 1GB.
+instance_type = "g6-nanode-1"
+
+instance_count = 2
+prefix         = "example1"

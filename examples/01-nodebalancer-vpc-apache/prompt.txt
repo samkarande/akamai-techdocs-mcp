@@ -1,0 +1,1 @@
+Create 2 linode shared cpu nano instances behind a node balancer within a VPC - create new VPC and subnet. Install apache web server on these linode instances and use ssh certificates available within the account. Choose region washington dc 2.
