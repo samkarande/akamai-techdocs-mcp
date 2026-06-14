@@ -11,10 +11,12 @@ from collections.abc import Iterator
 import pytest
 
 from crawler.fetcher import (
+    CurlTransport,
     FetchOutcome,
     FetchRequest,
     HttpxTransport,
     Transport,
+    _parse_curl_headers,
     fetch,
 )
 
@@ -184,3 +186,99 @@ def test_backoff_is_exponential_capped_at_8s(attempt: int, expected_min: float) 
     )
     assert sleeps, "expected at least one backoff sleep"
     assert sleeps[-1] == expected_min
+
+
+# --- CurlTransport ----------------------------------------------------------
+
+
+def _fake_curl_run(status_line: str, header_lines: str, body: bytes):
+    """Build a subprocess.run replacement that writes curl's -D/-o files."""
+
+    def run(cmd, capture_output, text, timeout):  # noqa: ANN001, ANN202
+        header_path = cmd[cmd.index("-D") + 1]
+        body_path = cmd[cmd.index("-o") + 1]
+        with open(header_path, "w", encoding="utf-8") as fh:
+            fh.write(f"{status_line}\r\n{header_lines}\r\n\r\n")
+        with open(body_path, "wb") as fh:
+            fh.write(body)
+        code = status_line.split()[-1]
+
+        class _Proc:
+            returncode = 0
+            stdout = code
+            stderr = ""
+
+        return _Proc()
+
+    return run
+
+
+def test_curl_transport_returns_status_headers_body(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "crawler.fetcher.subprocess.run",
+        _fake_curl_run("HTTP/2 200", 'content-type: application/json\r\netag: "abc"',
+                       b'{"ok": true}'),
+    )
+    with CurlTransport() as t:
+        status, headers, body = t.get(
+            "https://raw.githubusercontent.com/x/openapi.json",
+            {"If-None-Match": '"abc"'},
+            30.0,
+        )
+    assert status == 200
+    assert headers["content-type"] == "application/json"
+    assert headers["etag"] == '"abc"'
+    assert body == '{"ok": true}'
+
+
+def test_curl_transport_passes_conditional_headers(monkeypatch) -> None:
+    seen: dict[str, object] = {}
+
+    def run(cmd, capture_output, text, timeout):  # noqa: ANN001, ANN202
+        seen["cmd"] = cmd
+        header_path = cmd[cmd.index("-D") + 1]
+        body_path = cmd[cmd.index("-o") + 1]
+        with open(header_path, "w", encoding="utf-8") as fh:
+            fh.write("HTTP/2 304\r\n\r\n")
+        with open(body_path, "wb") as fh:
+            fh.write(b"")
+
+        class _Proc:
+            returncode = 0
+            stdout = "304"
+            stderr = ""
+
+        return _Proc()
+
+    monkeypatch.setattr("crawler.fetcher.subprocess.run", run)
+    with CurlTransport() as t:
+        status, _, _ = t.get("https://example.com/x", {"If-None-Match": '"v1"'}, 30.0)
+    assert status == 304
+    cmd = seen["cmd"]
+    assert "-H" in cmd
+    assert 'If-None-Match: "v1"' in cmd
+
+
+def test_curl_transport_raises_on_nonzero_exit(monkeypatch) -> None:
+    def run(cmd, capture_output, text, timeout):  # noqa: ANN001, ANN202
+        class _Proc:
+            returncode = 6
+            stdout = "000"
+            stderr = "Could not resolve host"
+
+        return _Proc()
+
+    monkeypatch.setattr("crawler.fetcher.subprocess.run", run)
+    with CurlTransport() as t, pytest.raises(RuntimeError, match="curl exited 6"):
+        t.get("https://nope.invalid/x", {}, 5.0)
+
+
+def test_parse_curl_headers_keeps_last_redirect_block(tmp_path) -> None:
+    dump = tmp_path / "h"
+    dump.write_text(
+        "HTTP/2 301\r\nlocation: https://example.com/final\r\n\r\n"
+        "HTTP/2 200\r\ncontent-type: text/plain\r\netag: \"z\"\r\n\r\n",
+        encoding="utf-8",
+    )
+    headers = _parse_curl_headers(str(dump))
+    assert headers == {"content-type": "text/plain", "etag": '"z"'}

@@ -25,6 +25,7 @@ from pathlib import Path
 
 from crawler.chunker import chunk_markdown
 from crawler.fetcher import (
+    CurlTransport,
     FetchOutcome,
     FetchRequest,
     HttpxTransport,
@@ -62,7 +63,7 @@ def main(argv: list[str] | None = None) -> int:
 
         for source in manifest.sources:
             writer.add_source(source)
-            transport = _select_transport(source.domain)
+            transport = _select_transport(source)
             print(f"[{source.id}] {len(source.urls)} URLs via {type(transport).__name__}")
             with _safe_transport(transport) as t:
                 if t is None:
@@ -91,12 +92,20 @@ def _package_version() -> str:
         return "0.0.0+dev"
 
 
-def _select_transport(domain: str) -> Transport:
-    if domain in WAF_DOMAINS:
+def _select_transport(source: Source) -> Transport:
+    # Explicit per-source override wins over domain-based defaults.
+    if source.transport == "curl":
+        return CurlTransport()
+    if source.transport == "httpx":
+        return HttpxTransport()
+    if source.transport == "playwright" or source.domain in WAF_DOMAINS:
         try:
             from crawler.playwright_transport import PlaywrightTransport
         except ImportError:
-            print(f"  warning: playwright not installed; falling back to httpx for {domain}")
+            print(
+                f"  warning: playwright not installed; falling back to httpx "
+                f"for {source.id}"
+            )
             return HttpxTransport()
         return PlaywrightTransport()
     return HttpxTransport()

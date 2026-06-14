@@ -74,6 +74,36 @@ def test_minimal_valid_manifest() -> None:
     assert m.manifest_version == "0.1.0"
     assert len(m.sources) == 1
     assert isinstance(m.sources[0], Source)
+    assert m.sources[0].transport == ""  # default: auto
+
+
+def _manifest_with_transport(value: str) -> str:
+    return dedent(
+        f"""
+        schema_version: 1
+        manifest_version: "0.1.0"
+        allowed_domains:
+          - example.com
+        sources:
+          - id: ex
+            product: Example
+            version: latest
+            domain: example.com
+            transport: {value}
+            urls:
+              - https://example.com/a
+        """
+    )
+
+
+def test_parses_valid_transport_override() -> None:
+    m = load_manifest_from_text(_manifest_with_transport("curl"))
+    assert m.sources[0].transport == "curl"
+
+
+def test_rejects_unknown_transport() -> None:
+    with pytest.raises(ManifestError, match="transport"):
+        load_manifest_from_text(_manifest_with_transport("wget"))
 
 
 def test_rejects_missing_schema_version() -> None:

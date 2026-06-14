@@ -21,10 +21,13 @@
 #     domain        — which allowed_domain this source belongs to.
 #     follow_links  — if true, the crawler follows in-domain links from
 #                     the seed URLs (depth 1). Default false for safety.
+#     transport     — optional fetch override: "curl", "httpx", or
+#                     "playwright". Default (omitted) = auto: playwright
+#                     for WAF domains, httpx otherwise.
 #     urls[]        — seed URLs to fetch.
 
 schema_version: 1
-manifest_version: 0.2.0
+manifest_version: 0.2.1
 
 allowed_domains:
   - techdocs.akamai.com
@@ -120,6 +123,7 @@ sources:
     description: Linode API OpenAPI specification (raw upstream source)
     domain: raw.githubusercontent.com
     follow_links: false
+    transport: curl
     urls:
       - https://raw.githubusercontent.com/linode/linode-api-docs/refs/heads/development/openapi.json
 

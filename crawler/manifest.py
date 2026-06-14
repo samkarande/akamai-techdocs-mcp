@@ -17,6 +17,10 @@ import yaml
 
 SUPPORTED_SCHEMA_VERSIONS = {1}
 
+# Optional per-source fetch transport override. Empty string = auto
+# (domain-based selection in the crawler).
+VALID_TRANSPORTS = {"httpx", "curl", "playwright"}
+
 
 class ManifestError(ValueError):
     """Raised when sources.yaml is malformed or violates an invariant."""
@@ -31,6 +35,7 @@ class Source:
     urls: tuple[str, ...]
     description: str = ""
     follow_links: bool = False
+    transport: str = ""
 
 
 @dataclass(frozen=True, slots=True)
@@ -121,6 +126,12 @@ def _parse_source(raw: Any, allowed_domains: tuple[str, ...]) -> Source:
         )
     description = raw.get("description") or ""
     follow_links = bool(raw.get("follow_links", False))
+    transport = str(raw.get("transport") or "").strip().lower()
+    if transport and transport not in VALID_TRANSPORTS:
+        raise ManifestError(
+            f"source {src_id!r} transport {transport!r} is not one of "
+            f"{sorted(VALID_TRANSPORTS)}"
+        )
     urls_raw = _require(raw, "urls", list)
     urls = tuple(_validate_url(u, domain, src_id) for u in urls_raw)
     if not urls:
@@ -132,6 +143,7 @@ def _parse_source(raw: Any, allowed_domains: tuple[str, ...]) -> Source:
         domain=domain,
         description=description,
         follow_links=follow_links,
+        transport=transport,
         urls=urls,
     )
 
