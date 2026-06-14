@@ -1,0 +1,44 @@
+# Demonstrates "2 pods per node" at the Kubernetes layer (LKE does not expose
+# a kubelet --max-pods cap). With a 2-node pool and 4 replicas, the topology
+# spread constraint forces an even spread of at most 2 web pods per node.
+#
+# Apply after the cluster is up:
+#   terraform output -raw kubeconfig | base64 --decode > kubeconfig.yaml
+#   KUBECONFIG=$PWD/kubeconfig.yaml kubectl apply -f k8s/sample-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app: web
+spec:
+  replicas: 4 # 2 nodes x 2 pods/node
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      # Spread pods evenly across nodes; with replicas = 2 x nodes this caps
+      # the deployment at 2 pods per node.
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: web
+      containers:
+        - name: web
+          image: nginx:stable
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi

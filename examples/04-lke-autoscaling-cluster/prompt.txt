@@ -1,0 +1,1 @@
+create a LKE cluster with autoscale, desired capacity 2 nodes, 2 pods per node in washington dc region.

@@ -173,6 +173,7 @@ runnable code, and a README explaining the design.
 | 1 | [`01-nodebalancer-vpc-apache`](./examples/01-nodebalancer-vpc-apache) | Terraform — Apache web tier (2× nano) behind a NodeBalancer in a new VPC |
 | 2 | [`02-object-storage-private-bucket`](./examples/02-object-storage-private-bucket) | Terraform — a private (non-public) Object Storage bucket |
 | 3 | [`03-managed-mysql-database`](./examples/03-managed-mysql-database) | Terraform — a Managed MySQL 8 database |
+| 4 | [`04-lke-autoscaling-cluster`](./examples/04-lke-autoscaling-cluster) | Terraform + k8s — an autoscaling LKE cluster with a 2-pods-per-node workload |
 
 These were produced by prompting an assistant wired to this MCP server;
 the `prompt.txt` in each folder is the exact request. They are reference

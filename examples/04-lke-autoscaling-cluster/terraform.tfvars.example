@@ -1,0 +1,20 @@
+# Copy to terraform.tfvars and fill in. Do NOT commit your real tfvars.
+
+# Either set this, or export LINODE_TOKEN in your shell and leave it empty.
+linode_token = ""
+
+# Washington, DC.
+region = "us-iad"
+
+# Confirm with `linode-cli lke versions-list`.
+k8s_version = "1.32"
+
+label     = "example4-lke"
+node_type = "g6-standard-2"
+
+# Desired capacity 2, autoscaling 2..4.
+desired_node_count = 2
+autoscaler_min     = 2
+autoscaler_max     = 4
+
+high_availability = false
