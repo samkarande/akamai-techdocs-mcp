@@ -27,7 +27,7 @@
 #     urls[]        — seed URLs to fetch.
 
 schema_version: 1
-manifest_version: 0.3.0
+manifest_version: 0.4.0
 
 allowed_domains:
   - spinframework.dev
@@ -94,6 +94,37 @@ sources:
     follow_links: false
     urls:
       - https://developer.hashicorp.com/terraform/tutorials/modules
+
+  - id: linode-terraform-best-practices
+    product: Linode Terraform
+    version: latest
+    description: >
+      Akamai/Linode Terraform best practices — deprecated attributes, firewall
+      requirements, NodeBalancer private-IP fallback, and general hygiene.
+    domain: raw.githubusercontent.com
+    follow_links: false
+    transport: curl
+    urls:
+      - https://raw.githubusercontent.com/samkarande/akamai-techdocs-mcp/main/docs/linode-terraform-best-practices.md
+
+  - id: linode-terraform-provider-docs
+    product: Linode Terraform Provider
+    version: dev
+    description: >
+      Official resource docs for the Linode Terraform provider — attribute
+      types, deprecations, and usage examples for core infrastructure resources.
+    domain: raw.githubusercontent.com
+    follow_links: false
+    transport: curl
+    urls:
+      - https://raw.githubusercontent.com/linode/terraform-provider-linode/dev/docs/resources/instance.md
+      - https://raw.githubusercontent.com/linode/terraform-provider-linode/dev/docs/resources/firewall.md
+      - https://raw.githubusercontent.com/linode/terraform-provider-linode/dev/docs/resources/firewall_device.md
+      - https://raw.githubusercontent.com/linode/terraform-provider-linode/dev/docs/resources/nodebalancer.md
+      - https://raw.githubusercontent.com/linode/terraform-provider-linode/dev/docs/resources/nodebalancer_config.md
+      - https://raw.githubusercontent.com/linode/terraform-provider-linode/dev/docs/resources/nodebalancer_node.md
+      - https://raw.githubusercontent.com/linode/terraform-provider-linode/dev/docs/resources/vpc.md
+      - https://raw.githubusercontent.com/linode/terraform-provider-linode/dev/docs/resources/vpc_subnet.md
 
   - id: linode-github
     product: Linode GitHub
