@@ -1,24 +1,71 @@
 ###############################################################################
 # Example 2 — a private Object Storage bucket.
 #
-#   Bucket "raw-images" in the us-east (Newark / "us-east-1") region,
-#   with a private ACL so its objects are not publicly readable.
+#   Bucket "raw-images" in the us-east (Newark) region, private ACL.
+#
+# Apply behaviour:
+#   - Bucket does not exist → created, apply succeeds.
+#   - Bucket already exists → skipped with an informational message,
+#     apply still succeeds (no error).
+#
+# Destroy behaviour:
+#   - Bucket is empty → deleted.
+#   - Bucket is non-empty → destroy fails with a helpful message asking
+#     the user to empty the bucket first. This is intentional: Terraform
+#     will not silently discard objects.
+#
+# LINODE_TOKEN must be set in the environment (Terraform already requires
+# it for the provider, so no extra steps are needed).
 ###############################################################################
 
-resource "linode_object_storage_bucket" "raw_images" {
-  region = var.region
-  label  = var.bucket_label
+resource "null_resource" "bucket" {
+  triggers = {
+    bucket_label = var.bucket_label
+    region       = var.region
+    acl          = var.acl
+  }
 
-  # "private" => objects are not publicly accessible. This is the key setting
-  # for "make the object store non public". The canned ACL here is applied at
-  # bucket creation via the Linode API, so no S3 access keys are required.
-  acl = var.acl
+  # Create the bucket, or print a helpful message if it already exists.
+  provisioner "local-exec" {
+    command = <<-EOT
+      STATUS=$(curl -sf -o /dev/null -w '%{http_code}' \
+        -H "Authorization: Bearer $LINODE_TOKEN" \
+        "https://api.linode.com/v4/object-storage/buckets/${var.region}/${var.bucket_label}")
 
-  # Defense in depth: disable cross-origin sharing.
-  cors_enabled = false
+      if [ "$STATUS" = "200" ]; then
+        echo "INFO: Bucket '${var.bucket_label}' already exists in '${var.region}'. No changes made."
+      else
+        curl -sf -X POST \
+          -H "Authorization: Bearer $LINODE_TOKEN" \
+          -H "Content-Type: application/json" \
+          -d '{"label":"${var.bucket_label}","region":"${var.region}","acl":"${var.acl}","cors_enabled":false}' \
+          "https://api.linode.com/v4/object-storage/buckets" > /dev/null \
+          || { echo "ERROR: Failed to create bucket '${var.bucket_label}'."; exit 1; }
+        echo "INFO: Bucket '${var.bucket_label}' created in '${var.region}'."
+      fi
+    EOT
+  }
 
-  # NOTE: `versioning` and `lifecycle_rule` are managed over the S3 API and
-  # would require `access_key`/`secret_key` (e.g. from a
-  # linode_object_storage_key) on this resource, so they're omitted here to
-  # keep the example token-only.
+  # Delete the bucket on destroy — fails if non-empty (intentional safety guard).
+  provisioner "local-exec" {
+    when = destroy
+    command = <<-EOT
+      STATUS=$(curl -sf -X DELETE \
+        -H "Authorization: Bearer $LINODE_TOKEN" \
+        -o /dev/null -w '%{http_code}' \
+        "https://api.linode.com/v4/object-storage/buckets/${self.triggers.region}/${self.triggers.bucket_label}")
+
+      if [ "$STATUS" = "200" ] || [ "$STATUS" = "204" ]; then
+        echo "INFO: Bucket '${self.triggers.bucket_label}' deleted."
+      else
+        echo "ERROR: Could not delete bucket '${self.triggers.bucket_label}'."
+        echo "       If it contains objects, empty it first then re-run terraform destroy."
+        exit 1
+      fi
+    EOT
+  }
+}
+
+locals {
+  bucket_hostname = "${var.bucket_label}.${var.region}.linodeobjects.com"
 }

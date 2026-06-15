@@ -1,19 +1,19 @@
 output "bucket_label" {
   description = "The bucket name."
-  value       = linode_object_storage_bucket.raw_images.label
+  value       = var.bucket_label
 }
 
 output "bucket_region" {
-  description = "Region the bucket was created in."
-  value       = linode_object_storage_bucket.raw_images.region
+  description = "Region the bucket lives in."
+  value       = var.region
 }
 
 output "bucket_hostname" {
   description = "S3-compatible hostname for the bucket."
-  value       = linode_object_storage_bucket.raw_images.hostname
+  value       = local.bucket_hostname
 }
 
 output "bucket_acl" {
-  description = "Effective canned ACL (private = non-public)."
-  value       = linode_object_storage_bucket.raw_images.acl
+  description = "Canned ACL applied at creation (private = non-public)."
+  value       = var.acl
 }
