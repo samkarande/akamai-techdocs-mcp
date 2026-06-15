@@ -6,7 +6,8 @@
 #    └─ subnet (10.0.4.0/24)
 #        ├─ web-1  (public iface for egress + vpc iface 10.0.4.10)
 #        └─ web-2  (public iface for egress + vpc iface 10.0.4.11)
-#   NodeBalancer (HTTP :80, round-robin) ──> web-1:80, web-2:80 (VPC IPs)
+#   NodeBalancer (HTTP :80, round-robin) ──> web-1:80, web-2:80 (private IPs)
+#   Firewall (ports 80/443 inbound) ──> NodeBalancer + web instances
 #
 # Apache is installed via cloud-init (Linode Metadata user_data).
 # Root SSH access uses the SSH keys already saved in your Linode account,
@@ -52,7 +53,8 @@ resource "linode_instance" "web" {
   image  = var.image
   tags   = var.tags
 
-  root_pass = random_password.root.result
+  root_pass  = random_password.root.result
+  private_ip = true
 
   # Use SSH keys already stored in the Linode account for these usernames.
   authorized_users = var.authorized_users
@@ -104,17 +106,44 @@ resource "linode_nodebalancer_config" "http" {
   check_attempts = 3
 }
 
-# NOTE: The NodeBalancer reaches the backends over their VPC addresses. This
-# requires NodeBalancer-in-VPC support to be available for your account and
-# provider version. If unavailable, give each instance a private IP
-# (private_ip = true) and point these nodes at the 192.168.x addresses instead.
 resource "linode_nodebalancer_node" "web" {
   count           = var.instance_count
   nodebalancer_id = linode_nodebalancer.this.id
   config_id       = linode_nodebalancer_config.http.id
 
   label   = "${var.prefix}-web-${count.index + 1}"
-  address = "${local.instance_vpc_ips[count.index]}:80"
+  address = "${linode_instance.web[count.index].private_ip_address}:80"
   weight  = 50
   mode    = "accept"
+}
+
+# --- Firewall ----------------------------------------------------------------
+
+resource "linode_firewall" "this" {
+  label = "${var.prefix}-apache-fw"
+  tags  = var.tags
+
+  inbound_policy  = "DROP"
+  outbound_policy = "ACCEPT"
+
+  inbound {
+    label    = "allow-http"
+    action   = "ACCEPT"
+    protocol = "TCP"
+    ports    = "80"
+    ipv4     = ["0.0.0.0/0"]
+    ipv6     = ["::/0"]
+  }
+
+  inbound {
+    label    = "allow-https"
+    action   = "ACCEPT"
+    protocol = "TCP"
+    ports    = "443"
+    ipv4     = ["0.0.0.0/0"]
+    ipv6     = ["::/0"]
+  }
+
+  linodes       = linode_instance.web[*].id
+  nodebalancers = [linode_nodebalancer.this.id]
 }

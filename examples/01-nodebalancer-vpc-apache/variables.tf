@@ -8,7 +8,7 @@ variable "linode_token" {
 variable "region" {
   description = "Linode region. us-iad is Washington, DC. Verify with `linode-cli regions list`."
   type        = string
-  default     = "us-iad"
+  default     = "us-iad-2"
 }
 
 variable "instance_type" {

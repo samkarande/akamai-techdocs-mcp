@@ -10,7 +10,7 @@ output "nodebalancer_hostname" {
 
 output "instance_public_ips" {
   description = "Public IPv4 of each web instance (for SSH administration)."
-  value       = [for i in linode_instance.web : i.ip_address]
+  value       = [for i in linode_instance.web : tolist(i.ipv4)[0]]
 }
 
 output "instance_vpc_ips" {
@@ -21,4 +21,9 @@ output "instance_vpc_ips" {
 output "vpc_id" {
   description = "ID of the created VPC."
   value       = linode_vpc.this.id
+}
+
+output "firewall_id" {
+  description = "ID of the firewall attached to the NodeBalancer and web instances."
+  value       = linode_firewall.this.id
 }
