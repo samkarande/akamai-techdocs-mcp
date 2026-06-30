@@ -14,14 +14,27 @@ Tools (descriptions here become what MCP clients show the model):
 
 from __future__ import annotations
 
+import asyncio
+from contextlib import asynccontextmanager
 from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
-from akamai_techdocs_mcp.index import IndexHandle
+from akamai_techdocs_mcp.index import IndexHandle, resolve_index_path
 from akamai_techdocs_mcp.updater import maybe_update
 
-mcp: FastMCP = FastMCP("akamai-techdocs")
+
+@asynccontextmanager
+async def _lifespan(server: FastMCP):
+    # Kick off the index refresh in a thread pool so the server is not blocked
+    # waiting on the network during the initialize handshake. The downloaded
+    # index (if any) is picked up on the next server restart.
+    loop = asyncio.get_running_loop()
+    loop.run_in_executor(None, maybe_update)
+    yield
+
+
+mcp: FastMCP = FastMCP("akamai-techdocs", lifespan=_lifespan)
 
 _index: IndexHandle | None = None
 
@@ -85,15 +98,14 @@ def list_sources() -> dict[str, Any]:
 
 
 def main() -> None:
-    # Best-effort: pull a newer index release from GitHub if there is
-    # one. Never raises; if the network is unavailable or the repo has
-    # no releases, we fall through to whatever index is already on disk
-    # (user cache or bundled wheel data). The new file lands in the
-    # user cache and resolve_index_path() finds it ahead of the bundled
-    # copy on the very next get_index() call.
-    maybe_update()
-    # Open the index eagerly so the server fails fast with a clear
-    # error rather than starting up and erroring on the first tool call.
+    # On a completely fresh install (no cached index, no bundled index)
+    # download one synchronously before starting so the first tool call
+    # doesn't fail immediately. On subsequent startups the index already
+    # exists and the refresh happens in the background via _lifespan.
+    if resolve_index_path() is None:
+        maybe_update()
+    # Open the index eagerly so startup errors surface with a clear
+    # message rather than appearing mid-session on the first tool call.
     get_index()
     mcp.run()
 

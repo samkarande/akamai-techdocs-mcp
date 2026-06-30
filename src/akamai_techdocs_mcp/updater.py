@@ -27,6 +27,7 @@ from __future__ import annotations
 import fcntl
 import hashlib
 import json
+import logging
 import os
 import sqlite3
 import sys
@@ -106,6 +107,10 @@ def maybe_update(
 
     lockfile = cache_dir / "updater.lock"
     try:
+        # Silence httpx/httpcore INFO logs — they would appear on stderr and
+        # confuse MCP clients that capture the server process's stderr output.
+        logging.getLogger("httpx").setLevel(logging.WARNING)
+        logging.getLogger("httpcore").setLevel(logging.WARNING)
         with _try_lock(lockfile) as locked:
             if not locked:
                 # Another process is updating; let it finish.
