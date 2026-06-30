@@ -1,1 +1,6 @@
-create a LKE cluster with autoscale, desired capacity 2 nodes, 2 pods per node in washington dc region.
+create a LKE cluster with autoscale, desired capacity 2 nodes, 2 pods per node in us-iad-2 region. use 2GB sharded node size. 
+create 2 kinds of pods - one with apache server and another with ngnix server installed. 
+It should throw a static html with apache Vs ngnix version, ip address and pod name. 
+put the LKE cluster behind node balancer. 
+Create a firewall with port 80 and 443 accessible over internet. 
+

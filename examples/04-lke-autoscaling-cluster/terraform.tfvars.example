@@ -4,13 +4,13 @@
 linode_token = ""
 
 # Washington, DC.
-region = "us-iad"
+region = "us-iad-2"
 
-# Confirm with `linode-cli lke versions-list`.
-k8s_version = "1.32"
+# Check available versions: curl -s -H "Authorization: Bearer $LINODE_TOKEN" https://api.linode.com/v4/lke/versions
+k8s_version = "1.35"
 
 label     = "example4-lke"
-node_type = "g6-standard-2"
+node_type = "g6-standard-1"
 
 # Desired capacity 2, autoscaling 2..4.
 desired_node_count = 2

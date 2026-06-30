@@ -1,0 +1,85 @@
+# Nginx Web Server — Deployment + LoadBalancer Service
+#
+# 2 replicas spread across 2 nodes (1 per node) via topologySpreadConstraints.
+# Each pod generates its index.html at startup using shell + env vars from
+# the Kubernetes Downward API, showing version, pod name, and pod IP.
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: nginx
+      containers:
+        - name: nginx
+          image: nginx:stable
+          ports:
+            - containerPort: 80
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              (
+                echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Nginx Info</title>'
+                echo '<style>'
+                echo 'body{font-family:sans-serif;max-width:600px;margin:60px auto;padding:20px;background:#f0f2f5}'
+                echo 'h1{color:#27ae60;border-bottom:3px solid #27ae60;padding-bottom:8px}'
+                echo 'table{width:100%;border-collapse:collapse;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.1)}'
+                echo 'td{padding:12px 16px;border-bottom:1px solid #eee}'
+                echo 'td:first-child{font-weight:bold;background:#fafafa;width:110px}'
+                echo '</style></head><body>'
+                echo '<h1>Nginx Web Server</h1>'
+                echo '<table>'
+                echo "<tr><td>Version</td><td>$(nginx -v 2>&1)</td></tr>"
+                echo "<tr><td>Pod Name</td><td>$POD_NAME</td></tr>"
+                echo "<tr><td>Pod IP</td><td>$POD_IP</td></tr>"
+                echo '</table></body></html>'
+              ) > /usr/share/nginx/html/index.html
+              exec nginx -g 'daemon off;'
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  annotations:
+    service.beta.kubernetes.io/linode-loadbalancer-throttle: "4"
+spec:
+  type: LoadBalancer
+  selector:
+    app: nginx
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80

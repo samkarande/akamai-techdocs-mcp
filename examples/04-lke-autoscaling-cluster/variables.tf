@@ -6,27 +6,27 @@ variable "linode_token" {
 }
 
 variable "region" {
-  description = "Region for the LKE cluster. us-iad is Washington, DC."
+  description = "Linode region. us-iad-2 is Washington DC (secondary AZ)."
   type        = string
-  default     = "us-iad"
+  default     = "us-iad-2"
 }
 
 variable "k8s_version" {
-  description = "Kubernetes version. Confirm options with `linode-cli lke versions-list`."
+  description = "Kubernetes version. Check available versions with `linode-cli lke versions-list` or the Linode API."
   type        = string
-  default     = "1.32"
+  default     = "1.35"
 }
 
 variable "label" {
-  description = "Label for the LKE cluster."
+  description = "Label prefix for the LKE cluster and firewall."
   type        = string
   default     = "example4-lke"
 }
 
 variable "node_type" {
-  description = "Linode plan for worker nodes. g6-standard-2 is the Shared 4GB plan."
+  description = "Linode plan for worker nodes. g6-standard-1 is the Shared 2 GB plan."
   type        = string
-  default     = "g6-standard-2"
+  default     = "g6-standard-1"
 }
 
 variable "desired_node_count" {
@@ -36,13 +36,13 @@ variable "desired_node_count" {
 }
 
 variable "autoscaler_min" {
-  description = "Autoscaler floor (kept at the desired capacity)."
+  description = "Autoscaler floor — minimum number of nodes."
   type        = number
   default     = 2
 }
 
 variable "autoscaler_max" {
-  description = "Autoscaler ceiling — the pool scales up to this under load."
+  description = "Autoscaler ceiling — maximum number of nodes under load."
   type        = number
   default     = 4
 }
@@ -54,7 +54,7 @@ variable "high_availability" {
 }
 
 variable "tags" {
-  description = "Tags applied to the cluster."
+  description = "Tags applied to the cluster and firewall."
   type        = list(string)
   default     = ["example4", "lke", "managed-by-terraform"]
 }
