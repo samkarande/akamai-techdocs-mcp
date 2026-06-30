@@ -67,7 +67,7 @@ jobs:
           echo "Building $TAG (wheel version $VERSION)"
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v8
+        uses: astral-sh/setup-uv@v8.2.0
         with:
           enable-cache: true
 
