@@ -29,9 +29,9 @@ def test_loads_real_sources_yaml() -> None:
     assert m.schema_version == 1
     assert "raw.githubusercontent.com" in m.allowed_domains
     assert "spinframework.dev" in m.allowed_domains
-    # The WAF-blocked techdocs source/domain was retired in favor of
-    # GitHub README sources.
-    assert "techdocs.akamai.com" not in m.allowed_domains
+    # techdocs.akamai.com is now indexed using ClaudeBot user agent
+    # which is allowlisted by Akamai's WAF/Bot Manager.
+    assert "techdocs.akamai.com" in m.allowed_domains
     source_ids = {s.id for s in m.sources}
     assert source_ids == {
         "spin-framework",
@@ -39,14 +39,32 @@ def test_loads_real_sources_yaml() -> None:
         "keda",
         "karpenter",
         "terraform-modules",
+        "linode-terraform-best-practices",
+        "linode-terraform-provider-docs",
         "linode-github",
+        "akamai-cloud-computing",
+        "akamai-functions",
+        "akamai-developer-center",
     }
     gh = next(s for s in m.sources if s.id == "linode-github")
     assert gh.domain == "raw.githubusercontent.com"
     assert gh.transport == "curl"
-    assert len(gh.urls) >= 30  # full linode org README set
+    assert len(gh.urls) >= 88  # linode org README set (3 redundant ones commented out)
     assert len(set(gh.urls)) == len(gh.urls)  # no duplicates
     assert all(u.startswith("https://raw.githubusercontent.com/linode/") for u in gh.urls)
+    # Verify techdocs sources
+    cloud = next(s for s in m.sources if s.id == "akamai-cloud-computing")
+    assert cloud.domain == "techdocs.akamai.com"
+    assert cloud.transport == "playwright"
+    assert len(cloud.urls) >= 390  # comprehensive cloud computing docs
+    functions = next(s for s in m.sources if s.id == "akamai-functions")
+    assert functions.domain == "techdocs.akamai.com"
+    assert functions.transport == "playwright"
+    assert len(functions.urls) >= 28  # akamai functions docs
+    dev_center = next(s for s in m.sources if s.id == "akamai-developer-center")
+    assert dev_center.domain == "techdocs.akamai.com"
+    assert dev_center.transport == "playwright"
+    assert len(dev_center.urls) == 9  # developer center docs
 
 
 def test_returns_immutable_dataclasses() -> None:

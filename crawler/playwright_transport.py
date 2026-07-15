@@ -23,10 +23,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 WaitUntil = Literal["load", "domcontentloaded", "networkidle", "commit"]
 
-DEFAULT_USER_AGENT = (
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-)
+DEFAULT_USER_AGENT = "ClaudeBot"  # Allowlisted by techdocs.akamai.com WAF
 DEFAULT_WAIT_UNTIL: WaitUntil = "networkidle"
 
 

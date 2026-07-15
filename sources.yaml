@@ -27,7 +27,7 @@
 #     urls[]        — seed URLs to fetch.
 
 schema_version: 1
-manifest_version: 0.4.0
+manifest_version: 0.5.0
 
 allowed_domains:
   - spinframework.dev
@@ -35,6 +35,7 @@ allowed_domains:
   - keda.sh
   - karpenter.sh
   - developer.hashicorp.com
+  - techdocs.akamai.com
 
 sources:
   - id: spin-framework
@@ -135,6 +136,7 @@ sources:
     transport: curl
     # All non-fork repos in the github.com/linode org that have a README,
     # resolved to raw README on each repo's default branch.
+    # Note: Some READMEs now covered by akamai-cloud-computing techdocs are commented out.
     urls:
       - https://raw.githubusercontent.com/linode/Marketplace-Apps/master/readme.md
       - https://raw.githubusercontent.com/linode/TOD-test-report-processor/main/README.md
@@ -170,7 +172,8 @@ sources:
       - https://raw.githubusercontent.com/linode/arpproxy/master/README.md
       - https://raw.githubusercontent.com/linode/beginners-guide-to-devops-tools/main/README.md
       - https://raw.githubusercontent.com/linode/certwrangler/main/README.md
-      - https://raw.githubusercontent.com/linode/cli/master/README.md
+      # REDUNDANT: Covered by akamai-cloud-computing/docs/cli-1.md and related CLI docs
+      # - https://raw.githubusercontent.com/linode/cli/master/README.md
       - https://raw.githubusercontent.com/linode/cloud-firewall-controller/main/README.md
       - https://raw.githubusercontent.com/linode/cluster-api-provider-linode/main/README.md
       - https://raw.githubusercontent.com/linode/dbaas-lke-acl-sync/main/README.md
@@ -195,7 +198,8 @@ sources:
       - https://raw.githubusercontent.com/linode/linode-api-docs/development/README.md
       - https://raw.githubusercontent.com/linode/linode-api-openapi/main/README.md
       - https://raw.githubusercontent.com/linode/linode-blockstorage-csi-driver/main/README.md
-      - https://raw.githubusercontent.com/linode/linode-cli/dev/README.md
+      # REDUNDANT: Covered by akamai-cloud-computing/docs/cli-1.md and related CLI docs
+      # - https://raw.githubusercontent.com/linode/linode-cli/dev/README.md
       - https://raw.githubusercontent.com/linode/linode-cloud-controller-manager/main/README.md
       - https://raw.githubusercontent.com/linode/linode-cosi-driver/main/README.md
       - https://raw.githubusercontent.com/linode/linode-doc-template/master/README.md
@@ -209,7 +213,8 @@ sources:
       - https://raw.githubusercontent.com/linode/lke-enterprise/main/README.md
       - https://raw.githubusercontent.com/linode/lke-sintel-demo/master/README.md
       - https://raw.githubusercontent.com/linode/longview/master/README.md
-      - https://raw.githubusercontent.com/linode/manager/develop/README.md
+      # REDUNDANT: Covered by akamai-cloud-computing/docs/cloud-manager.md and related docs
+      # - https://raw.githubusercontent.com/linode/manager/develop/README.md
       - https://raw.githubusercontent.com/linode/mcp-cluster-api/main/README.md
       - https://raw.githubusercontent.com/linode/ndproxy/master/README.md
       - https://raw.githubusercontent.com/linode/packer-builder-linode/master/README.md
@@ -227,3 +232,515 @@ sources:
       - https://raw.githubusercontent.com/linode/terraform-provider-linode/dev/README.md
       - https://raw.githubusercontent.com/linode/ui-cluster-driver-lke/main/README.md
       - https://raw.githubusercontent.com/linode/velero-plugin/main/README.md
+
+  # ========================================================================
+  # AKAMAI TECHDOCS (OFFICIAL DOCUMENTATION)
+  # Added: 2026-07-15
+  # Source: https://techdocs.akamai.com/llms.txt
+  # ========================================================================
+
+  - id: akamai-cloud-computing
+    product: Akamai Cloud Computing
+    version: latest
+    description: >
+      Official Akamai Cloud (formerly Linode) documentation — comprehensive
+      guides for Compute Instances, Kubernetes (LKE), Block/Object Storage,
+      Networking (VPC, Firewall, NodeBalancer, DNS), Monitoring (Cloud Pulse,
+      Longview), IAM, CLI, Managed Databases, and more.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    urls:
+      # Guides - Getting Started & Account Management
+      - https://techdocs.akamai.com/cloud-computing/docs/welcome.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started.md
+      - https://techdocs.akamai.com/cloud-computing/docs/how-to-choose-a-data-center.md
+      - https://techdocs.akamai.com/cloud-computing/docs/network-transfer-usage-and-costs.md
+      - https://techdocs.akamai.com/cloud-computing/docs/help-and-support.md
+      - https://techdocs.akamai.com/cloud-computing/docs/send-email.md
+      - https://techdocs.akamai.com/cloud-computing/docs/subscribe-to-status-updates.md
+      - https://techdocs.akamai.com/cloud-computing/docs/grant-a-developer-access.md
+      - https://techdocs.akamai.com/cloud-computing/docs/automate-cloud-resource-deployment.md
+      - https://techdocs.akamai.com/cloud-computing/docs/resell-services.md
+      - https://techdocs.akamai.com/cloud-computing/docs/partner-referrals-beta.md
+      - https://techdocs.akamai.com/cloud-computing/docs/distributed-compute-regions.md
+      - https://techdocs.akamai.com/cloud-computing/docs/supported-services-distributed.md
+      - https://techdocs.akamai.com/cloud-computing/docs/plans-distributed.md
+      - https://techdocs.akamai.com/cloud-computing/docs/ip-sharing-distributed.md
+      - https://techdocs.akamai.com/cloud-computing/docs/create-compute-instance-distributed.md
+      - https://techdocs.akamai.com/cloud-computing/docs/new-data-centers-beta-2026.md
+      - https://techdocs.akamai.com/cloud-computing/docs/nvidia-rtx-pro-6000-blackwell-gpu-onboarding.md
+      # User Profile & Security
+      - https://techdocs.akamai.com/cloud-computing/docs/profile.md
+      - https://techdocs.akamai.com/cloud-computing/docs/security-controls-for-user-accounts.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-2fa.md
+      - https://techdocs.akamai.com/cloud-computing/docs/enable-third-party-authentication.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-ssh-keys.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-personal-access-tokens.md
+      - https://techdocs.akamai.com/cloud-computing/docs/reset-your-user-password.md
+      - https://techdocs.akamai.com/cloud-computing/docs/faqs-for-creating-and-managing-linode-accounts.md
+      # Administration
+      - https://techdocs.akamai.com/cloud-computing/docs/administration.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-users-on-your-account.md
+      - https://techdocs.akamai.com/cloud-computing/docs/change-your-email-address.md
+      - https://techdocs.akamai.com/cloud-computing/docs/transfer-services-to-a-different-account.md
+      - https://techdocs.akamai.com/cloud-computing/docs/parent-and-child-accounts-for-akamai-partners.md
+      - https://techdocs.akamai.com/cloud-computing/docs/select-network-interfaces-for-new-linodes.md
+      - https://techdocs.akamai.com/cloud-computing/docs/select-default-firewalls-for-new-linodes.md
+      - https://techdocs.akamai.com/cloud-computing/docs/cancel-an-account.md
+      - https://techdocs.akamai.com/cloud-computing/docs/quotas.md
+      # Billing
+      - https://techdocs.akamai.com/cloud-computing/docs/understanding-how-billing-works.md
+      - https://techdocs.akamai.com/cloud-computing/docs/access-billing-information.md
+      - https://techdocs.akamai.com/cloud-computing/docs/view-invoices-and-payment-history.md
+      - https://techdocs.akamai.com/cloud-computing/docs/update-billing-contact-information.md
+      - https://techdocs.akamai.com/cloud-computing/docs/make-a-payment.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-payment-methods.md
+      - https://techdocs.akamai.com/cloud-computing/docs/stop-further-billing.md
+      - https://techdocs.akamai.com/cloud-computing/docs/tax-information.md
+      - https://techdocs.akamai.com/cloud-computing/docs/referral-program.md
+      - https://techdocs.akamai.com/cloud-computing/docs/add-a-promo-code.md
+      - https://techdocs.akamai.com/cloud-computing/docs/billing-faqs.md
+      # IAM & Access Control
+      - https://techdocs.akamai.com/cloud-computing/docs/identity-and-access-cm.md
+      - https://techdocs.akamai.com/cloud-computing/docs/migration-grants-identity-and-access.md
+      - https://techdocs.akamai.com/cloud-computing/docs/cloud-iam-rbac-vs-grant-linodes.md
+      - https://techdocs.akamai.com/cloud-computing/docs/identity-access-cm-manage-access.md
+      - https://techdocs.akamai.com/cloud-computing/docs/identity-access-cm-available-roles.md
+      - https://techdocs.akamai.com/cloud-computing/docs/single-sign-on-cm.md
+      - https://techdocs.akamai.com/cloud-computing/docs/sso-cm-configuration.md
+      - https://techdocs.akamai.com/cloud-computing/docs/enable-single-sign-on.md
+      - https://techdocs.akamai.com/cloud-computing/docs/enforce-single-sign-on.md
+      - https://techdocs.akamai.com/cloud-computing/docs/test-the-idp-configuration.md
+      - https://techdocs.akamai.com/cloud-computing/docs/add-emergency-access-accounts.md
+      - https://techdocs.akamai.com/cloud-computing/docs/add-sso-required-users.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-idp-settings.md
+      - https://techdocs.akamai.com/cloud-computing/docs/create-an-identity-provider-idp-configuration.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-certificates.md
+      - https://techdocs.akamai.com/cloud-computing/docs/delete-an-identity-provider-idp-configuration.md
+      - https://techdocs.akamai.com/cloud-computing/docs/parent-child-iam.md
+      - https://techdocs.akamai.com/cloud-computing/docs/parent-child-partner.md
+      - https://techdocs.akamai.com/cloud-computing/docs/parent-child-end-customer.md
+      - https://techdocs.akamai.com/cloud-computing/docs/parent-child-migration-partner.md
+      - https://techdocs.akamai.com/cloud-computing/docs/parent-child-migration-end-customer.md
+      - https://techdocs.akamai.com/cloud-computing/docs/iam-aclp.md
+      # Compute Instances
+      - https://techdocs.akamai.com/cloud-computing/docs/compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-compute-instances.md
+      - https://techdocs.akamai.com/cloud-computing/docs/create-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/local-disk-encryption.md
+      - https://techdocs.akamai.com/cloud-computing/docs/set-up-and-secure-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/compute-instance-plan-types.md
+      - https://techdocs.akamai.com/cloud-computing/docs/generational-compute-plans.md
+      - https://techdocs.akamai.com/cloud-computing/docs/how-to-choose-a-compute-instance-plan.md
+      - https://techdocs.akamai.com/cloud-computing/docs/choosing-between-shared-and-dedicated-cpus.md
+      - https://techdocs.akamai.com/cloud-computing/docs/dedicated-cpu-compute-instances.md
+      - https://techdocs.akamai.com/cloud-computing/docs/shared-cpu-compute-instances.md
+      - https://techdocs.akamai.com/cloud-computing/docs/high-memory-compute-instances.md
+      - https://techdocs.akamai.com/cloud-computing/docs/premium-compute-instances.md
+      - https://techdocs.akamai.com/cloud-computing/docs/accelerated-compute-instances.md
+      - https://techdocs.akamai.com/cloud-computing/docs/gpu-compute-instances.md
+      - https://techdocs.akamai.com/cloud-computing/docs/gpu-selection-guidance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/virtual-numa-topology.md
+      - https://techdocs.akamai.com/cloud-computing/docs/install-the-nvidia-cuda-toolkit-on-gpu-compute-instances.md
+      - https://techdocs.akamai.com/cloud-computing/docs/resize-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/known-limitations-you-may-encounter-with-nvidia-rtx-pro-6000-blackwell-server-edition-gpu-linodes.md
+      - https://techdocs.akamai.com/cloud-computing/docs/choose-a-distribution.md
+      - https://techdocs.akamai.com/cloud-computing/docs/default-distro-packages.md
+      - https://techdocs.akamai.com/cloud-computing/docs/package-mirrors.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-disks-on-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/copy-a-disk-over-ssh.md
+      - https://techdocs.akamai.com/cloud-computing/docs/copy-a-disk-to-a-different-account.md
+      - https://techdocs.akamai.com/cloud-computing/docs/reset-the-root-password-on-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/clone-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/access-your-system-console-using-lish.md
+      - https://techdocs.akamai.com/cloud-computing/docs/access-your-desktop-environment-using-glish.md
+      # Compute Networking
+      - https://techdocs.akamai.com/cloud-computing/docs/compute-instance-networking.md
+      - https://techdocs.akamai.com/cloud-computing/docs/automatically-configure-networking.md
+      - https://techdocs.akamai.com/cloud-computing/docs/dns-resolvers.md
+      - https://techdocs.akamai.com/cloud-computing/docs/managing-ip-addresses-on-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/an-overview-of-ipv6-on-linode.md
+      - https://techdocs.akamai.com/cloud-computing/docs/configure-rdns-reverse-dns-on-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/enable-ip-sharing-elastic-ips-in-atlanta-through-frr.md
+      - https://techdocs.akamai.com/cloud-computing/docs/configure-failover-on-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/configuring-ip-failover-over-bgp-using-frr-advanced.md
+      - https://techdocs.akamai.com/cloud-computing/docs/use-keepalived-health-checks-with-bgp-based-failover.md
+      - https://techdocs.akamai.com/cloud-computing/docs/multi-queue-nics.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-configuration-profiles-on-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-the-kernel-on-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/networking-interface.md
+      - https://techdocs.akamai.com/cloud-computing/docs/managing-linode-interfaces.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-configuration-profile-interfaces.md
+      - https://techdocs.akamai.com/cloud-computing/docs/upgrading-config-profile-interfaces-to-linode-interfaces.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manual-network-configuration-on-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/network-configuration-using-networkmanager.md
+      - https://techdocs.akamai.com/cloud-computing/docs/network-configuration-using-netplan.md
+      - https://techdocs.akamai.com/cloud-computing/docs/network-configuration-using-ifupdown.md
+      - https://techdocs.akamai.com/cloud-computing/docs/network-configuration-using-systemd-networkd.md
+      - https://techdocs.akamai.com/cloud-computing/docs/work-with-placement-groups.md
+      # Compute Monitoring & Maintenance
+      - https://techdocs.akamai.com/cloud-computing/docs/monitor-and-maintain-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/configure-email-alerts-for-resource-usage-on-compute-instances.md
+      - https://techdocs.akamai.com/cloud-computing/docs/linodes-audit-logs.md
+      - https://techdocs.akamai.com/cloud-computing/docs/update-packages.md
+      # Compute Troubleshooting
+      - https://techdocs.akamai.com/cloud-computing/docs/troubleshooting-compute-instances.md
+      - https://techdocs.akamai.com/cloud-computing/docs/recover-from-unexpected-shutdowns-with-lassie.md
+      - https://techdocs.akamai.com/cloud-computing/docs/rescue-and-rebuild.md
+      - https://techdocs.akamai.com/cloud-computing/docs/troubleshooting-general-issues-on-compute-instances.md
+      - https://techdocs.akamai.com/cloud-computing/docs/troubleshooting-basic-connection-issues-on-compute-instances.md
+      - https://techdocs.akamai.com/cloud-computing/docs/troubleshooting-ssh-on-compute-instances.md
+      - https://techdocs.akamai.com/cloud-computing/docs/troubleshooting-memory-issues-on-compute-instances.md
+      - https://techdocs.akamai.com/cloud-computing/docs/troubleshooting-firewall-issues-on-compute-instances.md
+      - https://techdocs.akamai.com/cloud-computing/docs/troubleshooting-web-servers.md
+      - https://techdocs.akamai.com/cloud-computing/docs/compute-migrations.md
+      - https://techdocs.akamai.com/cloud-computing/docs/migrate-to-a-new-data-center.md
+      - https://techdocs.akamai.com/cloud-computing/docs/host-maintenance-policy.md
+      - https://techdocs.akamai.com/cloud-computing/docs/faqs-for-compute-instances.md
+      # Linode Managed
+      - https://techdocs.akamai.com/cloud-computing/docs/linode-managed.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-the-linode-managed-service.md
+      - https://techdocs.akamai.com/cloud-computing/docs/configure-credentials-for-linode-managed.md
+      - https://techdocs.akamai.com/cloud-computing/docs/configure-ssh-access-for-linode-managed.md
+      - https://techdocs.akamai.com/cloud-computing/docs/configure-firewall-rules-to-allow-access-from-linode-infrastructure.md
+      - https://techdocs.akamai.com/cloud-computing/docs/create-and-edit-service-monitors-for-linode-managed.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-contacts-for-linode-managed.md
+      - https://techdocs.akamai.com/cloud-computing/docs/cancel-linode-managed.md
+      # Kubernetes (LKE)
+      - https://techdocs.akamai.com/cloud-computing/docs/linode-kubernetes-engine.md
+      - https://techdocs.akamai.com/cloud-computing/docs/lke-enterprise.md
+      - https://techdocs.akamai.com/cloud-computing/docs/lke-enterprise-known-issues.md
+      - https://techdocs.akamai.com/cloud-computing/docs/upgrade-an-lke-enterprise-cluster-to-a-newer-kubernetes-version.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-lke-linode-kubernetes-engine.md
+      - https://techdocs.akamai.com/cloud-computing/docs/create-a-cluster.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-kubernetes-clusters-on-lke.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-nodes-and-node-pools.md
+      - https://techdocs.akamai.com/cloud-computing/docs/an-overview-of-the-kubernetes-dashboard-on-lke.md
+      - https://techdocs.akamai.com/cloud-computing/docs/high-availability-ha-control-plane-on-lke.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-a-cluster-with-kubectl.md
+      - https://techdocs.akamai.com/cloud-computing/docs/lke-versioning-and-life-cycle-policy.md
+      - https://techdocs.akamai.com/cloud-computing/docs/labels-and-taints.md
+      - https://techdocs.akamai.com/cloud-computing/docs/gpus-on-lke.md
+      - https://techdocs.akamai.com/cloud-computing/docs/upgrade-a-cluster-to-a-newer-kubernetes-version.md
+      - https://techdocs.akamai.com/cloud-computing/docs/control-plane-acls.md
+      - https://techdocs.akamai.com/cloud-computing/docs/drain-a-node-pool-on-lke-cluster.md
+      - https://techdocs.akamai.com/cloud-computing/docs/rotate-kubernetes-secrets.md
+      - https://techdocs.akamai.com/cloud-computing/docs/reset-kubeconfig.md
+      - https://techdocs.akamai.com/cloud-computing/docs/deploy-and-manage-a-kubernetes-cluster-with-the-api.md
+      - https://techdocs.akamai.com/cloud-computing/docs/get-started-with-load-balancing-on-an-lke-cluster.md
+      - https://techdocs.akamai.com/cloud-computing/docs/secure-a-cluster-with-user-permissions-and-rbac.md
+      - https://techdocs.akamai.com/cloud-computing/docs/lke-network-firewall-details.md
+      - https://techdocs.akamai.com/cloud-computing/docs/coredns-custom-config.md
+      - https://techdocs.akamai.com/cloud-computing/docs/application-platform.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-akamai-application-platform.md
+      - https://techdocs.akamai.com/cloud-computing/docs/lke-e-metrics.md
+      # Metadata Service
+      - https://techdocs.akamai.com/cloud-computing/docs/overview-of-the-metadata-service.md
+      - https://techdocs.akamai.com/cloud-computing/docs/add-user-data-when-deploying-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/access-the-metadata-service-api.md
+      - https://techdocs.akamai.com/cloud-computing/docs/metadata-service-api.md
+      - https://techdocs.akamai.com/cloud-computing/docs/using-cloud-config-files-to-configure-a-server.md
+      - https://techdocs.akamai.com/cloud-computing/docs/troubleshoot-metadata-service.md
+      - https://techdocs.akamai.com/cloud-computing/docs/additional-resources.md
+      # Images
+      - https://techdocs.akamai.com/cloud-computing/docs/images.md
+      - https://techdocs.akamai.com/cloud-computing/docs/capture-an-image.md
+      - https://techdocs.akamai.com/cloud-computing/docs/upload-an-image.md
+      - https://techdocs.akamai.com/cloud-computing/docs/replicate-an-image.md
+      - https://techdocs.akamai.com/cloud-computing/docs/deploy-an-image-to-a-new-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/deploy-an-image-to-an-existing-compute-instance.md
+      # Backup Service
+      - https://techdocs.akamai.com/cloud-computing/docs/backup-service.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-the-linode-backup-service.md
+      - https://techdocs.akamai.com/cloud-computing/docs/enable-backups.md
+      - https://techdocs.akamai.com/cloud-computing/docs/schedule-backups.md
+      - https://techdocs.akamai.com/cloud-computing/docs/take-a-manual-snapshot.md
+      - https://techdocs.akamai.com/cloud-computing/docs/restore-a-backup-to-a-new-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/restore-a-backup-to-an-existing-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/cancel-backups.md
+      - https://techdocs.akamai.com/cloud-computing/docs/troubleshooting-issues-with-the-backup-service.md
+      - https://techdocs.akamai.com/cloud-computing/docs/download-backups-locally.md
+      - https://techdocs.akamai.com/cloud-computing/docs/faqs-for-the-backup-service.md
+      # Block Storage
+      - https://techdocs.akamai.com/cloud-computing/docs/block-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-block-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-block-storage-volumes.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-block-storage-volumes-with-the-api.md
+      - https://techdocs.akamai.com/cloud-computing/docs/volumes-disk-encryption.md
+      - https://techdocs.akamai.com/cloud-computing/docs/attach-and-detach-a-volume.md
+      - https://techdocs.akamai.com/cloud-computing/docs/resize-a-volume.md
+      - https://techdocs.akamai.com/cloud-computing/docs/configure-and-mount-a-volume.md
+      - https://techdocs.akamai.com/cloud-computing/docs/boot-from-a-block-storage-volume.md
+      - https://techdocs.akamai.com/cloud-computing/docs/transfer-block-storage-data-between-data-centers.md
+      - https://techdocs.akamai.com/cloud-computing/docs/transfer-a-volume-to-a-different-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/common-use-cases-for-block-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/block-storage-audit-logs.md
+      # Object Storage
+      - https://techdocs.akamai.com/cloud-computing/docs/object-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-object-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/endpoint-types.md
+      - https://techdocs.akamai.com/cloud-computing/docs/object-storage-product-limits.md
+      - https://techdocs.akamai.com/cloud-computing/docs/object-storage-pricing.md
+      - https://techdocs.akamai.com/cloud-computing/docs/create-and-manage-buckets.md
+      - https://techdocs.akamai.com/cloud-computing/docs/upload-and-manage-files-objects.md
+      - https://techdocs.akamai.com/cloud-computing/docs/access-buckets-and-files-through-urls.md
+      - https://techdocs.akamai.com/cloud-computing/docs/use-cases-for-object-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-access-keys.md
+      - https://techdocs.akamai.com/cloud-computing/docs/define-access-and-permissions-using-bucket-policies.md
+      - https://techdocs.akamai.com/cloud-computing/docs/define-access-and-permissions-using-acls-access-control-lists.md
+      - https://techdocs.akamai.com/cloud-computing/docs/lifecycle-policies.md
+      - https://techdocs.akamai.com/cloud-computing/docs/use-tags-and-prefixes-in-lifecycle-policies-to-delete-objects.md
+      - https://techdocs.akamai.com/cloud-computing/docs/find-the-canonical-user-id-for-an-account.md
+      - https://techdocs.akamai.com/cloud-computing/docs/configure-a-custom-domain-with-a-tls-ssl-certificate.md
+      - https://techdocs.akamai.com/cloud-computing/docs/clients-and-tooling.md
+      - https://techdocs.akamai.com/cloud-computing/docs/aws-cli-sdks-support-details.md
+      - https://techdocs.akamai.com/cloud-computing/docs/using-the-linode-cli-with-object-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/using-s3cmd-with-object-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/using-s4cmd-with-object-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/using-cyberduck-with-object-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/using-the-aws-cli-with-object-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/using-the-aws-sdk-for-php-with-object-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/using-the-aws-sdk-for-python-boto3-with-object-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/using-grafana-loki-with-object-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/object-storage-best-practices.md
+      - https://techdocs.akamai.com/cloud-computing/docs/data-protection.md
+      - https://techdocs.akamai.com/cloud-computing/docs/protect-data-with-object-lock.md
+      - https://techdocs.akamai.com/cloud-computing/docs/versioning-retain-object-version-history.md
+      - https://techdocs.akamai.com/cloud-computing/docs/data-durability.md
+      - https://techdocs.akamai.com/cloud-computing/docs/designing-deployments-for-high-availability-and-disaster-recovery.md
+      - https://techdocs.akamai.com/cloud-computing/docs/monitor-object-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/object-storage-cloud-pulse-metrics.md
+      - https://techdocs.akamai.com/cloud-computing/docs/logs-for-object-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/cancel-object-storage.md
+      # Cloud Firewall
+      - https://techdocs.akamai.com/cloud-computing/docs/cloud-firewall.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-cloud-firewalls.md
+      - https://techdocs.akamai.com/cloud-computing/docs/create-a-cloud-firewall.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-firewall-rules.md
+      - https://techdocs.akamai.com/cloud-computing/docs/apply-firewall-rules-to-a-service.md
+      - https://techdocs.akamai.com/cloud-computing/docs/update-cloud-firewall-status.md
+      - https://techdocs.akamai.com/cloud-computing/docs/comparing-cloud-firewalls-to-linux-firewall-software.md
+      - https://techdocs.akamai.com/cloud-computing/docs/delete-a-cloud-firewall.md
+      - https://techdocs.akamai.com/cloud-computing/docs/firewalls-audit-logs.md
+      # NodeBalancer
+      - https://techdocs.akamai.com/cloud-computing/docs/nodebalancer.md
+      - https://techdocs.akamai.com/cloud-computing/docs/introduction-to-load-balancing.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-nodebalancers.md
+      - https://techdocs.akamai.com/cloud-computing/docs/create-a-nodebalancer.md
+      - https://techdocs.akamai.com/cloud-computing/docs/configuration-options-for-nodebalancers.md
+      - https://techdocs.akamai.com/cloud-computing/docs/using-proxy-protocol-with-nodebalancers.md
+      - https://techdocs.akamai.com/cloud-computing/docs/available-protocols.md
+      - https://techdocs.akamai.com/cloud-computing/docs/clients-ip-address-pass-through.md
+      - https://techdocs.akamai.com/cloud-computing/docs/back-end-nodes-compute-instances.md
+      - https://techdocs.akamai.com/cloud-computing/docs/tls-ssl-termination-on-nodebalancers.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-nodebalancers.md
+      - https://techdocs.akamai.com/cloud-computing/docs/monitor-nodebalancers.md
+      - https://techdocs.akamai.com/cloud-computing/docs/nodebalancers-metrics.md
+      - https://techdocs.akamai.com/cloud-computing/docs/nodebalancers-audit-logs.md
+      - https://techdocs.akamai.com/cloud-computing/docs/configure-nodebalancers-with-the-api.md
+      # DNS Manager
+      - https://techdocs.akamai.com/cloud-computing/docs/dns-manager.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-dns-manager.md
+      - https://techdocs.akamai.com/cloud-computing/docs/create-a-domain.md
+      - https://techdocs.akamai.com/cloud-computing/docs/dns-record-types.md
+      - https://techdocs.akamai.com/cloud-computing/docs/a-and-aaaa-records.md
+      - https://techdocs.akamai.com/cloud-computing/docs/cname-records.md
+      - https://techdocs.akamai.com/cloud-computing/docs/mx-records.md
+      - https://techdocs.akamai.com/cloud-computing/docs/txt-records.md
+      - https://techdocs.akamai.com/cloud-computing/docs/ns-records.md
+      - https://techdocs.akamai.com/cloud-computing/docs/soa-record.md
+      - https://techdocs.akamai.com/cloud-computing/docs/caa-records.md
+      - https://techdocs.akamai.com/cloud-computing/docs/srv-records.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-domains.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-dns-records.md
+      - https://techdocs.akamai.com/cloud-computing/docs/configure-your-domains-authoritative-name-servers.md
+      - https://techdocs.akamai.com/cloud-computing/docs/incoming-dns-zone-transfers.md
+      - https://techdocs.akamai.com/cloud-computing/docs/outgoing-dns-zone-transfers.md
+      - https://techdocs.akamai.com/cloud-computing/docs/troubleshooting-dns-records.md
+      - https://techdocs.akamai.com/cloud-computing/docs/common-dns-configurations.md
+      # VPC
+      - https://techdocs.akamai.com/cloud-computing/docs/vpc.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-vpc.md
+      - https://techdocs.akamai.com/cloud-computing/docs/create-a-vpc.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-vpcs.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-vpc-subnets.md
+      - https://techdocs.akamai.com/cloud-computing/docs/assign-a-compute-instance-to-a-vpc.md
+      - https://techdocs.akamai.com/cloud-computing/docs/forward-proxy-for-vpc.md
+      - https://techdocs.akamai.com/cloud-computing/docs/vpc-audit-logs.md
+      # VLAN
+      - https://techdocs.akamai.com/cloud-computing/docs/vlan.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-vlans.md
+      - https://techdocs.akamai.com/cloud-computing/docs/attach-a-vlan-to-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/detach-a-vlan-from-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manually-configuring-a-vlan-on-a-compute-instance.md
+      - https://techdocs.akamai.com/cloud-computing/docs/common-use-cases-for-vlans.md
+      - https://techdocs.akamai.com/cloud-computing/docs/create-a-private-network-with-vlans-using-the-api.md
+      # Reserved IPs
+      - https://techdocs.akamai.com/cloud-computing/docs/reserved-ips.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-reserved-ips.md
+      - https://techdocs.akamai.com/cloud-computing/docs/reserve-an-ip.md
+      - https://techdocs.akamai.com/cloud-computing/docs/managing-reserved-ips.md
+      # Managed Databases
+      - https://techdocs.akamai.com/cloud-computing/docs/aiven-database-clusters.md
+      - https://techdocs.akamai.com/cloud-computing/docs/get-started-new-clusters.md
+      - https://techdocs.akamai.com/cloud-computing/docs/database-engines-plans.md
+      - https://techdocs.akamai.com/cloud-computing/docs/aiven-manage-database.md
+      - https://techdocs.akamai.com/cloud-computing/docs/advanced-configuration-parameters.md
+      - https://techdocs.akamai.com/cloud-computing/docs/monitor-databases.md
+      - https://techdocs.akamai.com/cloud-computing/docs/databases-metrics.md
+      - https://techdocs.akamai.com/cloud-computing/docs/aiven-mysql.md
+      - https://techdocs.akamai.com/cloud-computing/docs/aiven-postgresql.md
+      # Cloud Pulse (Monitoring)
+      - https://techdocs.akamai.com/cloud-computing/docs/akamai-cloud-pulse.md
+      - https://techdocs.akamai.com/cloud-computing/docs/aclp-key-concepts-and-terms.md
+      - https://techdocs.akamai.com/cloud-computing/docs/aclp-metrics.md
+      - https://techdocs.akamai.com/cloud-computing/docs/metrics-dashboards.md
+      - https://techdocs.akamai.com/cloud-computing/docs/use-centralized-dashboard.md
+      - https://techdocs.akamai.com/cloud-computing/docs/use-entity-level-dashboards.md
+      - https://techdocs.akamai.com/cloud-computing/docs/export-metrics-to-external-tools.md
+      - https://techdocs.akamai.com/cloud-computing/docs/otel-collector-get-started.md
+      - https://techdocs.akamai.com/cloud-computing/docs/otel-collector-deployment-methods.md
+      - https://techdocs.akamai.com/cloud-computing/docs/otel-collector-receiver-configuration.md
+      - https://techdocs.akamai.com/cloud-computing/docs/otel-collector-request-limits-batching.md
+      - https://techdocs.akamai.com/cloud-computing/docs/otel-collector-configuration-changes.md
+      - https://techdocs.akamai.com/cloud-computing/docs/otel-collector-missing-metrics.md
+      - https://techdocs.akamai.com/cloud-computing/docs/otel-collector-troubleshooting.md
+      - https://techdocs.akamai.com/cloud-computing/docs/otel-collector-faqs.md
+      - https://techdocs.akamai.com/cloud-computing/docs/metrics-dimensions-parameters.md
+      - https://techdocs.akamai.com/cloud-computing/docs/aclp-alerts.md
+      - https://techdocs.akamai.com/cloud-computing/docs/alert-types-and-parameters.md
+      - https://techdocs.akamai.com/cloud-computing/docs/view-alert.md
+      - https://techdocs.akamai.com/cloud-computing/docs/create-user-alert.md
+      - https://techdocs.akamai.com/cloud-computing/docs/edit-alert.md
+      - https://techdocs.akamai.com/cloud-computing/docs/enable-disable-alert.md
+      - https://techdocs.akamai.com/cloud-computing/docs/clone-alert.md
+      - https://techdocs.akamai.com/cloud-computing/docs/delete-alert.md
+      - https://techdocs.akamai.com/cloud-computing/docs/assign-unassign-entities.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-notification-channels.md
+      # Log Delivery
+      - https://techdocs.akamai.com/cloud-computing/docs/log-delivery.md
+      - https://techdocs.akamai.com/cloud-computing/docs/logs-responsibilities.md
+      - https://techdocs.akamai.com/cloud-computing/docs/get-started-with-logs.md
+      - https://techdocs.akamai.com/cloud-computing/docs/quick-start-audit-logs.md
+      - https://techdocs.akamai.com/cloud-computing/docs/quick-start-kubernetes-audit-logs.md
+      - https://techdocs.akamai.com/cloud-computing/docs/streams.md
+      - https://techdocs.akamai.com/cloud-computing/docs/copy-of-manage-streams-ga.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-streams.md
+      - https://techdocs.akamai.com/cloud-computing/docs/destinations.md
+      - https://techdocs.akamai.com/cloud-computing/docs/copy-of-manage-destinations-ga.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-destinations.md
+      - https://techdocs.akamai.com/cloud-computing/docs/protect-logs-in-object-storage.md
+      - https://techdocs.akamai.com/cloud-computing/docs/log-files.md
+      - https://techdocs.akamai.com/cloud-computing/docs/configuration-audit-log-events.md
+      - https://techdocs.akamai.com/cloud-computing/docs/log-delivery-metrics.md
+      # Longview
+      - https://techdocs.akamai.com/cloud-computing/docs/longview.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-longview.md
+      - https://techdocs.akamai.com/cloud-computing/docs/view-and-manage-longview-clients.md
+      - https://techdocs.akamai.com/cloud-computing/docs/understanding-longview-metrics.md
+      - https://techdocs.akamai.com/cloud-computing/docs/capture-apache-metrics-with-linode-longview.md
+      - https://techdocs.akamai.com/cloud-computing/docs/capture-nginx-metrics-with-linode-longview.md
+      - https://techdocs.akamai.com/cloud-computing/docs/capture-mysql-metrics-with-linode-longview.md
+      - https://techdocs.akamai.com/cloud-computing/docs/change-longview-plan-upgrade-to-pro.md
+      - https://techdocs.akamai.com/cloud-computing/docs/troubleshooting-linode-longview.md
+      # Cloud Manager
+      - https://techdocs.akamai.com/cloud-computing/docs/cloud-manager.md
+      - https://techdocs.akamai.com/cloud-computing/docs/overview-of-cloud-manager.md
+      - https://techdocs.akamai.com/cloud-computing/docs/what-are-cloud-manager-events-and-activity-feeds.md
+      - https://techdocs.akamai.com/cloud-computing/docs/tags-and-groups.md
+      - https://techdocs.akamai.com/cloud-computing/docs/search-in-cloud-manager.md
+      - https://techdocs.akamai.com/cloud-computing/docs/troubleshooting-cloud-manager-errors.md
+      # CLI
+      - https://techdocs.akamai.com/cloud-computing/docs/cli-1.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-the-linode-cli.md
+      - https://techdocs.akamai.com/cloud-computing/docs/administration-commands.md
+      - https://techdocs.akamai.com/cloud-computing/docs/domains-commands.md
+      - https://techdocs.akamai.com/cloud-computing/docs/linode-instances-commands.md
+      - https://techdocs.akamai.com/cloud-computing/docs/linode-interfaces.md
+      - https://techdocs.akamai.com/cloud-computing/docs/lke-commands.md
+      - https://techdocs.akamai.com/cloud-computing/docs/nodebalancers-commands.md
+      - https://techdocs.akamai.com/cloud-computing/docs/object-storage-commands.md
+      - https://techdocs.akamai.com/cloud-computing/docs/support-commands.md
+      - https://techdocs.akamai.com/cloud-computing/docs/volumes-commands.md
+      # StackScripts
+      - https://techdocs.akamai.com/cloud-computing/docs/stackscripts.md
+      - https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-stackscripts.md
+      - https://techdocs.akamai.com/cloud-computing/docs/create-a-stackscript.md
+      - https://techdocs.akamai.com/cloud-computing/docs/deploy-a-compute-instance-using-a-stackscript.md
+      - https://techdocs.akamai.com/cloud-computing/docs/manage-stackscripts.md
+      - https://techdocs.akamai.com/cloud-computing/docs/write-a-custom-script-for-use-with-stackscripts.md
+      - https://techdocs.akamai.com/cloud-computing/docs/common-use-cases-for-stackscripts.md
+      - https://techdocs.akamai.com/cloud-computing/docs/use-an-externally-hosted-deployment-script.md
+      # Changelog
+      - https://techdocs.akamai.com/cloud-computing/changelog/jul-9-2026-lke-updates.md
+      - https://techdocs.akamai.com/cloud-computing/changelog/jul-7-2026-lke-enterprise-kubernetes-v134-support.md
+      - https://techdocs.akamai.com/cloud-computing/changelog/jul-1-2026-reserved-public-ipv4-addresses.md
+      - https://techdocs.akamai.com/cloud-computing/changelog/jul-1-2026-new-billing-model.md
+      - https://techdocs.akamai.com/cloud-computing/changelog/july-1-2026-nvidia-rtx-protm-6000-blackwell-8-card-gpu-instances-beta.md
+
+  - id: akamai-functions
+    product: Akamai Functions
+    version: latest
+    description: >
+      Official Akamai Functions documentation — WebAssembly edge application
+      framework (based on Spin). Covers quickstart, account management, Property
+      Manager integration, database queries (MySQL/PostgreSQL), Key-Value store,
+      cron jobs, Linode Object Storage streaming, and deployment via GitHub Actions.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    urls:
+      # Guides
+      - https://techdocs.akamai.com/akamai-functions/docs/welcome.md
+      - https://techdocs.akamai.com/akamai-functions/docs/quickstart.md
+      - https://techdocs.akamai.com/akamai-functions/docs/manage-accounts.md
+      - https://techdocs.akamai.com/akamai-functions/docs/integrate-with-property-manager.md
+      - https://techdocs.akamai.com/akamai-functions/docs/stream-data-from-linode-object-store.md
+      - https://techdocs.akamai.com/akamai-functions/docs/query-relational-databases-mysql.md
+      - https://techdocs.akamai.com/akamai-functions/docs/query-relational-databases-postgresql.md
+      - https://techdocs.akamai.com/akamai-functions/docs/build-a-supabase-cache-proxy.md
+      - https://techdocs.akamai.com/akamai-functions/docs/schedule-tasks-with-cron-jobs-in-spin.md
+      - https://techdocs.akamai.com/akamai-functions/docs/use-the-key-value-store.md
+      - https://techdocs.akamai.com/akamai-functions/docs/link-an-application.md
+      - https://techdocs.akamai.com/akamai-functions/docs/list-and-inspect-your-applications.md
+      - https://techdocs.akamai.com/akamai-functions/docs/update-an-application.md
+      - https://techdocs.akamai.com/akamai-functions/docs/delete-an-application.md
+      - https://techdocs.akamai.com/akamai-functions/docs/deploy-app-variables.md
+      - https://techdocs.akamai.com/akamai-functions/docs/deploy-using-github-actions.md
+      - https://techdocs.akamai.com/akamai-functions/docs/aka-command-reference.md
+      - https://techdocs.akamai.com/akamai-functions/docs/webassembly-language-support-matrix.md
+      - https://techdocs.akamai.com/akamai-functions/docs/http-trigger-reference.md
+      - https://techdocs.akamai.com/akamai-functions/docs/related-standards.md
+      - https://techdocs.akamai.com/akamai-functions/docs/faq.md
+      - https://techdocs.akamai.com/akamai-functions/docs/application-logs.md
+      - https://techdocs.akamai.com/akamai-functions/docs/quotas-and-limits.md
+      # Changelog
+      - https://techdocs.akamai.com/akamai-functions/changelog/mar-20-2026-spin-aka-v070-updates.md
+      - https://techdocs.akamai.com/akamai-functions/changelog/dec-5-2025-spin-aka-v060-updates.md
+      - https://techdocs.akamai.com/akamai-functions/changelog/sept-16-2025-spin-aka-v050-updates.md
+      - https://techdocs.akamai.com/akamai-functions/changelog/aug-26-2025-spin-aka-v044-updates.md
+      - https://techdocs.akamai.com/akamai-functions/changelog/aug-7-2025-spin-aka-v043-updates.md
+
+  - id: akamai-developer-center
+    product: Akamai Developer Center
+    version: latest
+    description: >
+      Official Akamai Developer Center documentation — EdgeGrid authentication,
+      CLI tools, API connectors (Postman, HTTPie, Docker), and error response
+      handling for Akamai APIs.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    urls:
+      # Guides
+      - https://techdocs.akamai.com/developer/docs/developer-center.md
+      - https://techdocs.akamai.com/developer/docs/edgegrid.md
+      - https://techdocs.akamai.com/developer/docs/connectors.md
+      - https://techdocs.akamai.com/developer/docs/cli.md
+      - https://techdocs.akamai.com/developer/docs/postman.md
+      - https://techdocs.akamai.com/developer/docs/httpie.md
+      - https://techdocs.akamai.com/developer/docs/docker.md
+      - https://techdocs.akamai.com/developer/docs/error-responses.md
+      # Recipes
+      - https://techdocs.akamai.com/developer/recipes/authenticate-api-requests.md

@@ -30,6 +30,7 @@ from typing import Protocol, runtime_checkable
 import httpx
 
 DEFAULT_USER_AGENT = "akamai-techdocs-mcp-crawler/0.1"
+TECHDOCS_USER_AGENT = "ClaudeBot"  # Allowlisted by techdocs.akamai.com WAF
 DEFAULT_TIMEOUT_SECONDS = 30.0
 DEFAULT_MAX_RETRIES = 3
 
