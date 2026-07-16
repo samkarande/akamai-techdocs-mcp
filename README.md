@@ -1,98 +1,116 @@
 # akamai-techdocs-mcp
 
-An MCP server that gives AI assistants (Claude Desktop, Claude Code,
-Cursor, …) full-text search across Akamai Cloud (Linode) and Akamai
-Functions documentation, plus the ability to fetch entire doc pages by
-URL.
+An MCP server that gives AI assistants instant access to comprehensive Akamai technical documentation. Search and retrieve docs for Akamai Cloud Computing (Linode), Akamai Functions, Developer tools, and more — all offline, with automatic updates.
 
-The server ships with a prebuilt SQLite index of the docs, so it works
-offline immediately after install. A CI job rebuilds the index from the
-URLs declared in [`sources.yaml`](./sources.yaml) — adding new URLs to
-that file is the primary way to extend coverage.
+## What It Does
 
-## Sources included
+This MCP (Model Context Protocol) server indexes **546 documentation URLs** across official Akamai TechDocs, Linode API specs, GitHub project READMEs, and ecosystem tools. It provides three powerful tools to AI assistants:
 
-Roughly 1,500 searchable chunks across:
+- **`search_docs`** — Full-text search across all documentation with BM25 ranking
+- **`get_doc`** — Retrieve complete markdown content for any indexed page
+- **`list_sources`** — Browse the catalog of indexed products and versions
 
-- **Linode API** — the full OpenAPI specification (~449 operations:
-  Linodes, LKE, Managed Databases, Object Storage, VPCs, NodeBalancers,
-  Firewalls, DNS, account/billing, and more).
-- **Linode open-source projects** — READMEs for every non-fork repo in
-  [github.com/linode](https://github.com/linode) (91 repos): SDKs
-  (`linodego`, `linode_api4-python`), the Linode CLI, IaC providers
-  (Terraform, Ansible, Packer), Kubernetes/LKE operators (cloud
-  controller manager, CSI/COSI drivers, Cluster API, Karpenter), the
-  Akamai App Platform (APL), AI quickstarts, and more.
-- **Spin Framework v3** — the WebAssembly app framework upstream of
-  Akamai Functions (quickstart, triggers, language guides, manifest
-  reference, deployment).
-- **Ecosystem references** — KEDA (event-driven autoscaling), Karpenter
-  (node autoscaling), and a HashiCorp Terraform modules tutorial.
+The server ships with a prebuilt SQLite index (~3,000+ searchable chunks) and automatically checks for weekly updates from GitHub Releases. Works offline immediately after install.
 
-Call `list_sources` from any MCP client to see exactly what's in the
-shipped index, including `url_count` and `last_crawled_at`.
+### Documentation Coverage
 
-> Note: hand-written docs on `techdocs.akamai.com` are not indexed —
-> Akamai's Bot Manager returns HTTP 403 to crawlers (local and CI
-> alike). The Linode API content is sourced from the upstream OpenAPI
-> spec on GitHub instead.
+**Official Akamai TechDocs** (434 URLs):
+- **Akamai Cloud Computing** (397 URLs) — Comprehensive guides for Compute Instances, Kubernetes (LKE), Block/Object Storage, Networking (VPC, Firewall, NodeBalancer, DNS), Monitoring (Cloud Pulse, Longview), IAM, CLI, Managed Databases
+- **Akamai Functions** (28 URLs) — WebAssembly edge application framework, quickstart, database integration, Key-Value store, cron jobs
+- **Akamai Developer Center** (9 URLs) — EdgeGrid authentication, CLI tools, API connectors (Postman, HTTPie, Docker)
 
-## Install
+**Linode API & Tools** (112 URLs):
+- **Linode API OpenAPI Spec** — Complete API reference (~449 operations)
+- **Linode Open-Source Projects** (88 repos) — SDKs (linodego, linode_api4-python, ansible_linode), IaC providers (Terraform, Ansible, Packer), Kubernetes operators (CSI/COSI drivers, Cluster API, Karpenter provider), Akamai App Platform (APL), AI quickstarts
+- **Linode Terraform Provider** — Resource documentation for infrastructure as code
 
-You need [`uv`](https://docs.astral.sh/uv/) installed. Pick whichever
-of these matches how you want to run the server.
+**Ecosystem References**:
+- **Spin Framework v3** — WebAssembly app framework (upstream for Akamai Functions)
+- **KEDA** — Kubernetes event-driven autoscaling deployment reference
+- **Karpenter** — Kubernetes node autoscaler getting started guide
+- **HashiCorp Terraform** — Modules tutorial
 
-### Option 1 — `uvx`, no install (recommended for trying it out)
+Call `list_sources` from your AI assistant to see exactly what's indexed with URL counts and last crawl timestamps.
 
-Point your MCP client at `uvx` and let it fetch + cache on each launch:
+## How to Use
 
-```sh
-uvx --from git+https://github.com/samkarande/akamai-techdocs-mcp akamai-techdocs-mcp
+Once installed and configured, simply ask your AI assistant natural-language questions:
+
+**Examples:**
+- *"Use akamai-techdocs to look up the Linode API call to create an LKE Kubernetes cluster."*
+- *"Search akamai-techdocs for how to configure a VPC with Terraform."*
+- *"How do I create a compute instance with the linodego Go SDK? Check akamai-techdocs."*
+- *"Look up Akamai Functions Key-Value store usage."*
+- *"Find documentation on setting up Cloud Firewall rules."*
+- *"List all products indexed by akamai-techdocs."*
+
+Each search result includes the source URL, so your AI assistant can cite it properly in answers.
+
+### Worked Examples
+
+The [`examples/`](./examples) directory contains production-ready Terraform configurations generated by prompting Claude with this MCP server:
+
+| Example | Description | Stack |
+|---------|-------------|-------|
+| [`01-nodebalancer-vpc-apache`](./examples/01-nodebalancer-vpc-apache) | Apache web tier (2× nano) behind a NodeBalancer in a VPC | Terraform |
+| [`02-object-storage-private-bucket`](./examples/02-object-storage-private-bucket) | Private Object Storage bucket with access keys | Terraform |
+| [`03-managed-mysql-database`](./examples/03-managed-mysql-database) | Managed MySQL 8 database cluster | Terraform |
+| [`04-lke-autoscaling-cluster`](./examples/04-lke-autoscaling-cluster) | Autoscaling LKE cluster with sample workload | Terraform + k8s |
+
+Each example includes the exact `prompt.txt` used to generate it.
+
+## Installation
+
+### Prerequisites
+
+**All Platforms:**
+- Python 3.11 or later
+- [`uv`](https://docs.astral.sh/uv/) package manager
+
+**Install uv:**
+
+```bash
+# macOS / Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows PowerShell
+irm https://astral.sh/uv/install.ps1 | iex
 ```
 
-Wheels built this way ship without a bundled index; the server's
-auto-updater downloads `index.sqlite` from the latest GitHub Release
-on first run.
+### Install the MCP Server
 
-### Option 2 — pinned install from a GitHub Release
+**Recommended: Zero-install via uvx** (macOS, Linux, Windows)
 
-Every release attaches an installable wheel with the freshly built
-index baked in. Grab the wheel URL from the
-[latest release](https://github.com/samkarande/akamai-techdocs-mcp/releases/latest)
-and install it (the filename includes the version):
+No permanent installation needed — `uvx` fetches and caches on demand:
 
-```sh
+```bash
+# Test it works
+uvx --from git+https://github.com/samkarande/akamai-techdocs-mcp akamai-techdocs-mcp --help
+```
+
+The server auto-downloads the prebuilt index from GitHub Releases on first run.
+
+**Alternative: Install from GitHub Release** (for pinned versions)
+
+```bash
+# Find the latest release at:
+# https://github.com/samkarande/akamai-techdocs-mcp/releases/latest
+
 uv tool install --reinstall \
   https://github.com/samkarande/akamai-techdocs-mcp/releases/download/<tag>/akamai_techdocs_mcp-<version>-py3-none-any.whl
 ```
 
-That puts `akamai-techdocs-mcp` on your PATH (typically
-`~/.local/bin/akamai-techdocs-mcp`).
+This installs `akamai-techdocs-mcp` to your PATH (typically `~/.local/bin/` on Linux/macOS, or user Scripts directory on Windows).
 
-### Option 3 — local build from source (developer flow)
+### Configure Your MCP Client
 
-```sh
-git clone https://github.com/samkarande/akamai-techdocs-mcp.git
-cd akamai-techdocs-mcp
+#### Claude Desktop
 
-# 1. Build the prebuilt index (run once, ~10s for Spin docs).
-uv run python -m crawler.build_index
+**macOS:** Edit `~/Library/Application Support/Claude/claude_desktop_config.json`  
+**Windows:** Edit `%APPDATA%\Claude\claude_desktop_config.json`  
+**Linux:** Edit `~/.config/Claude/claude_desktop_config.json`
 
-# 2. Build a wheel that bundles the index.
-uv build --wheel
-
-# 3. Install the CLI tool globally.
-uv tool install --reinstall ./dist/akamai_techdocs_mcp-*.whl
-```
-
-## Wire it into your AI client
-
-### Claude Desktop
-
-Edit `~/Library/Application Support/Claude/claude_desktop_config.json`
-(macOS) or the platform equivalent.
-
-**If you used Option 1 (uvx, no install):**
+**Using uvx (zero-install):**
 
 ```json
 {
@@ -109,7 +127,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json`
 }
 ```
 
-**If you used Option 2 or 3 (installed wheel):**
+**Using installed wheel:**
 
 ```json
 {
@@ -121,188 +139,212 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json`
 }
 ```
 
-If `akamai-techdocs-mcp` isn't on Claude Desktop's PATH, use the
-absolute path from `which akamai-techdocs-mcp` instead.
+If `akamai-techdocs-mcp` isn't found, use the absolute path from `which akamai-techdocs-mcp` (or `where akamai-techdocs-mcp` on Windows).
 
-Fully quit and reopen Claude Desktop.
+**Restart Claude Desktop completely** (quit and reopen, don't just refresh).
 
-### Claude Code
+#### Claude Code
 
-If installed (Options 2/3):
-
-```sh
+```bash
+# Using installed version
 claude mcp add akamai-techdocs -- akamai-techdocs-mcp
-```
 
-Or zero-install (Option 1):
-
-```sh
+# Or zero-install
 claude mcp add akamai-techdocs -- \
   uvx --from git+https://github.com/samkarande/akamai-techdocs-mcp akamai-techdocs-mcp
 ```
 
-### Cursor / other MCP clients
+#### Cursor / Other MCP Clients
 
-Same shape — `command: akamai-techdocs-mcp`, no args, no env vars.
+Configure with `command: akamai-techdocs-mcp` (no args, no env vars).
 
-## Try it
+---
 
-In your assistant, ask things like:
+## TL;DR: Auto-Index, Updates & Building
 
-- *"Use akamai-techdocs to look up the Linode API call to create an LKE
-  Kubernetes cluster."*
-- *"Search akamai-techdocs for the `linode_object_storage_bucket`
-  Terraform resource."*
-- *"How do I create an instance with the linodego Go SDK? Check
-  akamai-techdocs."*
-- *"Look up how to write a Spin component in Rust."*
-- *"List the products indexed by akamai-techdocs."*
+### How the Index Works
 
-Each result includes the source URL so the model can (and should) cite
-it back in answers.
+The server uses a prebuilt SQLite database (`index.sqlite`) containing:
+- **Full-text search index** (BM25) of all documentation chunks
+- **Metadata** for each source (product, version, URLs, last crawl time)
+- **Complete markdown** content for page reassembly
 
-## Examples
+Users **never crawl directly** — the index is built by GitHub Actions CI and distributed via Releases.
 
-The [`examples/`](./examples) directory holds worked, copy-pasteable
-solutions to common Akamai Cloud tasks. Each example is its own folder
-containing the originating natural-language **prompt** (`prompt.txt`),
-runnable code, and a README explaining the design.
+### Automatic Updates
 
-| # | Example | Stack |
-|---|---|---|
-| 1 | [`01-nodebalancer-vpc-apache`](./examples/01-nodebalancer-vpc-apache) | Terraform — Apache web tier (2× nano) behind a NodeBalancer in a new VPC |
-| 2 | [`02-object-storage-private-bucket`](./examples/02-object-storage-private-bucket) | Terraform — a private (non-public) Object Storage bucket |
-| 3 | [`03-managed-mysql-database`](./examples/03-managed-mysql-database) | Terraform — a Managed MySQL 8 database |
-| 4 | [`04-lke-autoscaling-cluster`](./examples/04-lke-autoscaling-cluster) | Terraform + k8s — an autoscaling LKE cluster with a 2-pods-per-node workload |
+**The server auto-updates weekly:**
 
-These were produced by prompting an assistant wired to this MCP server;
-the `prompt.txt` in each folder is the exact request. They are reference
-code — review before applying to a real account.
+1. On startup, checks GitHub Releases for newer index builds
+2. If found, downloads `index.sqlite` + checksum, verifies, and swaps atomically
+3. Falls back to cached index on any failure (offline, rate limit, etc.)
+4. Takes effect on next server restart (usually when you relaunch your MCP client)
 
-## Tools the server exposes
+**Environment variables:**
+- `AKAMAI_MCP_OFFLINE=1` — Skip update checks entirely
+- `AKAMAI_MCP_RELEASES_REPO=owner/repo` — Use a different GitHub repo
 
-- **`search_docs(query, product?, limit?)`** — BM25 full-text search
-  across all chunks. Returns a ranked list of `{url, doc_title,
-  heading_path, snippet, source_id, product, version, rank}` with
-  `«match»` highlighting in the snippet.
-- **`get_doc(url)`** — reassembles the full markdown of one doc page
-  from its chunks. Returns metadata + the markdown body.
-- **`list_sources()`** — catalogue of indexed products with
-  `url_count`, `tombstoned_count`, and `last_crawled_at`. Useful for
-  finding the exact `product` filter values `search_docs` accepts.
+### Building the Index Locally
 
-Every response includes an index `meta` block (schema_version,
-manifest_version, manifest_sha, built_at, crawler_version) so freshness
-is observable.
+**For contributors or self-hosting:**
 
-## Adding URLs to the index
+```bash
+# Clone the repo
+git clone https://github.com/samkarande/akamai-techdocs-mcp.git
+cd akamai-techdocs-mcp
 
-Edit [`sources.yaml`](./sources.yaml). Open a PR. The weekly CI workflow
-([`build-index.yml`](.github/workflows/build-index.yml)) rebuilds the
-index with your URLs included; users get the new content on their next
-refresh — no package upgrade required.
+# Install dev dependencies (includes crawler tools)
+uv sync --group dev
 
-Constraints enforced by the manifest loader:
+# Install Playwright browser (needed for techdocs.akamai.com)
+uv run playwright install chromium
 
-- URLs must be HTTPS.
-- Each URL's hostname must match its source's `domain`.
-- Every source `domain` must be present in `allowed_domains`.
-- `schema_version` must match what the loader supports.
-
-## Rebuilding the index locally
-
-```sh
+# Build the index (outputs to dist/index.sqlite)
 uv run python -m crawler.build_index --verbose
-```
 
-Inspect the output:
-
-```sh
+# Inspect the results
 uv run python -c "
 import sqlite3
 c = sqlite3.connect('dist/index.sqlite')
 for r in c.execute('SELECT key, value FROM meta'): print(r)
 print(c.execute('SELECT COUNT(*) FROM chunks').fetchone()[0], 'chunks')
 "
+
+# Build a wheel with bundled index
+uv build --wheel
+
+# Install locally
+uv tool install --reinstall ./dist/akamai_techdocs_mcp-*.whl
 ```
+
+**Linux-specific note:** Playwright on Linux requires system libraries for headless Chromium:
+
+```bash
+sudo apt install -y libglib2.0-0 libnss3 libnspr4 libdbus-1-3 \
+    libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxcb1 \
+    libxkbcommon0 libx11-6 libxcomposite1 libxdamage1 libxext6 \
+    libxfixes3 libxrandr2 libgbm1 libpango-1.0-0 libcairo2 libasound2
+```
+
+### Adding New Documentation Sources
+
+Edit [`sources.yaml`](./sources.yaml) and open a PR. The weekly CI workflow ([`build-index.yml`](.github/workflows/build-index.yml)) will rebuild the index with your URLs included. All users get the update automatically on their next refresh.
+
+**Constraints enforced by the manifest:**
+- URLs must be HTTPS
+- Each URL's hostname must match its source's `domain`
+- Every `domain` must be in `allowed_domains`
+- Follow the existing YAML structure (see file comments)
+
+### Release Workflows
+
+**Two automated workflows:**
+
+1. **`build-index.yml`** (Weekly on Mondays 06:00 UTC)
+   - Crawls all sources in `sources.yaml`
+   - Builds fresh `index.sqlite`
+   - Creates release tagged `index-YYYY-MM-DD`
+   - Users auto-update via this release
+
+2. **`release.yml`** (Manual versioned releases)
+   ```bash
+   # Tag-driven
+   git tag v0.1.0
+   git push origin v0.1.0
+   
+   # Or via GitHub UI
+   gh workflow run release.yml -f version=0.1.0
+   ```
+   - Builds index + versioned wheel
+   - Creates release `v0.1.0`
+
+---
+
+## MCP Tools Reference
+
+### `search_docs(query, product?, limit?)`
+
+Full-text search using BM25 ranking across all indexed documentation.
+
+**Parameters:**
+- `query` (string, required) — Search terms
+- `product` (string, optional) — Filter by product name (e.g., "Akamai Cloud Computing", "Akamai Functions")
+- `limit` (integer, optional, default 10) — Max results to return
+
+**Returns:** Array of results with:
+- `url` — Source URL
+- `doc_title` — Page title
+- `heading_path` — Breadcrumb of headings
+- `snippet` — Matched text with `«highlights»`
+- `source_id`, `product`, `version` — Metadata
+- `rank` — BM25 relevance score
+
+### `get_doc(url)`
+
+Retrieve the complete markdown content for a specific documentation page.
+
+**Parameters:**
+- `url` (string, required) — Full URL of the doc page
+
+**Returns:** Object with:
+- `url`, `title`, `source_id`, `product`, `version` — Metadata
+- `markdown` — Full page content (reassembled from chunks)
+
+### `list_sources()`
+
+Catalog of all indexed products with statistics.
+
+**Returns:** Array of sources with:
+- `id`, `product`, `version`, `description` — Product info
+- `url_count` — Number of indexed URLs
+- `tombstoned_count` — Removed/404'd URLs
+- `last_crawled_at` — ISO timestamp of last index build
+
+Plus `meta` block with `schema_version`, `manifest_version`, `built_at`, etc.
+
+---
 
 ## Development
 
-```sh
-uv sync
+```bash
+# Install all dependencies
+uv sync --group dev
+
+# Run tests
 uv run pytest
+
+# Lint and type check
 uv run ruff check .
 uv run pyright
+
+# Format code
+uv run ruff format .
 ```
 
-The repo uses Python 3.13 pinned via `.python-version` because Python
-3.13.3+ and 3.14 silently skip hatchling's editable install `.pth`
-file (it starts with `_`, treated as hidden after a CVE backport).
-The repo-root `conftest.py` puts `src/` on `sys.path` for tests as a
-local workaround. Wheels (what users install) are unaffected.
+**Python Version Note:**  
+The repo pins Python 3.13 via `.python-version` due to a known issue with 3.13.3+ and hatchling editable installs. Wheels (what users install) are unaffected and work with Python 3.11+.
 
-## Cutting a release
+## Platform Compatibility
 
-Two workflows publish to GitHub Releases:
+✅ **Windows** — Fully supported (Python 3.11+, Windows 10+)  
+✅ **Linux** — Fully supported (Ubuntu, Debian, RHEL-based)  
+✅ **macOS** — Fully supported (current development platform)
 
-- **[`build-index.yml`](.github/workflows/build-index.yml)** runs every
-  Monday at 06:00 UTC (and on demand via `workflow_dispatch`). It
-  rebuilds `index.sqlite`, packages a wheel with that index, and
-  publishes both under a date-based tag like `index-2026-06-08`. This
-  is what keeps installed copies' documentation fresh.
+All core dependencies are pure Python and cross-platform. Crawler requires Playwright (cross-platform with browser binaries for all OSes).
 
-- **[`release.yml`](.github/workflows/release.yml)** is for cutting a
-  versioned code release. Two ways to trigger it:
+## Known Limitations
 
-  ```sh
-  # Tag-driven (preferred)
-  git tag v0.1.0
-  git push origin v0.1.0
-
-  # Or manual via the GitHub UI / CLI
-  gh workflow run release.yml -f version=0.1.0
-  ```
-
-  It builds an index, builds a wheel whose filename includes the
-  version (`akamai_techdocs_mcp-0.1.0-py3-none-any.whl`), and creates
-  a release named `v0.1.0`. The pyproject version is edited in the
-  runner only; the repo itself stays untouched.
-
-## Auto-update
-
-When the server starts, it checks GitHub Releases for a release newer
-(by publish time) than what's already in your local cache
-(`~/.cache/akamai-techdocs-mcp/`). If one exists, it downloads
-`index.sqlite` + `index.sqlite.sha256`, verifies the checksum,
-validates the schema, and atomically swaps the file into place.
-
-- The update is **best-effort**: any failure (offline, rate-limited,
-  schema mismatch, etc.) logs to stderr and falls back to whatever
-  index is already on disk. Server startup never blocks on it for
-  more than a few seconds.
-- A newly downloaded index **takes effect on the next server
-  restart** — your MCP client (Claude Desktop / Code) restarts the
-  server when it relaunches, which is usually enough.
-- Set `AKAMAI_MCP_OFFLINE=1` in the server's environment to skip
-  the check entirely.
-- Point at a different repo's releases with
-  `AKAMAI_MCP_RELEASES_REPO=owner/repo`.
-
-The weekly [`build-index.yml`](.github/workflows/build-index.yml)
-workflow is what produces those releases; users running the installed
-wheel pick up fresh content automatically.
-
-## Known limitations
-
-- **`techdocs.akamai.com` is not indexed** — see "Sources included"
-  above. Akamai's Bot Manager returns HTTP 403 to crawlers (local and
-  CI), so Linode API content comes from the upstream OpenAPI spec on
-  GitHub instead.
-- **Hot-swap of a freshly downloaded index isn't supported.** The
-  running server keeps the old SQLite connection open; the new file
-  is visible only on the next start. For most MCP clients this is a
-  non-issue since they restart the server on app relaunch.
+- **Index updates take effect on next server restart** — The running server keeps the old SQLite connection open. Your MCP client typically restarts the server when relaunched.
+- **Crawling requires ClaudeBot user agent** — Akamai's Bot Manager allowlists the `ClaudeBot` user agent for techdocs.akamai.com access. Other user agents receive HTTP 403.
 
 ## License
 
 GPL-3.0-only. See [LICENSE](./LICENSE).
+
+## Contributing
+
+Contributions welcome! Open an issue or PR. Key areas:
+- Adding new documentation sources to `sources.yaml`
+- Improving search relevance or chunking strategies
+- Platform-specific installation documentation
+- Example prompts and use cases
