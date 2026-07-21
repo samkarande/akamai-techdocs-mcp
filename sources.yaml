@@ -27,7 +27,7 @@
 #     urls[]        — seed URLs to fetch.
 
 schema_version: 1
-manifest_version: 0.5.0
+manifest_version: 0.7.0
 
 allowed_domains:
   - spinframework.dev
@@ -36,6 +36,7 @@ allowed_domains:
   - karpenter.sh
   - developer.hashicorp.com
   - techdocs.akamai.com
+  - zuplo.com
 
 sources:
   - id: spin-framework
@@ -744,3 +745,349 @@ sources:
       - https://techdocs.akamai.com/developer/docs/error-responses.md
       # Recipes
       - https://techdocs.akamai.com/developer/recipes/authenticate-api-requests.md
+
+  - id: akamai-mfa
+    product: Akamai MFA
+    version: latest
+    description: >
+      Official Akamai Multi-Factor Authentication documentation — workforce MFA
+      service covering setup, user/device management, provisioning (SCIM, AD/LDAP,
+      Azure, Okta, EAA), integrations (SAML, ADFS, Okta, PingFederate, VPN/RADIUS),
+      authentication methods (FIDO2, push notifications, hardware tokens, OTP),
+      policies, and administration.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    urls:
+      # Welcome
+      - https://techdocs.akamai.com/mfa/docs/welcome-mfa.md
+      # Get Started
+      - https://techdocs.akamai.com/mfa/docs/set-up-mfa.md
+      - https://techdocs.akamai.com/mfa/docs/sync-directory-mfa.md
+      - https://techdocs.akamai.com/mfa/docs/add-integrations.md
+      - https://techdocs.akamai.com/mfa/docs/define-policies.md
+      - https://techdocs.akamai.com/mfa/docs/enable-self-enroll.md
+      - https://techdocs.akamai.com/mfa/docs/deploy-installation.md
+      # For Administrators
+      - https://techdocs.akamai.com/mfa/docs/manage-mfa.md
+      - https://techdocs.akamai.com/mfa/docs/access-mfa.md
+      - https://techdocs.akamai.com/mfa/docs/role-based-access-controls.md
+      - https://techdocs.akamai.com/mfa/docs/view-mfa-dashboard.md
+      - https://techdocs.akamai.com/mfa/docs/prov-deprov-users.md
+      - https://techdocs.akamai.com/mfa/docs/add-user-manually.md
+      - https://techdocs.akamai.com/mfa/docs/upload-csv-file.md
+      - https://techdocs.akamai.com/mfa/docs/generic-scim-provisioning.md
+      - https://techdocs.akamai.com/mfa/docs/provision-ad-ldap.md
+      - https://techdocs.akamai.com/mfa/docs/provi-users-eaa.md
+      - https://techdocs.akamai.com/mfa/docs/prov-users-azure-scim.md
+      - https://techdocs.akamai.com/mfa/docs/prov-users-okta-scim.md
+      - https://techdocs.akamai.com/mfa/docs/enroll-new-users.md
+      - https://techdocs.akamai.com/mfa/docs/bulk-emails-users.md
+      - https://techdocs.akamai.com/mfa/docs/bulk-emails-grp.md
+      - https://techdocs.akamai.com/mfa/docs/delete-manually.md
+      - https://techdocs.akamai.com/mfa/docs/support-china-users.md
+      - https://techdocs.akamai.com/mfa/docs/manage-enrollment-emails.md
+      - https://techdocs.akamai.com/mfa/docs/view-email-details.md
+      - https://techdocs.akamai.com/mfa/docs/customize-enrollment-email.md
+      - https://techdocs.akamai.com/mfa/docs/manage-users-devices.md
+      - https://techdocs.akamai.com/mfa/docs/view-users-list.md
+      - https://techdocs.akamai.com/mfa/docs/user-statuses.md
+      - https://techdocs.akamai.com/mfa/docs/search-filter-users.md
+      - https://techdocs.akamai.com/mfa/docs/view-user-details.md
+      - https://techdocs.akamai.com/mfa/docs/update-user-manually.md
+      - https://techdocs.akamai.com/mfa/docs/add-rm-user-grp.md
+      - https://techdocs.akamai.com/mfa/docs/enable-and-disable-a-user-account.md
+      - https://techdocs.akamai.com/mfa/docs/view-devices.md
+      - https://techdocs.akamai.com/mfa/docs/device-statuses.md
+      - https://techdocs.akamai.com/mfa/docs/enroll-a-user-directly.md
+      - https://techdocs.akamai.com/mfa/docs/verify-a-user.md
+      - https://techdocs.akamai.com/mfa/docs/manage-hardware-tokens.md
+      - https://techdocs.akamai.com/mfa/docs/assign-hardware-token.md
+      - https://techdocs.akamai.com/mfa/docs/unassign-hardware-token.md
+      - https://techdocs.akamai.com/mfa/docs/resync-hardware-tokens.md
+      - https://techdocs.akamai.com/mfa/docs/activate-deactivate-device.md
+      - https://techdocs.akamai.com/mfa/docs/generate-bypass-code.md
+      - https://techdocs.akamai.com/mfa/docs/manage-locked-out-user.md
+      - https://techdocs.akamai.com/mfa/docs/customize-mobile-app.md
+      - https://techdocs.akamai.com/mfa/docs/manage-group.md
+      - https://techdocs.akamai.com/mfa/docs/view-groups-in-the-list.md
+      - https://techdocs.akamai.com/mfa/docs/search-filter-group.md
+      - https://techdocs.akamai.com/mfa/docs/view-group-members.md
+      - https://techdocs.akamai.com/mfa/docs/add-group-manually.md
+      - https://techdocs.akamai.com/mfa/docs/update-group-manually.md
+      - https://techdocs.akamai.com/mfa/docs/manage-integrations.md
+      - https://techdocs.akamai.com/mfa/docs/username-normalization.md
+      - https://techdocs.akamai.com/mfa/docs/eaa-idp.md
+      - https://techdocs.akamai.com/mfa/docs/adfs.md
+      - https://techdocs.akamai.com/mfa/docs/entra-id-eam.md
+      - https://techdocs.akamai.com/mfa/docs/okta.md
+      - https://techdocs.akamai.com/mfa/docs/passwordless-login-okta.md
+      - https://techdocs.akamai.com/mfa/docs/shibboleth.md
+      - https://techdocs.akamai.com/mfa/docs/splunk-adapter.md
+      - https://techdocs.akamai.com/mfa/docs/unix-pam.md
+      - https://techdocs.akamai.com/mfa/docs/akr-fido2-ssh-agent.md
+      - https://techdocs.akamai.com/mfa/docs/windows-logon-plugin.md
+      - https://techdocs.akamai.com/mfa/docs/demo-integration.md
+      - https://techdocs.akamai.com/mfa/docs/saml.md
+      - https://techdocs.akamai.com/mfa/docs/pingfederate-integration.md
+      - https://techdocs.akamai.com/mfa/docs/keycloak-integration.md
+      - https://techdocs.akamai.com/mfa/docs/ping-davinci.md
+      - https://techdocs.akamai.com/mfa/docs/pf-gateway.md
+      - https://techdocs.akamai.com/mfa/docs/prereq.md
+      - https://techdocs.akamai.com/mfa/docs/add-pf-integr.md
+      - https://techdocs.akamai.com/mfa/docs/vpn-radius-client.md
+      - https://techdocs.akamai.com/mfa/docs/vpn-radius-client-passcode.md
+      - https://techdocs.akamai.com/mfa/docs/vpn-allowing-interaction.md
+      - https://techdocs.akamai.com/mfa/docs/vpn-captive-portal.md
+      - https://techdocs.akamai.com/mfa/docs/vpn-config-guide.md
+      - https://techdocs.akamai.com/mfa/docs/troubleshoot-pf.md
+      - https://techdocs.akamai.com/mfa/docs/manage-policies.md
+      - https://techdocs.akamai.com/mfa/docs/new-existing-user-policy.md
+      - https://techdocs.akamai.com/mfa/docs/device-posture-policy.md
+      - https://techdocs.akamai.com/mfa/docs/lockout-policy.md
+      - https://techdocs.akamai.com/mfa/docs/edit-global-policy.md
+      - https://techdocs.akamai.com/mfa/docs/config-custom-policies.md
+      - https://techdocs.akamai.com/mfa/docs/associate-policies.md
+      - https://techdocs.akamai.com/mfa/docs/dissociate-policies.md
+      - https://techdocs.akamai.com/mfa/docs/allowed-auth-methods.md
+      - https://techdocs.akamai.com/mfa/docs/offline-authentication-policy.md
+      - https://techdocs.akamai.com/mfa/docs/remembered-devices-policy.md
+      - https://techdocs.akamai.com/mfa/docs/deploy-config-changes.md
+      - https://techdocs.akamai.com/mfa/docs/view-deployments-history.md
+      - https://techdocs.akamai.com/mfa/docs/deploy-pending-changes.md
+      - https://techdocs.akamai.com/mfa/docs/manage-reports.md
+      - https://techdocs.akamai.com/mfa/docs/generate-auth-events.md
+      - https://techdocs.akamai.com/mfa/docs/troubleshoot-auth-events.md
+      # For Users
+      - https://techdocs.akamai.com/mfa/docs/use-mfa.md
+      - https://techdocs.akamai.com/mfa/docs/self-enroll-mfa.md
+      - https://techdocs.akamai.com/mfa/docs/self-enroll-smartphone.md
+      - https://techdocs.akamai.com/mfa/docs/self-enroll-your-platform-authenticator.md
+      - https://techdocs.akamai.com/mfa/docs/self-enroll-security-key.md
+      - https://techdocs.akamai.com/mfa/docs/self-enroll-your-passkey.md
+      - https://techdocs.akamai.com/mfa/docs/self-enroll-your-webauthn-credential.md
+      - https://techdocs.akamai.com/mfa/docs/enroll-third-party-otp.md
+      - https://techdocs.akamai.com/mfa/docs/self-enroll-phone.md
+      - https://techdocs.akamai.com/mfa/docs/auth-mfa.md
+      - https://techdocs.akamai.com/mfa/docs/auth-prompt.md
+      - https://techdocs.akamai.com/mfa/docs/use-push-notif.md
+      - https://techdocs.akamai.com/mfa/docs/use-security-key.md
+      - https://techdocs.akamai.com/mfa/docs/use-a-platform-authenticator.md
+      - https://techdocs.akamai.com/mfa/docs/use-a-passkey.md
+      - https://techdocs.akamai.com/mfa/docs/use-a-webauthn-credential.md
+      - https://techdocs.akamai.com/mfa/docs/use-push-totp.md
+      - https://techdocs.akamai.com/mfa/docs/use-clientless-push.md
+      - https://techdocs.akamai.com/mfa/docs/use-phone-call.md
+      - https://techdocs.akamai.com/mfa/docs/use-hardware-token.md
+      - https://techdocs.akamai.com/mfa/docs/use-email-sms-otp.md
+      - https://techdocs.akamai.com/mfa/docs/use-bypass-code.md
+      - https://techdocs.akamai.com/mfa/docs/use-third-party-otp.md
+      - https://techdocs.akamai.com/mfa/docs/use-mfa-rdp-logins.md
+      - https://techdocs.akamai.com/mfa/docs/use-mfa-ssh-logins.md
+      - https://techdocs.akamai.com/mfa/docs/manage-devices.md
+      - https://techdocs.akamai.com/mfa/docs/register-new-device.md
+      - https://techdocs.akamai.com/mfa/docs/delete-enrolled-device.md
+      - https://techdocs.akamai.com/mfa/docs/enable-auto-challenge.md
+      - https://techdocs.akamai.com/mfa/docs/display-install-help-page.md
+      - https://techdocs.akamai.com/mfa/docs/rm-account-mfa-app.md
+      - https://techdocs.akamai.com/mfa/docs/manage-your-phone-security-key-browser-pairing.md
+      # Administrator Tools
+      - https://techdocs.akamai.com/mfa/docs/splunk-app.md
+
+  - id: akamai-iam-api
+    product: Akamai IAM API
+    version: v3
+    description: >
+      Official Akamai Identity and Access Management API documentation — manage
+      users, groups, roles, properties, API clients, credentials, IP access control
+      lists, and permissions for Akamai Control Center.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    urls:
+      - https://techdocs.akamai.com/iam-api/reference/api.md
+      - https://techdocs.akamai.com/iam-api/reference/api-summary.md
+      - https://techdocs.akamai.com/iam-api/reference/get-started.md
+      - https://techdocs.akamai.com/iam-api/reference/api-concepts.md
+      - https://techdocs.akamai.com/iam-api/reference/rotate-credentials.md
+      - https://techdocs.akamai.com/iam-api/reference/rate-limits.md
+      - https://techdocs.akamai.com/iam-api/reference/manage-access-to-properties-and-includes.md
+      - https://techdocs.akamai.com/iam-api/reference/iam-api-migration.md
+      - https://techdocs.akamai.com/iam-api/reference/api-errors.md
+      - https://techdocs.akamai.com/iam-api/reference/400.md
+      - https://techdocs.akamai.com/iam-api/reference/401.md
+      - https://techdocs.akamai.com/iam-api/reference/403.md
+      - https://techdocs.akamai.com/iam-api/reference/404.md
+      - https://techdocs.akamai.com/iam-api/reference/405.md
+      - https://techdocs.akamai.com/iam-api/reference/415.md
+
+  - id: akamai-mfa-oidc-api
+    product: Akamai MFA OIDC API
+    version: latest
+    description: >
+      Official Akamai MFA OpenID Connect (OIDC) API documentation — OIDC-based
+      authentication workflows, API concepts, error handling for MFA integration.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    urls:
+      - https://techdocs.akamai.com/mfa-oidc/reference/api.md
+      - https://techdocs.akamai.com/mfa-oidc/reference/api-summary.md
+      - https://techdocs.akamai.com/mfa-oidc/reference/get-started.md
+      - https://techdocs.akamai.com/mfa-oidc/reference/api-concepts.md
+      - https://techdocs.akamai.com/mfa-oidc/reference/api-workflow.md
+      - https://techdocs.akamai.com/mfa-oidc/reference/errors.md
+      - https://techdocs.akamai.com/mfa-oidc/reference/400.md
+      - https://techdocs.akamai.com/mfa-oidc/reference/401.md
+      - https://techdocs.akamai.com/mfa-oidc/reference/403.md
+      - https://techdocs.akamai.com/mfa-oidc/reference/404.md
+      - https://techdocs.akamai.com/mfa-oidc/reference/415.md
+      - https://techdocs.akamai.com/mfa-oidc/reference/500.md
+
+  - id: akamai-eaa-authentication
+    product: Akamai Enterprise Application Access - Authentication
+    version: latest
+    description: >
+      Official Akamai Enterprise Application Access (EAA) authentication documentation —
+      user authentication, identity provider integrations (Azure AD, ADFS, Okta, OneLogin),
+      SSO, MFA (Akamai MFA, Duo, Google Authenticator), certificate-based authentication,
+      and access control.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    urls:
+      - https://techdocs.akamai.com/eaa/docs/block-users-accessing-apps.md
+      - https://techdocs.akamai.com/eaa/docs/use-idp-eaa-service-provider.md
+      - https://techdocs.akamai.com/eaa/docs/integrate-azure-active-dir.md
+      - https://techdocs.akamai.com/eaa/docs/integrate-active-dir-ad-fs.md
+      - https://techdocs.akamai.com/eaa/docs/integrate-okta.md
+      - https://techdocs.akamai.com/eaa/docs/auth-user-access-apps-onelogin.md
+      - https://techdocs.akamai.com/eaa/docs/sso-auth.md
+      - https://techdocs.akamai.com/eaa/docs/config-sso-jenkins-use-http-headers.md
+      - https://techdocs.akamai.com/eaa/docs/desktop-single-sign-auth.md
+      - https://techdocs.akamai.com/eaa/docs/multi-factor-auth.md
+      - https://techdocs.akamai.com/eaa/docs/pci-dss-mfa.md
+      - https://techdocs.akamai.com/eaa/docs/use-google-authenticator-for-setting-up-totp-on-end-users-device.md
+      - https://techdocs.akamai.com/eaa/docs/use-akamai-mfa.md
+      - https://techdocs.akamai.com/eaa/docs/use-duo-mfa.md
+      - https://techdocs.akamai.com/eaa/docs/duo-universal-prompt-support.md
+      - https://techdocs.akamai.com/eaa/docs/more-mfa-opt.md
+      - https://techdocs.akamai.com/eaa/docs/add-organization-name-for-sms-and-email-mfa-notifications.md
+      - https://techdocs.akamai.com/eaa/docs/end-user-configuration-for-mfa-tokens.md
+      - https://techdocs.akamai.com/eaa/docs/bypass-mfa.md
+      - https://techdocs.akamai.com/eaa/docs/mfa-for-third-party-identity-provider.md
+      - https://techdocs.akamai.com/eaa/docs/certs-eaa.md
+      - https://techdocs.akamai.com/eaa/docs/cert-based-auth-idp.md
+      - https://techdocs.akamai.com/eaa/docs/online-cert-status-protocol-ocsp.md
+      - https://techdocs.akamai.com/eaa/docs/rm-self-signed-cert.md
+      - https://techdocs.akamai.com/eaa/docs/certificate-rotation-of-expired-certificates.md
+      - https://techdocs.akamai.com/eaa/docs/certificate-based-device-authentication-or-user-validation-in-an-application.md
+      - https://techdocs.akamai.com/eaa/docs/origin-server.md
+      - https://techdocs.akamai.com/eaa/docs/network-zones.md
+
+  - id: zuplo-docs
+    product: Zuplo API Gateway
+    version: latest
+    description: >
+      Zuplo API gateway documentation — concepts, handlers, policies, rate limiting,
+      authentication (API keys, JWT, OAuth), custom code, MCP gateway/server, AI gateway,
+      migration guides (Apigee, Kong, AWS, Azure), examples, and local development.
+    domain: zuplo.com
+    follow_links: false
+    urls:
+      # Core Concepts
+      - https://zuplo.com/docs/concepts/how-zuplo-works.md
+      - https://zuplo.com/docs/concepts/project-structure.md
+      - https://zuplo.com/docs/concepts/request-lifecycle.md
+      - https://zuplo.com/docs/concepts/authentication.md
+      - https://zuplo.com/docs/concepts/api-keys.md
+      - https://zuplo.com/docs/concepts/source-control-and-deployment.md
+      # Handlers
+      - https://zuplo.com/docs/handlers/url-forward.md
+      - https://zuplo.com/docs/handlers/url-rewrite.md
+      - https://zuplo.com/docs/handlers/custom-handler.md
+      - https://zuplo.com/docs/handlers/openapi.md
+      - https://zuplo.com/docs/handlers/aws-lambda.md
+      - https://zuplo.com/docs/handlers/mcp-server.md
+      # Policies - Authentication & Security
+      - https://zuplo.com/docs/policies/api-key-inbound.md
+      - https://zuplo.com/docs/policies/rate-limit-inbound.md
+      - https://zuplo.com/docs/policies/quota-inbound.md
+      - https://zuplo.com/docs/policies/auth0-jwt-auth-inbound.md
+      - https://zuplo.com/docs/policies/okta-jwt-auth-inbound.md
+      - https://zuplo.com/docs/policies/firebase-jwt-inbound.md
+      - https://zuplo.com/docs/policies/clerk-jwt-auth-inbound.md
+      - https://zuplo.com/docs/policies/cognito-jwt-auth-inbound.md
+      - https://zuplo.com/docs/policies/supabase-jwt-auth-inbound.md
+      - https://zuplo.com/docs/policies/open-id-jwt-auth-inbound.md
+      - https://zuplo.com/docs/policies/basic-auth-inbound.md
+      - https://zuplo.com/docs/policies/mtls-auth-inbound.md
+      # Policies - Advanced
+      - https://zuplo.com/docs/policies/custom-code-inbound.md
+      - https://zuplo.com/docs/policies/custom-code-outbound.md
+      - https://zuplo.com/docs/policies/request-validation-inbound.md
+      - https://zuplo.com/docs/policies/validate-json-schema-inbound.md
+      - https://zuplo.com/docs/policies/caching-inbound.md
+      - https://zuplo.com/docs/policies/semantic-cache-inbound.md
+      - https://zuplo.com/docs/policies/monetization-inbound.md
+      # Rate Limiting
+      - https://zuplo.com/docs/rate-limiting/getting-started.md
+      - https://zuplo.com/docs/rate-limiting/dynamic-rate-limiting.md
+      - https://zuplo.com/docs/rate-limiting/how-it-works.md
+      # Programmable API
+      - https://zuplo.com/docs/programmable-api/overview.md
+      - https://zuplo.com/docs/programmable-api/zuplo-context.md
+      - https://zuplo.com/docs/programmable-api/zuplo-request.md
+      - https://zuplo.com/docs/programmable-api/runtime-extensions.md
+      # Local Development & Testing
+      - https://zuplo.com/docs/articles/local-development.md
+      - https://zuplo.com/docs/articles/testing.md
+      - https://zuplo.com/docs/cli/overview.md
+      # MCP Gateway
+      - https://zuplo.com/docs/mcp-gateway/introduction.md
+      - https://zuplo.com/docs/mcp-gateway/quickstart.md
+      - https://zuplo.com/docs/mcp-gateway/how-it-works.md
+      - https://zuplo.com/docs/mcp-gateway/auth/overview.md
+      - https://zuplo.com/docs/mcp-gateway/auth/configuring-okta.md
+      - https://zuplo.com/docs/mcp-gateway/auth/configuring-auth0.md
+      # MCP Server
+      - https://zuplo.com/docs/mcp-server/introduction.md
+      - https://zuplo.com/docs/mcp-server/custom-tools.md
+      - https://zuplo.com/docs/mcp-server/graphql.md
+      # AI Gateway
+      - https://zuplo.com/docs/ai-gateway/introduction.md
+      - https://zuplo.com/docs/ai-gateway/getting-started.md
+      - https://zuplo.com/docs/ai-gateway/providers.md
+      # Migration Guides
+      - https://zuplo.com/migrate/apigee-edge.md
+      - https://zuplo.com/migrate/kong-community.md
+      - https://zuplo.com/docs/articles/migrate-from-aws-api-gateway.md
+      - https://zuplo.com/docs/articles/migrate-from-azure-apim.md
+      - https://zuplo.com/docs/articles/migrate-from-apigee.md
+      - https://zuplo.com/docs/articles/migrate-from-kong.md
+      # Examples
+      - https://zuplo.com/examples.md
+      - https://zuplo.com/examples/basic-api-gateway.md
+      - https://zuplo.com/examples/api-key-jwt-multi-auth.md
+      - https://zuplo.com/examples/dynamic-rate-limits.md
+      - https://zuplo.com/examples/circuit-breaker.md
+      - https://zuplo.com/examples/canary-routing.md
+      - https://zuplo.com/examples/geolocation-routing.md
+      - https://zuplo.com/examples/mcp-server-custom-tools.md
+      - https://zuplo.com/examples/remote-mcp-server.md
+      - https://zuplo.com/examples/semantic-caching.md
+      # Blog - API Gateway & Security
+      - https://zuplo.com/blog/a-better-aws-api-gateway.md
+      - https://zuplo.com/blog/api-key-authentication.md
+      - https://zuplo.com/blog/api-key-best-practices.md
+      - https://zuplo.com/blog/how-to-rate-limit-an-api.md
+      - https://zuplo.com/blog/subtle-art-of-rate-limiting-an-api.md
+      - https://zuplo.com/blog/jwt-vs-api-key-authentication.md
+      - https://zuplo.com/blog/time-for-gitops-to-come-to-apis.md
+      # Blog - MCP & AI
+      - https://zuplo.com/blog/introducing-remote-mcp-servers.md
+      - https://zuplo.com/blog/why-mcp-wont-kill-apis.md
+      - https://zuplo.com/blog/ai-agents-are-coming-for-your-apis.md
+      - https://zuplo.com/blog/essential-security-policies-for-mcp-and-ai.md
+      # Blog - API Monetization
+      - https://zuplo.com/blog/api-monetization-ultimate-guide.md
