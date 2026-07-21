@@ -38,3 +38,4 @@ venv/
 
 # Claude Code session dir
 .claude/
+build.log
