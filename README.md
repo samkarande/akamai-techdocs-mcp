@@ -4,25 +4,32 @@ An MCP server that gives AI assistants instant access to comprehensive Akamai te
 
 ## What It Does
 
-This MCP (Model Context Protocol) server indexes **546 documentation URLs** across official Akamai TechDocs, Linode API specs, GitHub project READMEs, and ecosystem tools. It provides three powerful tools to AI assistants:
+This MCP (Model Context Protocol) server indexes **811 documentation URLs** across official Akamai TechDocs, Linode API specs, GitHub project READMEs, and ecosystem tools. It provides three powerful tools to AI assistants:
 
 - **`search_docs`** — Full-text search across all documentation with BM25 ranking
 - **`get_doc`** — Retrieve complete markdown content for any indexed page
 - **`list_sources`** — Browse the catalog of indexed products and versions
 
-The server ships with a prebuilt SQLite index (~3,000+ searchable chunks) and automatically checks for weekly updates from GitHub Releases. Works offline immediately after install.
+The server ships with a prebuilt SQLite index (~6,600+ searchable chunks) and automatically checks for weekly updates from GitHub Releases. Works offline immediately after install.
 
 ### Documentation Coverage
 
-**Official Akamai TechDocs** (434 URLs):
+**Official Akamai TechDocs** (618 URLs):
 - **Akamai Cloud Computing** (397 URLs) — Comprehensive guides for Compute Instances, Kubernetes (LKE), Block/Object Storage, Networking (VPC, Firewall, NodeBalancer, DNS), Monitoring (Cloud Pulse, Longview), IAM, CLI, Managed Databases
+- **Akamai MFA** (129 URLs) — Multi-factor authentication service: setup, provisioning (SCIM, AD/LDAP, Azure, Okta, EAA), user/device management, integrations (SAML, ADFS, PingFederate, VPN/RADIUS), authentication methods (FIDO2, push, hardware tokens, OTP)
 - **Akamai Functions** (28 URLs) — WebAssembly edge application framework, quickstart, database integration, Key-Value store, cron jobs
+- **Akamai EAA Authentication** (28 URLs) — Enterprise Application Access authentication, IdP integrations (Azure AD, ADFS, Okta, OneLogin), SSO, MFA, certificate-based authentication
+- **Akamai IAM API** (15 URLs) — Identity and Access Management API v3: user, group, role, property, API client, and credential management
+- **Akamai MFA OIDC API** (12 URLs) — OpenID Connect authentication workflows for MFA integration
 - **Akamai Developer Center** (9 URLs) — EdgeGrid authentication, CLI tools, API connectors (Postman, HTTPie, Docker)
 
 **Linode API & Tools** (112 URLs):
 - **Linode API OpenAPI Spec** — Complete API reference (~449 operations)
 - **Linode Open-Source Projects** (88 repos) — SDKs (linodego, linode_api4-python, ansible_linode), IaC providers (Terraform, Ansible, Packer), Kubernetes operators (CSI/COSI drivers, Cluster API, Karpenter provider), Akamai App Platform (APL), AI quickstarts
 - **Linode Terraform Provider** — Resource documentation for infrastructure as code
+
+**API Gateway & Developer Tools** (81 URLs):
+- **Zuplo API Gateway** — Concepts, handlers, authentication policies (API keys, JWT, OAuth for Auth0/Okta/Firebase/Clerk/Cognito), rate limiting, MCP Gateway/Server, AI Gateway, migration guides (Apigee, Kong, AWS, Azure), examples
 
 **Ecosystem References**:
 - **Spin Framework v3** — WebAssembly app framework (upstream for Akamai Functions)
@@ -42,6 +49,11 @@ Once installed and configured, simply ask your AI assistant natural-language que
 - *"How do I create a compute instance with the linodego Go SDK? Check akamai-techdocs."*
 - *"Look up Akamai Functions Key-Value store usage."*
 - *"Find documentation on setting up Cloud Firewall rules."*
+- *"How do I set up Akamai MFA with Okta SCIM provisioning?"*
+- *"Search for IAM API methods to manage user groups and roles."*
+- *"What authentication methods does Zuplo support for API gateways?"*
+- *"How do I migrate from AWS API Gateway to Zuplo?"*
+- *"Show me how to configure MCP Gateway with OAuth in Zuplo."*
 - *"List all products indexed by akamai-techdocs."*
 
 Each search result includes the source URL, so your AI assistant can cite it properly in answers.
