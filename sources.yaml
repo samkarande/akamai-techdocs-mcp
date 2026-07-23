@@ -27,7 +27,7 @@
 #     urls[]        — seed URLs to fetch.
 
 schema_version: 1
-manifest_version: 0.7.0
+manifest_version: 0.8.0
 
 allowed_domains:
   - spinframework.dev
@@ -251,6 +251,8 @@ sources:
     domain: techdocs.akamai.com
     follow_links: false
     transport: playwright
+    # Source index: https://techdocs.akamai.com/cloud-computing/docs/llms.txt
+    # To refresh: fetch the llms.txt and extract .md URLs
     urls:
       # Guides - Getting Started & Account Management
       - https://techdocs.akamai.com/cloud-computing/docs/welcome.md
@@ -680,6 +682,271 @@ sources:
       - https://techdocs.akamai.com/cloud-computing/changelog/jul-1-2026-new-billing-model.md
       - https://techdocs.akamai.com/cloud-computing/changelog/july-1-2026-nvidia-rtx-protm-6000-blackwell-8-card-gpu-instances-beta.md
 
+  - id: akamai-edgeworkers
+    product: Akamai EdgeWorkers
+    version: latest
+    description: >
+      Official Akamai EdgeWorkers documentation — serverless JavaScript execution
+      at the edge. Covers event handlers, code bundling, JavaScript API reference,
+      development tools (TypeScript, testing, IDE extensions), administration,
+      monitoring, debugging, recipes, and API reference for managing EdgeWorkers.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    # Source indexes:
+    #   - https://techdocs.akamai.com/edgeworkers/docs/llms.txt (guides)
+    #   - https://techdocs.akamai.com/edgeworkers/reference/llms.txt (API reference)
+    #   - https://techdocs.akamai.com/edgeworkers/recipes/llms.txt (recipes)
+    #   - https://techdocs.akamai.com/edgeworkers/changelog/llms.txt (changelog)
+    # To refresh: fetch each llms.txt and extract .md URLs
+    urls:
+      # Guides - Welcome
+      - https://techdocs.akamai.com/edgeworkers/docs/welcome-to-edgeworkers.md
+      - https://techdocs.akamai.com/edgeworkers/docs/event-handler-functions.md
+      - https://techdocs.akamai.com/edgeworkers/docs/response-orchestration.md
+      - https://techdocs.akamai.com/edgeworkers/docs/administrator-and-developer-roles.md
+      - https://techdocs.akamai.com/edgeworkers/docs/specifications.md
+      - https://techdocs.akamai.com/edgeworkers/docs/use-cases.md
+      - https://techdocs.akamai.com/edgeworkers/docs/store-locator.md
+      - https://techdocs.akamai.com/edgeworkers/docs/redirect-pages-based-on-location.md
+      - https://techdocs.akamai.com/edgeworkers/docs/manifest-and-playlist-personalization.md
+      - https://techdocs.akamai.com/edgeworkers/docs/live-program-replacement.md
+      - https://techdocs.akamai.com/edgeworkers/docs/content-insertion.md
+      - https://techdocs.akamai.com/edgeworkers/docs/process-response-bodies.md
+      - https://techdocs.akamai.com/edgeworkers/docs/transform-response-content.md
+      - https://techdocs.akamai.com/edgeworkers/docs/html-rewriter-dynamic-content-assembly.md
+      - https://techdocs.akamai.com/edgeworkers/docs/fire-and-forget.md
+      - https://techdocs.akamai.com/edgeworkers/docs/content-security-policy.md
+      - https://techdocs.akamai.com/edgeworkers/docs/import-external-module-npm-package-mgr.md
+      # Guides - Prerequisites
+      - https://techdocs.akamai.com/edgeworkers/docs/add-edgeworkers-to-contract.md
+      - https://techdocs.akamai.com/edgeworkers/docs/edgeworkers-free-trial.md
+      - https://techdocs.akamai.com/edgeworkers/docs/manage-access-to-edgeworkers.md
+      - https://techdocs.akamai.com/edgeworkers/docs/select-a-resource-tier.md
+      - https://techdocs.akamai.com/edgeworkers/docs/change-resource-tier.md
+      # Guides - Get started
+      - https://techdocs.akamai.com/edgeworkers/docs/hello-world.md
+      - https://techdocs.akamai.com/edgeworkers/docs/hello-world-edgeworkers-management-application.md
+      - https://techdocs.akamai.com/edgeworkers/docs/create-an-edgeworker-id-1.md
+      - https://techdocs.akamai.com/edgeworkers/docs/add-the-edgeworker-behavior-1.md
+      - https://techdocs.akamai.com/edgeworkers/docs/create-the-hello-world-code-bundle-1.md
+      - https://techdocs.akamai.com/edgeworkers/docs/deploy-hello-world-1.md
+      - https://techdocs.akamai.com/edgeworkers/docs/test-hello-world-1.md
+      - https://techdocs.akamai.com/edgeworkers/docs/api-hello-world.md
+      - https://techdocs.akamai.com/edgeworkers/docs/create-an-edgeworker-id-2.md
+      - https://techdocs.akamai.com/edgeworkers/docs/add-the-edgeworkers-behavior-2.md
+      - https://techdocs.akamai.com/edgeworkers/docs/create-the-hello-world-code-bundle-2.md
+      - https://techdocs.akamai.com/edgeworkers/docs/deploy-hello-world-2.md
+      - https://techdocs.akamai.com/edgeworkers/docs/test-hello-world-2.md
+      - https://techdocs.akamai.com/edgeworkers/docs/cli-hello-world.md
+      - https://techdocs.akamai.com/edgeworkers/docs/create-an-edgeworker-id-3.md
+      - https://techdocs.akamai.com/edgeworkers/docs/add-the-edgeworkers-behavior-3.md
+      - https://techdocs.akamai.com/edgeworkers/docs/create-the-hello-world-code-bundle-3.md
+      - https://techdocs.akamai.com/edgeworkers/docs/deploy-hello-world-3.md
+      - https://techdocs.akamai.com/edgeworkers/docs/test-hello-world-3.md
+      # Guides - Administration
+      - https://techdocs.akamai.com/edgeworkers/docs/set-up-the-edgeworkers-service.md
+      - https://techdocs.akamai.com/edgeworkers/docs/create-an-edgeworker-id.md
+      - https://techdocs.akamai.com/edgeworkers/docs/add-the-edgeworkers-behavior.md
+      - https://techdocs.akamai.com/edgeworkers/docs/manage-edgeworkers.md
+      - https://techdocs.akamai.com/edgeworkers/docs/error-handling.md
+      - https://techdocs.akamai.com/edgeworkers/docs/continue-on-error.md
+      - https://techdocs.akamai.com/edgeworkers/docs/configure-site-failover.md
+      - https://techdocs.akamai.com/edgeworkers/docs/test-site-failove.md
+      - https://techdocs.akamai.com/edgeworkers/docs/akamai-cli.md
+      - https://techdocs.akamai.com/edgeworkers/docs/create-a-subworker.md
+      - https://techdocs.akamai.com/edgeworkers/docs/subworkers-tutorial.md
+      - https://techdocs.akamai.com/edgeworkers/docs/flexible-composition.md
+      - https://techdocs.akamai.com/edgeworkers/docs/terminology.md
+      - https://techdocs.akamai.com/edgeworkers/docs/create-a-parent-edgeworker.md
+      - https://techdocs.akamai.com/edgeworkers/docs/add-child-edgeworkers.md
+      - https://techdocs.akamai.com/edgeworkers/docs/dynamic-reactivation.md
+      - https://techdocs.akamai.com/edgeworkers/docs/review-a-static-activation.md
+      - https://techdocs.akamai.com/edgeworkers/docs/pin-a-revision.md
+      - https://techdocs.akamai.com/edgeworkers/docs/debug-flexible-composition.md
+      # Guides - Development
+      - https://techdocs.akamai.com/edgeworkers/docs/write-your-javascript-code.md
+      - https://techdocs.akamai.com/edgeworkers/docs/javascript-error-handling.md
+      - https://techdocs.akamai.com/edgeworkers/docs/create-a-code-bundle.md
+      - https://techdocs.akamai.com/edgeworkers/docs/code-bundle-format.md
+      - https://techdocs.akamai.com/edgeworkers/docs/import-a-javascript-module.md
+      - https://techdocs.akamai.com/edgeworkers/docs/developer-tools.md
+      - https://techdocs.akamai.com/edgeworkers/docs/code-bundle-editor.md
+      - https://techdocs.akamai.com/edgeworkers/docs/typescript.md
+      - https://techdocs.akamai.com/edgeworkers/docs/unit-testing-for-edgeworkers.md
+      - https://techdocs.akamai.com/edgeworkers/docs/ide-extensions.md
+      - https://techdocs.akamai.com/edgeworkers/docs/sandbox.md
+      - https://techdocs.akamai.com/edgeworkers/docs/edgeworkers-code-profiler.md
+      - https://techdocs.akamai.com/edgeworkers/docs/code-profiler-tutorial.md
+      - https://techdocs.akamai.com/edgeworkers/docs/dev-environment-tutorial.md
+      # Guides - JavaScript API reference
+      - https://techdocs.akamai.com/edgeworkers/docs/about-the-javascript-api.md
+      - https://techdocs.akamai.com/edgeworkers/docs/request-object.md
+      - https://techdocs.akamai.com/edgeworkers/docs/user-location-object.md
+      - https://techdocs.akamai.com/edgeworkers/docs/device-object.md
+      - https://techdocs.akamai.com/edgeworkers/docs/cachekey-object.md
+      - https://techdocs.akamai.com/edgeworkers/docs/botscore-object.md
+      - https://techdocs.akamai.com/edgeworkers/docs/response-object.md
+      - https://techdocs.akamai.com/edgeworkers/docs/built-in-modules.md
+      - https://techdocs.akamai.com/edgeworkers/docs/create-response.md
+      - https://techdocs.akamai.com/edgeworkers/docs/streams.md
+      - https://techdocs.akamai.com/edgeworkers/docs/text-encode-transform.md
+      - https://techdocs.akamai.com/edgeworkers/docs/http-request.md
+      - https://techdocs.akamai.com/edgeworkers/docs/cookies.md
+      - https://techdocs.akamai.com/edgeworkers/docs/url-search-params.md
+      - https://techdocs.akamai.com/edgeworkers/docs/log.md
+      - https://techdocs.akamai.com/edgeworkers/docs/encoding.md
+      - https://techdocs.akamai.com/edgeworkers/docs/crypto.md
+      - https://techdocs.akamai.com/edgeworkers/docs/htmlrewriter.md
+      - https://techdocs.akamai.com/edgeworkers/docs/external-modules.md
+      - https://techdocs.akamai.com/edgeworkers/docs/hls-parser.md
+      - https://techdocs.akamai.com/edgeworkers/docs/dash-parser.md
+      - https://techdocs.akamai.com/edgeworkers/docs/jwt.md
+      - https://techdocs.akamai.com/edgeworkers/docs/cwt.md
+      - https://techdocs.akamai.com/edgeworkers/docs/watermarking.md
+      - https://techdocs.akamai.com/edgeworkers/docs/cat.md
+      # Guides - Technical resources
+      - https://techdocs.akamai.com/edgeworkers/docs/best-practices.md
+      - https://techdocs.akamai.com/edgeworkers/docs/best-practices-for-performance.md
+      - https://techdocs.akamai.com/edgeworkers/docs/best-practices-for-asynchronous-processing.md
+      - https://techdocs.akamai.com/edgeworkers/docs/faq-1.md
+      - https://techdocs.akamai.com/edgeworkers/docs/faq.md
+      - https://techdocs.akamai.com/edgeworkers/docs/prerequisites-and-limitations.md
+      - https://techdocs.akamai.com/edgeworkers/docs/technical.md
+      - https://techdocs.akamai.com/edgeworkers/docs/edgeworkers-javascript-code.md
+      - https://techdocs.akamai.com/edgeworkers/docs/reporting-and-billing.md
+      - https://techdocs.akamai.com/edgeworkers/docs/product-interoperability.md
+      - https://techdocs.akamai.com/edgeworkers/docs/troubleshooting.md
+      - https://techdocs.akamai.com/edgeworkers/docs/content-transformation.md
+      # Guides - Debug
+      - https://techdocs.akamai.com/edgeworkers/docs/about-javacript-troubleshooting.md
+      - https://techdocs.akamai.com/edgeworkers/docs/enable-standard-debug-headers.md
+      - https://techdocs.akamai.com/edgeworkers/docs/standard-debug-header-details.md
+      - https://techdocs.akamai.com/edgeworkers/docs/enable-enhanced-debug-headers.md
+      - https://techdocs.akamai.com/edgeworkers/docs/enable-enhanced-debug-headers-for-responseprovider.md
+      - https://techdocs.akamai.com/edgeworkers/docs/enhanced-debug-header-details.md
+      - https://techdocs.akamai.com/edgeworkers/docs/enhanced-debug-header-details-for-http-sub-requests.md
+      - https://techdocs.akamai.com/edgeworkers/docs/enhanced-debug-header-details-for-http-subworkers.md
+      - https://techdocs.akamai.com/edgeworkers/docs/error-codes.md
+      - https://techdocs.akamai.com/edgeworkers/docs/common-errors.md
+      # Guides - Monitor
+      - https://techdocs.akamai.com/edgeworkers/docs/about-monitoring.md
+      - https://techdocs.akamai.com/edgeworkers/docs/manage-report-data.md
+      - https://techdocs.akamai.com/edgeworkers/docs/overview-report.md
+      - https://techdocs.akamai.com/edgeworkers/docs/execution-status-report.md
+      - https://techdocs.akamai.com/edgeworkers/docs/execution-time-report.md
+      - https://techdocs.akamai.com/edgeworkers/docs/memory-usage-report.md
+      - https://techdocs.akamai.com/edgeworkers/docs/mpulse.md
+      - https://techdocs.akamai.com/edgeworkers/docs/enable-javascript-logging.md
+      - https://techdocs.akamai.com/edgeworkers/docs/ds2-javascript-logging.md
+      - https://techdocs.akamai.com/edgeworkers/docs/javascript-logging-details.md
+      - https://techdocs.akamai.com/edgeworkers/docs/datastream-2-integration.md
+      - https://techdocs.akamai.com/edgeworkers/docs/datastream2-reports.md
+      - https://techdocs.akamai.com/edgeworkers/docs/enable-log-delivery-for-edgeworkers.md
+      # Guides - Limitations
+      - https://techdocs.akamai.com/edgeworkers/docs/limitations.md
+      - https://techdocs.akamai.com/edgeworkers/docs/resource-tier-limitations.md
+      - https://techdocs.akamai.com/edgeworkers/docs/known-issues.md
+      # API Reference
+      - https://techdocs.akamai.com/edgeworkers/reference/api.md
+      - https://techdocs.akamai.com/edgeworkers/reference/api-summary.md
+      - https://techdocs.akamai.com/edgeworkers/reference/api-get-started.md
+      - https://techdocs.akamai.com/edgeworkers/reference/edgeworker-concepts.md
+      - https://techdocs.akamai.com/edgeworkers/reference/resource-limiting.md
+      - https://techdocs.akamai.com/edgeworkers/reference/api-errors.md
+      - https://techdocs.akamai.com/edgeworkers/reference/validation-types.md
+      - https://techdocs.akamai.com/edgeworkers/reference/400.md
+      - https://techdocs.akamai.com/edgeworkers/reference/401.md
+      - https://techdocs.akamai.com/edgeworkers/reference/403.md
+      - https://techdocs.akamai.com/edgeworkers/reference/404.md
+      - https://techdocs.akamai.com/edgeworkers/reference/422.md
+      - https://techdocs.akamai.com/edgeworkers/reference/429.md
+      - https://techdocs.akamai.com/edgeworkers/reference/500.md
+      - https://techdocs.akamai.com/edgeworkers/reference/501.md
+      - https://techdocs.akamai.com/edgeworkers/reference/502.md
+      - https://techdocs.akamai.com/edgeworkers/reference/503.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-groups.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-group.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-resource-tiers.md
+      - https://techdocs.akamai.com/edgeworkers/reference/post-ids.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-ids.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-id.md
+      - https://techdocs.akamai.com/edgeworkers/reference/put-id.md
+      - https://techdocs.akamai.com/edgeworkers/reference/delete-id.md
+      - https://techdocs.akamai.com/edgeworkers/reference/post-id-clone.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-id-resource-tier.md
+      - https://techdocs.akamai.com/edgeworkers/reference/post-versions.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-versions.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-version.md
+      - https://techdocs.akamai.com/edgeworkers/reference/delete-version.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-version-content.md
+      - https://techdocs.akamai.com/edgeworkers/reference/post-activations.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-activations.md
+      - https://techdocs.akamai.com/edgeworkers/reference/post-rollback-to-previous-active-version.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-activation.md
+      - https://techdocs.akamai.com/edgeworkers/reference/delete-activation.md
+      - https://techdocs.akamai.com/edgeworkers/reference/post-deactivations.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-deactivations.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-deactivation.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-properties.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-revisions.md
+      - https://techdocs.akamai.com/edgeworkers/reference/post-revision-activations.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-revision-activations.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-revision.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-revision-bom.md
+      - https://techdocs.akamai.com/edgeworkers/reference/post-revision-compare.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-revision-content.md
+      - https://techdocs.akamai.com/edgeworkers/reference/post-revision-pin.md
+      - https://techdocs.akamai.com/edgeworkers/reference/post-revision-unpin.md
+      - https://techdocs.akamai.com/edgeworkers/reference/post-validations.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-contracts.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-reports.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-report.md
+      - https://techdocs.akamai.com/edgeworkers/reference/post-secure-token.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-secure-token.md
+      - https://techdocs.akamai.com/edgeworkers/reference/post-override.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-overrides.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-override.md
+      - https://techdocs.akamai.com/edgeworkers/reference/get-limits.md
+      # Recipes
+      - https://techdocs.akamai.com/edgeworkers/recipes/activate-an-edgeworker-version.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/add-geo-and-custom-data-as-a-cookie.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/boost-search-autocomplete-performance.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/cancel-an-activation.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/clone-an-edgeworker-id.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/create-a-new-edgeworker-id.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/create-a-new-version.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/create-a-secure-token.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/deactivate-an-edgeworker-version.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/delete-an-edgeworker-id.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/delete-an-edgeworker-version.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/display-pages-based-on-location.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/download-an-edgeworker-bundle.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/get-a-deactivation.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/get-a-permission-group.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/get-an-activation.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/get-an-edgeworker-id.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/get-an-edgeworker-report.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/get-the-resource-tier.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/get-version-details.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/list-activations.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/list-contract-ids.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/list-deactivations.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/list-edgeworker-ids.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/list-permission-groups.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/list-properties.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/list-reports.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/list-resource-tiers.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/list-versions.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/update-an-edgeworker-id.md
+      - https://techdocs.akamai.com/edgeworkers/recipes/validate-an-edgeworkers-code-bundle.md
+      # Changelog
+      - https://techdocs.akamai.com/edgeworkers/changelog/june-2026-limit-and-reporting-updates.md
+      - https://techdocs.akamai.com/edgeworkers/changelog/feb-24-2006-edgeworkers-reports-improvements.md
+      - https://techdocs.akamai.com/edgeworkers/changelog/onbotsegmentavailable-event-handler.md
+      - https://techdocs.akamai.com/edgeworkers/changelog/max-size-response-status-and-headers.md
+      - https://techdocs.akamai.com/edgeworkers/changelog/limits-max-body-size.md
+
   - id: akamai-functions
     product: Akamai Functions
     version: latest
@@ -691,6 +958,10 @@ sources:
     domain: techdocs.akamai.com
     follow_links: false
     transport: playwright
+    # Source indexes:
+    #   - https://techdocs.akamai.com/akamai-functions/docs/llms.txt (guides)
+    #   - https://techdocs.akamai.com/akamai-functions/changelog/llms.txt (changelog)
+    # To refresh: fetch each llms.txt and extract .md URLs
     urls:
       # Guides
       - https://techdocs.akamai.com/akamai-functions/docs/welcome.md
@@ -733,6 +1004,10 @@ sources:
     domain: techdocs.akamai.com
     follow_links: false
     transport: playwright
+    # Source indexes:
+    #   - https://techdocs.akamai.com/developer/docs/llms.txt (guides)
+    #   - https://techdocs.akamai.com/developer/recipes/llms.txt (recipes)
+    # To refresh: fetch each llms.txt and extract .md URLs
     urls:
       # Guides
       - https://techdocs.akamai.com/developer/docs/developer-center.md
@@ -758,6 +1033,8 @@ sources:
     domain: techdocs.akamai.com
     follow_links: false
     transport: playwright
+    # Source index: https://techdocs.akamai.com/mfa/docs/llms.txt
+    # To refresh: fetch the llms.txt and extract .md URLs
     urls:
       # Welcome
       - https://techdocs.akamai.com/mfa/docs/welcome-mfa.md
@@ -904,6 +1181,8 @@ sources:
     domain: techdocs.akamai.com
     follow_links: false
     transport: playwright
+    # Source index: https://techdocs.akamai.com/iam-api/reference/llms.txt
+    # To refresh: fetch the llms.txt and extract .md URLs
     urls:
       - https://techdocs.akamai.com/iam-api/reference/api.md
       - https://techdocs.akamai.com/iam-api/reference/api-summary.md
@@ -930,6 +1209,8 @@ sources:
     domain: techdocs.akamai.com
     follow_links: false
     transport: playwright
+    # Source index: https://techdocs.akamai.com/mfa-oidc/reference/llms.txt
+    # To refresh: fetch the llms.txt and extract .md URLs
     urls:
       - https://techdocs.akamai.com/mfa-oidc/reference/api.md
       - https://techdocs.akamai.com/mfa-oidc/reference/api-summary.md
@@ -955,6 +1236,8 @@ sources:
     domain: techdocs.akamai.com
     follow_links: false
     transport: playwright
+    # Source index: https://techdocs.akamai.com/eaa/docs/llms.txt (authentication section subset)
+    # To refresh: fetch the llms.txt and extract relevant authentication .md URLs
     urls:
       - https://techdocs.akamai.com/eaa/docs/block-users-accessing-apps.md
       - https://techdocs.akamai.com/eaa/docs/use-idp-eaa-service-provider.md
