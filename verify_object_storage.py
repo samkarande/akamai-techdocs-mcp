@@ -26,7 +26,7 @@ def main():
         from datetime import date
 
         endpoint = "us-iad-18.linodeobjects.com"
-        bucket = "skills-db-access-keys"
+        bucket = "skills-db-telemetry"
         today = date.today().isoformat()
         prefix = f"telemetry/events/{today}/"
 

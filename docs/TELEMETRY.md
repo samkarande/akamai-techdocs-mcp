@@ -50,7 +50,7 @@ We **never** collect:
 ## How It Works
 
 1. **Telemetry is always-on** but only sends data when **Object Storage credentials are available** (CI/releases only)
-2. Events are written to Linode Object Storage: `skills-db-access-keys` bucket
+2. Events are written to Linode Object Storage: `skills-db-telemetry` bucket
 3. Files are stored as: `telemetry/events/YYYY-MM-DD/{hash}.json`
 4. Data is aggregated weekly for analysis
 

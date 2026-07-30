@@ -13,13 +13,13 @@ Add these two secrets to your GitHub repository:
 
 ### 1. Get Your Linode Object Storage Access Keys
 
-You should already have access keys for the `skills-db-access-keys` bucket. If not, create them:
+You should already have access keys for the `skills-db-telemetry` bucket. If not, create them:
 
 1. Log in to [Linode Cloud Manager](https://cloud.linode.com/)
 2. Navigate to **Object Storage** → **Access Keys**
 3. Click **Create Access Key**
 4. Label it: `akamai-techdocs-mcp-telemetry`
-5. **Limit bucket access** → Select: `skills-db-access-keys` (read/write)
+5. **Limit bucket access** → Select: `skills-db-telemetry` (read/write)
 6. Click **Submit**
 7. **Copy both keys immediately** (secret key is shown only once!)
 
@@ -75,7 +75,7 @@ After adding the secrets and updating workflows:
 3. Verify telemetry files appear in Object Storage:
    ```bash
    # List today's telemetry events
-   s3cmd ls s3://skills-db-access-keys/telemetry/events/$(date +%Y-%m-%d)/
+   s3cmd ls s3://skills-db-telemetry/telemetry/events/$(date +%Y-%m-%d)/
    ```
 
 ## Security Best Practices
@@ -84,7 +84,7 @@ After adding the secrets and updating workflows:
 - Secrets are encrypted at rest in GitHub
 - Only accessible to Actions workflows
 - Never logged in workflow output
-- Scoped to one bucket (read/write on `skills-db-access-keys` only)
+- Scoped to one bucket (read/write on `skills-db-telemetry` only)
 
 ❌ **Don't:**
 - Don't commit access keys to the repository
@@ -95,12 +95,12 @@ After adding the secrets and updating workflows:
 
 Events are written to:
 ```
-s3://skills-db-access-keys/telemetry/events/YYYY-MM-DD/{hash}.json
+s3://skills-db-telemetry/telemetry/events/YYYY-MM-DD/{hash}.json
 ```
 
 Example:
 ```
-s3://skills-db-access-keys/telemetry/events/2026-07-30/a3f7c8e91234.json
+s3://skills-db-telemetry/telemetry/events/2026-07-30/a3f7c8e91234.json
 ```
 
 ## Troubleshooting

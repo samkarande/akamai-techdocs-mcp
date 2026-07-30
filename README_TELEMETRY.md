@@ -84,14 +84,14 @@ gh workflow run build-index.yml
 ### 3. Verify Telemetry
 ```bash
 # Check Object Storage for today's events
-s3cmd ls s3://skills-db-access-keys/telemetry/events/$(date +%Y-%m-%d)/
+s3cmd ls s3://skills-db-telemetry/telemetry/events/$(date +%Y-%m-%d)/
 ```
 
 ---
 
 ## 📊 Object Storage Details
 
-- **Bucket**: `skills-db-access-keys`
+- **Bucket**: `skills-db-telemetry`
 - **Endpoint**: `us-iad-18.linodeobjects.com`
 - **Region**: `us-iad-1`
 - **Path**: `telemetry/events/YYYY-MM-DD/{hash}.json`
@@ -165,7 +165,7 @@ python test_telemetry.py
 ### Invalid credentials?
 1. Regenerate keys in Linode Cloud Manager
 2. Update GitHub secrets
-3. Verify bucket permissions: `skills-db-access-keys` (read/write)
+3. Verify bucket permissions: `skills-db-telemetry` (read/write)
 
 ---
 

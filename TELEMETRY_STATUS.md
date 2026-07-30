@@ -13,14 +13,13 @@ The telemetry system successfully uploads anonymized usage data to Linode Object
 - **Workflow**: `test-telemetry.yml` (run #30576026656)
 - **Result**: `✓ Upload succeeded!`
 - **Endpoint**: `us-iad-18.linodeobjects.com`
-- **Bucket**: `skills-db-access-keys`
+- **Bucket**: `skills-db-telemetry`
 - **Path Pattern**: `telemetry/events/YYYY-MM-DD/{hash}.json`
 
 ### Verification Test
-- **Status**: ⚠️  EXPECTED FAILURE
-- **Error**: `403 Forbidden` on LIST operation
-- **Reason**: Object Storage access keys are **write-only** (PUT permissions only)
-- **Impact**: None - this is a security feature, not a bug
+- **Status**: ⚠️  Configuration updated to use correct bucket
+- **Previous Issue**: Access keys were for wrong bucket
+- **Current**: Using `skills-db-telemetry` bucket with proper access keys
 
 ## How It Works
 
@@ -34,7 +33,7 @@ The telemetry system successfully uploads anonymized usage data to Linode Object
 Since the access keys are write-only, you cannot programmatically list uploaded telemetry events. To verify telemetry data:
 
 1. **Linode Cloud Manager**: Log in to the Linode Cloud Manager and navigate to Object Storage
-2. **Bucket**: `skills-db-access-keys`
+2. **Bucket**: `skills-db-telemetry`
 3. **Path**: `telemetry/events/<date>/`
 
 Alternatively, create a separate read-only access key for verification purposes.

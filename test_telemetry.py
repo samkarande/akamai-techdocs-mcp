@@ -35,7 +35,7 @@ def main():
 
     print("✓ Event sent!")
     print("\nTo verify upload, check Object Storage:")
-    print("  s3cmd ls s3://skills-db-access-keys/telemetry/events/$(date +%Y-%m-%d)/")
+    print("  s3cmd ls s3://skills-db-telemetry/telemetry/events/$(date +%Y-%m-%d)/")
     print("  # Or via Linode Cloud Manager")
 
 

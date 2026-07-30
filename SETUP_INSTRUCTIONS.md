@@ -56,7 +56,7 @@ Telemetry failures are **silent** (won't break builds), so no error = success.
 
 ## Object Storage Details
 
-- **Bucket**: `skills-db-access-keys`
+- **Bucket**: `skills-db-telemetry`
 - **Endpoint**: `us-iad-18.linodeobjects.com`
 - **Region**: `us-iad-1`
 - **Path pattern**: `telemetry/events/YYYY-MM-DD/{hash}.json`
@@ -68,15 +68,15 @@ After a workflow run, check that events appear in Object Storage:
 ### Using s3cmd
 ```bash
 # List today's events
-s3cmd ls s3://skills-db-access-keys/telemetry/events/$(date +%Y-%m-%d)/
+s3cmd ls s3://skills-db-telemetry/telemetry/events/$(date +%Y-%m-%d)/
 
 # View an event file
-s3cmd get s3://skills-db-access-keys/telemetry/events/2026-07-30/abc123.json - | jq
+s3cmd get s3://skills-db-telemetry/telemetry/events/2026-07-30/abc123.json - | jq
 ```
 
 ### Using Linode Cloud Manager
 1. Go to: https://cloud.linode.com/object-storage/buckets
-2. Click on `skills-db-access-keys` bucket
+2. Click on `skills-db-telemetry` bucket
 3. Navigate to: `telemetry/events/YYYY-MM-DD/`
 4. You should see `.json` files (one per event)
 
@@ -155,12 +155,12 @@ python test_telemetry.py
 ```
 
 **4. Verify bucket permissions**
-Your access key needs **read/write** permission on `skills-db-access-keys` bucket.
+Your access key needs **read/write** permission on `skills-db-telemetry` bucket.
 
 Check in Linode Cloud Manager:
 - Object Storage → Access Keys
 - Click on your key
-- Verify: `skills-db-access-keys` (read/write) ✓
+- Verify: `skills-db-telemetry` (read/write) ✓
 
 ### Test locally with credentials
 

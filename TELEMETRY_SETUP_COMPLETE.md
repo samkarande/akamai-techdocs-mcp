@@ -39,7 +39,7 @@ The akamai-techdocs-mcp server now has **always-on, privacy-safe telemetry** tha
 
 ### CI Builds/Releases
 - **Credentials available** (from GitHub Secrets) → Events sent to Object Storage
-- Events stored in: `s3://skills-db-access-keys/telemetry/events/YYYY-MM-DD/{hash}.json`
+- Events stored in: `s3://skills-db-telemetry/telemetry/events/YYYY-MM-DD/{hash}.json`
 
 ## Data Collected (Privacy-Safe)
 
@@ -75,14 +75,14 @@ To enable telemetry in CI builds, add these secrets to your GitHub repository:
 
 ## Telemetry Storage Details
 
-- **Bucket**: `skills-db-access-keys`
+- **Bucket**: `skills-db-telemetry`
 - **Endpoint**: `us-iad-18.linodeobjects.com` (US, Washington DC)
 - **Region**: `us-iad-1`
 - **Path**: `telemetry/events/YYYY-MM-DD/{event_hash}.json`
 
 Example event file:
 ```
-s3://skills-db-access-keys/telemetry/events/2026-07-30/a3f7c8e91234.json
+s3://skills-db-telemetry/telemetry/events/2026-07-30/a3f7c8e91234.json
 ```
 
 ## Testing Telemetry
@@ -103,7 +103,7 @@ akamai-techdocs-mcp
 3. Check workflow logs (telemetry failures are silent, won't break builds)
 4. Verify files in Object Storage:
    ```bash
-   s3cmd ls s3://skills-db-access-keys/telemetry/events/$(date +%Y-%m-%d)/
+   s3cmd ls s3://skills-db-telemetry/telemetry/events/$(date +%Y-%m-%d)/
    ```
 
 ## Disabling Telemetry

@@ -178,7 +178,7 @@ def _write_to_object_storage(event: dict[str, Any]) -> None:
 
         # Object Storage details
         endpoint = "us-iad-18.linodeobjects.com"
-        bucket = "skills-db-access-keys"
+        bucket = "skills-db-telemetry"
 
         # Generate unique event ID (hash of event content)
         event_json = json.dumps(event, sort_keys=True)
