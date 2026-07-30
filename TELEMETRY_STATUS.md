@@ -17,9 +17,9 @@ The telemetry system successfully uploads anonymized usage data to Linode Object
 - **Path Pattern**: `telemetry/events/YYYY-MM-DD/{hash}.json`
 
 ### Verification Test
-- **Status**: ⚠️  Configuration updated to use correct bucket
-- **Previous Issue**: Access keys were for wrong bucket
-- **Current**: Using `skills-db-telemetry` bucket with proper access keys
+- **Status**: ⚠️  LIST operations return 403 Forbidden
+- **Reason**: Access keys are write-only (PUT permissions only)
+- **Impact**: None - uploads work correctly, verification requires Linode Console
 
 ## How It Works
 
