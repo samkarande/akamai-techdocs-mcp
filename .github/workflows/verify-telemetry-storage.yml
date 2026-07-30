@@ -1,0 +1,30 @@
+name: Verify Telemetry Storage
+
+on:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install dependencies
+        run: |
+          uv venv
+          uv pip install httpx
+
+      - name: List telemetry events in Object Storage
+        env:
+          LINODE_OBJECT_ACCESS_KEY: ${{ secrets.LINODE_OBJECT_ACCESS_KEY }}
+          LINODE_OBJECT_SECRET_KEY: ${{ secrets.LINODE_OBJECT_SECRET_KEY }}
+        run: |
+          uv run python verify_object_storage.py
