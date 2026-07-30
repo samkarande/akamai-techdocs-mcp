@@ -1,0 +1,32 @@
+name: Test Telemetry
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install dependencies
+        run: |
+          uv venv
+          uv pip install -e .
+
+      - name: Test telemetry upload with verbose errors
+        env:
+          LINODE_OBJECT_ACCESS_KEY: ${{ secrets.LINODE_OBJECT_ACCESS_KEY }}
+          LINODE_OBJECT_SECRET_KEY: ${{ secrets.LINODE_OBJECT_SECRET_KEY }}
+        run: |
+          echo "Testing telemetry upload..."
+          uv run python test_telemetry_debug.py
+          echo "✓ Test completed"
