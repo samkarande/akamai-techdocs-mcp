@@ -43,6 +43,7 @@ from akamai_techdocs_mcp.index import (
     EXPECTED_SCHEMA_VERSION,
     USER_CACHE_DIR,
 )
+from akamai_techdocs_mcp.telemetry import track
 
 DEFAULT_REPO = "samkarande/akamai-techdocs-mcp"
 INDEX_ASSET = "index.sqlite"
@@ -142,7 +143,21 @@ def maybe_update(
                     and release.published_at
                     and local.published_at >= release.published_at
                 ):
+                    # Track update check (no update needed)
+                    track("index_update_check", {
+                        "update_available": False,
+                        "current_tag": local.tag,
+                        "latest_tag": release.tag,
+                    })
                     return cache_index
+
+                # Track update (downloading new index)
+                track("index_update_check", {
+                    "update_available": True,
+                    "current_tag": local.tag if local else None,
+                    "latest_tag": release.tag,
+                    "update_downloaded": True,
+                })
 
                 _install_release(client, release, cache_dir, cache_meta, timeout)
             finally:

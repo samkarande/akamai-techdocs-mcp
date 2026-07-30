@@ -27,7 +27,7 @@
 #     urls[]        — seed URLs to fetch.
 
 schema_version: 1
-manifest_version: 0.8.0
+manifest_version: 0.9.0
 
 allowed_domains:
   - spinframework.dev
@@ -946,6 +946,55 @@ sources:
       - https://techdocs.akamai.com/edgeworkers/changelog/onbotsegmentavailable-event-handler.md
       - https://techdocs.akamai.com/edgeworkers/changelog/max-size-response-status-and-headers.md
       - https://techdocs.akamai.com/edgeworkers/changelog/limits-max-body-size.md
+
+  - id: akamai-release-notes
+    product: Akamai Release Notes
+    version: latest
+    description: >
+      Official Akamai product release notes — updated weekly/biweekly for all
+      major products including EdgeWorkers, Cloud Compute, Security products
+      (Application Security, Bot Manager, Prolexic), CDN (Ion, Secure CDN),
+      DNS/Traffic Management, Media, Monitoring, and management tools.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    # Source index: https://techdocs.akamai.com/release-notes/llms.txt
+    # To refresh: fetch the llms.txt and extract .md URLs
+    # Note: These are living documents - product pages are updated with new releases
+    # rather than creating new dated pages. Weekly CI rebuilds capture updates automatically.
+    urls:
+      # Overview
+      - https://techdocs.akamai.com/release-notes/docs/overview.md
+      # Edge Computing & APIs
+      - https://techdocs.akamai.com/release-notes/docs/edgeworkers.md
+      - https://techdocs.akamai.com/release-notes/docs/api-gateway.md
+      # Cloud Infrastructure
+      - https://techdocs.akamai.com/release-notes/docs/cloud-compute.md
+      - https://techdocs.akamai.com/release-notes/docs/netstorage.md
+      # Security Products
+      - https://techdocs.akamai.com/release-notes/docs/application-security.md
+      - https://techdocs.akamai.com/release-notes/docs/bot-manager.md
+      - https://techdocs.akamai.com/release-notes/docs/prolexic.md
+      - https://techdocs.akamai.com/release-notes/docs/site-shield.md
+      - https://techdocs.akamai.com/release-notes/docs/client-side-protection-compliance.md
+      # Content Delivery
+      - https://techdocs.akamai.com/release-notes/docs/ion.md
+      - https://techdocs.akamai.com/release-notes/docs/secure-cdn.md
+      - https://techdocs.akamai.com/release-notes/docs/cloud-wrapper.md
+      - https://techdocs.akamai.com/release-notes/docs/web-performance.md
+      # DNS & Traffic Management
+      - https://techdocs.akamai.com/release-notes/docs/edge-dns.md
+      - https://techdocs.akamai.com/release-notes/docs/gtm.md
+      # Media
+      - https://techdocs.akamai.com/release-notes/docs/ivm.md
+      # Monitoring & Analytics
+      - https://techdocs.akamai.com/release-notes/docs/datastream.md
+      - https://techdocs.akamai.com/release-notes/docs/mpulse.md
+      - https://techdocs.akamai.com/release-notes/docs/reporting-analytics.md
+      # Management & Administration
+      - https://techdocs.akamai.com/release-notes/docs/property-manager.md
+      - https://techdocs.akamai.com/release-notes/docs/iam.md
+      - https://techdocs.akamai.com/release-notes/docs/certificates.md
 
   - id: akamai-functions
     product: Akamai Functions

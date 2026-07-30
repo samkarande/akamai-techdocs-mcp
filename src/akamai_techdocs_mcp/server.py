@@ -21,6 +21,7 @@ from typing import Any
 from mcp.server.fastmcp import FastMCP
 
 from akamai_techdocs_mcp.index import IndexHandle, resolve_index_path
+from akamai_techdocs_mcp.telemetry import track
 from akamai_techdocs_mcp.updater import maybe_update
 
 
@@ -68,7 +69,22 @@ def search_docs(
     snippet, source_id, product, version, rank}) and `meta` (index
     schema/manifest info). Each result's URL is citable.
     """
-    return get_index().search(query, product=product, limit=limit)
+    result = get_index().search(query, product=product, limit=limit)
+
+    # Track usage (NO query text - only metadata)
+    track("tool_call", {
+        "tool": "search_docs",
+        "query_char_count": len(query),
+        "query_word_count": len(query.split()),
+        "has_product_filter": product is not None,
+        "product_filter": product,  # Safe - it's a product name from our index
+        "limit_requested": limit,
+        "result_count": len(result.get("results", [])),
+        "has_results": len(result.get("results", [])) > 0,
+        "top_rank": result["results"][0]["rank"] if result.get("results") else None,
+    })
+
+    return result
 
 
 @mcp.tool()
@@ -81,7 +97,17 @@ def get_doc(url: str) -> dict[str, Any]:
     plus metadata (product, doc_last_modified, crawled_at). If the
     URL is not in the current index, returns ``found: false``.
     """
-    return get_index().get_doc(url)
+    result = get_index().get_doc(url)
+
+    # Track usage
+    track("tool_call", {
+        "tool": "get_doc",
+        "doc_found": result.get("found", False),
+        "doc_source_id": result.get("source_id"),
+        "doc_size_bytes": len(result.get("markdown", "")),
+    })
+
+    return result
 
 
 @mcp.tool()
@@ -94,10 +120,21 @@ def list_sources() -> dict[str, Any]:
     to search_docs, and for users debugging "why doesn't the MCP
     know about X" questions.
     """
-    return get_index().list_sources()
+    result = get_index().list_sources()
+
+    # Track usage
+    track("tool_call", {
+        "tool": "list_sources",
+        "source_count": len(result.get("sources", [])),
+    })
+
+    return result
 
 
 def main() -> None:
+    # Track server start
+    track("server_start", {})
+
     # On a completely fresh install (no cached index, no bundled index)
     # download one synchronously before starting so the first tool call
     # doesn't fail immediately. On subsequent startups the index already

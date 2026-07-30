@@ -53,6 +53,9 @@ jobs:
         run: uv run playwright install --with-deps chromium
 
       - name: Build index from sources.yaml
+        env:
+          LINODE_OBJECT_ACCESS_KEY: ${{ secrets.LINODE_OBJECT_ACCESS_KEY }}
+          LINODE_OBJECT_SECRET_KEY: ${{ secrets.LINODE_OBJECT_SECRET_KEY }}
         run: uv run python -m crawler.build_index --verbose
 
       - name: Build wheel with bundled index
