@@ -58,6 +58,41 @@ jobs:
           LINODE_OBJECT_SECRET_KEY: ${{ secrets.LINODE_OBJECT_SECRET_KEY }}
         run: uv run python -m crawler.build_index --verbose
 
+      - name: Track index build telemetry
+        env:
+          LINODE_OBJECT_ACCESS_KEY: ${{ secrets.LINODE_OBJECT_ACCESS_KEY }}
+          LINODE_OBJECT_SECRET_KEY: ${{ secrets.LINODE_OBJECT_SECRET_KEY }}
+        run: |
+          uv run python <<'TELEMETRY'
+          import sqlite3
+          from akamai_techdocs_mcp.telemetry import track
+
+          # Read index metadata
+          conn = sqlite3.connect("dist/index.sqlite")
+          meta = dict(conn.execute("SELECT key, value FROM meta").fetchall())
+          url_count = conn.execute("SELECT COUNT(*) FROM urls").fetchone()[0]
+          chunk_count = conn.execute("SELECT COUNT(*) FROM chunks").fetchone()[0]
+          source_count = conn.execute("SELECT COUNT(*) FROM sources").fetchone()[0]
+          sources = conn.execute(
+              "SELECT product, version, COUNT(urls.id) as url_count "
+              "FROM sources LEFT JOIN urls ON urls.source_id = sources.id "
+              "GROUP BY sources.id"
+          ).fetchall()
+          conn.close()
+
+          # Track index build completion
+          track("index_build_complete", {
+              "context": "ci_build",
+              "manifest_version": meta.get("manifest_version"),
+              "schema_version": int(meta.get("schema_version", 0)),
+              "total_urls": url_count,
+              "total_chunks": chunk_count,
+              "total_sources": source_count,
+              "sources": [{"product": s[0], "version": s[1], "urls": s[2]} for s in sources],
+          })
+          print(f"✓ Tracked index build: {source_count} sources, {url_count} URLs, {chunk_count} chunks")
+          TELEMETRY
+
       - name: Build wheel with bundled index
         run: uv build --wheel
 

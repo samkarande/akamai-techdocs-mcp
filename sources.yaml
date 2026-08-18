@@ -27,7 +27,7 @@
 #     urls[]        — seed URLs to fetch.
 
 schema_version: 1
-manifest_version: 0.9.0
+manifest_version: 0.10.0
 
 allowed_domains:
   - spinframework.dev
@@ -1316,6 +1316,683 @@ sources:
       - https://techdocs.akamai.com/eaa/docs/certificate-based-device-authentication-or-user-validation-in-an-application.md
       - https://techdocs.akamai.com/eaa/docs/origin-server.md
       - https://techdocs.akamai.com/eaa/docs/network-zones.md
+
+  - id: akamai-edgekv
+    product: Akamai EdgeKV
+    version: latest
+    description: >
+      Official Akamai EdgeKV documentation — low-latency key-value store for
+      EdgeWorkers. Covers data model, access tokens, helper library methods,
+      best practices, performance, and CLI tools.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    # Source index: https://techdocs.akamai.com/edgekv/docs/llms.txt
+    # To refresh: fetch the llms.txt and extract .md URLs
+    urls:
+      # Welcome
+      - https://techdocs.akamai.com/edgekv/docs/welcome-to-edgekv.md
+      - https://techdocs.akamai.com/edgekv/docs/edgekv-data-model.md
+      - https://techdocs.akamai.com/edgekv/docs/use-cases.md
+      - https://techdocs.akamai.com/edgekv/docs/augment-image-and-video-manager-with-edge-compute.md
+      - https://techdocs.akamai.com/edgekv/docs/send-a-constructed-response-to-a-web-page.md
+      # Prerequisites
+      - https://techdocs.akamai.com/edgekv/docs/add-edgekv-to-your-contract.md
+      - https://techdocs.akamai.com/edgekv/docs/manage-access-to-edgekv.md
+      - https://techdocs.akamai.com/edgekv/docs/generate-and-retrieve-edgekv-access-tokens.md
+      - https://techdocs.akamai.com/edgekv/docs/use-the-api-generate-and-retrieve-edgekv-access-tokens-1.md
+      - https://techdocs.akamai.com/edgekv/docs/use-the-cli-to-generate-and-manage-access-tokens.md
+      # Get started - API
+      - https://techdocs.akamai.com/edgekv/docs/api-hello-world.md
+      - https://techdocs.akamai.com/edgekv/docs/create-an-edgeworkers-function.md
+      - https://techdocs.akamai.com/edgekv/docs/initialize-the-edgekv-database-1.md
+      - https://techdocs.akamai.com/edgekv/docs/download-the-helper-library-1.md
+      - https://techdocs.akamai.com/edgekv/docs/add-data-to-your-database.md
+      - https://techdocs.akamai.com/edgekv/docs/create-a-code-bundle-1.md
+      - https://techdocs.akamai.com/edgekv/docs/activate-your-edgeworkers-function.md
+      # Get started - CLI
+      - https://techdocs.akamai.com/edgekv/docs/cli-hello-world.md
+      - https://techdocs.akamai.com/edgekv/docs/create-an-edgeworkers-function-1.md
+      - https://techdocs.akamai.com/edgekv/docs/initialize-the-edgekv-database-2.md
+      - https://techdocs.akamai.com/edgekv/docs/download-the-helper-library.md
+      - https://techdocs.akamai.com/edgekv/docs/add-data-to-your-edgekv-database-1.md
+      - https://techdocs.akamai.com/edgekv/docs/create-a-code-bundle-2.md
+      - https://techdocs.akamai.com/edgekv/docs/activate-your-edgeworkers-function-1.md
+      # Technical resources
+      - https://techdocs.akamai.com/edgekv/docs/library-helper-methods.md
+      - https://techdocs.akamai.com/edgekv/docs/best-practices.md
+      - https://techdocs.akamai.com/edgekv/docs/best-practices-for-data-model-design.md
+      - https://techdocs.akamai.com/edgekv/docs/access-tokens-1.md
+      - https://techdocs.akamai.com/edgekv/docs/frequently-asked-questions.md
+      - https://techdocs.akamai.com/edgekv/docs/general-questions.md
+      - https://techdocs.akamai.com/edgekv/docs/access-tokens.md
+      - https://techdocs.akamai.com/edgekv/docs/performance.md
+      - https://techdocs.akamai.com/edgekv/docs/throughput.md
+      - https://techdocs.akamai.com/edgekv/docs/sandbox-support-edgekv.md
+      # Administrative tools
+      - https://techdocs.akamai.com/edgekv/docs/akamai-cli.md
+      # Debug and Monitor
+      - https://techdocs.akamai.com/edgekv/docs/troubleshoot.md
+      - https://techdocs.akamai.com/edgekv/docs/reporting.md
+      # Limitations
+      - https://techdocs.akamai.com/edgekv/docs/limits.md
+      - https://techdocs.akamai.com/edgekv/docs/known-issues.md
+
+  - id: akamai-linode-api
+    product: Akamai Linode API
+    version: latest
+    description: >
+      Official Akamai Linode API reference — comprehensive REST API documentation
+      for all Akamai Cloud (Linode) services including Compute Instances, LKE,
+      Databases, Block/Object Storage, Networking, IAM, billing, and administration.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    # Source index: https://techdocs.akamai.com/linode-api/reference/llms.txt
+    # Note: This is a very large API with 500+ endpoints. Including representative
+    # subset of key operations. Full API spec already included via OpenAPI JSON.
+    # To refresh: fetch the llms.txt and extract .md URLs
+    urls:
+      # API Core
+      - https://techdocs.akamai.com/linode-api/reference/api.md
+      - https://techdocs.akamai.com/linode-api/reference/api-summary.md
+      - https://techdocs.akamai.com/linode-api/reference/get-started.md
+      - https://techdocs.akamai.com/linode-api/reference/api-workflow.md
+      - https://techdocs.akamai.com/linode-api/reference/rate-limits.md
+      - https://techdocs.akamai.com/linode-api/reference/pagination.md
+      - https://techdocs.akamai.com/linode-api/reference/filtering-and-sorting.md
+      - https://techdocs.akamai.com/linode-api/reference/time-values.md
+      - https://techdocs.akamai.com/linode-api/reference/response-headers.md
+      - https://techdocs.akamai.com/linode-api/reference/cli.md
+      - https://techdocs.akamai.com/linode-api/reference/errors.md
+      # Workflow Examples
+      - https://techdocs.akamai.com/linode-api/reference/reboot-your-linodes-for-qemu-maintenance.md
+      - https://techdocs.akamai.com/linode-api/reference/restore-a-managed-database-backup.md
+      - https://techdocs.akamai.com/linode-api/reference/configure-sso-login.md
+      - https://techdocs.akamai.com/linode-api/reference/capture-an-image.md
+      - https://techdocs.akamai.com/linode-api/reference/upload-an-image.md
+      - https://techdocs.akamai.com/linode-api/reference/deploy-an-image.md
+      - https://techdocs.akamai.com/linode-api/reference/create-a-linode-using-a-public-image.md
+      - https://techdocs.akamai.com/linode-api/reference/create-a-linode-using-a-private-image.md
+      - https://techdocs.akamai.com/linode-api/reference/create-a-linode-using-a-backup.md
+      - https://techdocs.akamai.com/linode-api/reference/create-a-linode-using-a-stackscript.md
+      - https://techdocs.akamai.com/linode-api/reference/config-audit-log-delivery.md
+      - https://techdocs.akamai.com/linode-api/reference/create-an-unlimited-access-key.md
+      - https://techdocs.akamai.com/linode-api/reference/create-a-limited-access-key.md
+      - https://techdocs.akamai.com/linode-api/reference/create-a-placement-group.md
+      - https://techdocs.akamai.com/linode-api/reference/create-a-resource-lock-for-a-linode.md
+
+  - id: akamai-app-platform
+    product: Akamai App Platform for LKE
+    version: latest
+    description: >
+      Official Akamai Application Platform documentation — internal developer
+      platform for LKE. Covers setup, GitOps workflows, team/user management,
+      workload deployment, monitoring, security policies, and operational guides.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    # Source index: https://techdocs.akamai.com/app-platform/docs/llms.txt
+    # To refresh: fetch the llms.txt and extract .md URLs
+    urls:
+      # Welcome
+      - https://techdocs.akamai.com/app-platform/docs/welcome.md
+      # Setup
+      - https://techdocs.akamai.com/app-platform/docs/lke-automatic-install.md
+      - https://techdocs.akamai.com/app-platform/docs/additional-installation-methods.md
+      - https://techdocs.akamai.com/app-platform/docs/lke-manual-install.md
+      - https://techdocs.akamai.com/app-platform/docs/custom.md
+      - https://techdocs.akamai.com/app-platform/docs/helm.md
+      - https://techdocs.akamai.com/app-platform/docs/advanced-configuration.md
+      - https://techdocs.akamai.com/app-platform/docs/dns.md
+      - https://techdocs.akamai.com/app-platform/docs/oidc.md
+      - https://techdocs.akamai.com/app-platform/docs/entrypoint.md
+      - https://techdocs.akamai.com/app-platform/docs/byo-wildcard-cert.md
+      - https://techdocs.akamai.com/app-platform/docs/byo-git.md
+      - https://techdocs.akamai.com/app-platform/docs/post-installation-steps.md
+      - https://techdocs.akamai.com/app-platform/docs/upgrade-instructions.md
+      # Get Started
+      - https://techdocs.akamai.com/app-platform/docs/getting-started.md
+      - https://techdocs.akamai.com/app-platform/docs/console-overview.md
+      - https://techdocs.akamai.com/app-platform/docs/console-platform-view.md
+      - https://techdocs.akamai.com/app-platform/docs/console-team-overview.md
+      - https://techdocs.akamai.com/app-platform/docs/security-best-practices.md
+      # Platform-level usage
+      - https://techdocs.akamai.com/app-platform/docs/gitops.md
+      - https://techdocs.akamai.com/app-platform/docs/platform-teams.md
+      - https://techdocs.akamai.com/app-platform/docs/platform-user-management.md
+      - https://techdocs.akamai.com/app-platform/docs/manage-apps.md
+      - https://techdocs.akamai.com/app-platform/docs/manage-catalog.md
+      - https://techdocs.akamai.com/app-platform/docs/platform-settings.md
+      - https://techdocs.akamai.com/app-platform/docs/cluster-settings.md
+      - https://techdocs.akamai.com/app-platform/docs/general-platform-settings.md
+      - https://techdocs.akamai.com/app-platform/docs/alert-settings.md
+      - https://techdocs.akamai.com/app-platform/docs/oidc-settings.md
+      - https://techdocs.akamai.com/app-platform/docs/object-storage-settings.md
+      - https://techdocs.akamai.com/app-platform/docs/how-to-for-ops.md
+      - https://techdocs.akamai.com/app-platform/docs/secrets.md
+      - https://techdocs.akamai.com/app-platform/docs/ingress-classes.md
+      - https://techdocs.akamai.com/app-platform/docs/platform-maintenance.md
+      - https://techdocs.akamai.com/app-platform/docs/core-only.md
+      - https://techdocs.akamai.com/app-platform/docs/clone-apl.md
+      - https://techdocs.akamai.com/app-platform/docs/manage-age.md
+      - https://techdocs.akamai.com/app-platform/docs/change-admin-password.md
+      - https://techdocs.akamai.com/app-platform/docs/add-owner-to-team-org-gitea.md
+      - https://techdocs.akamai.com/app-platform/docs/disaster-recovery.md
+      - https://techdocs.akamai.com/app-platform/docs/basic.md
+      - https://techdocs.akamai.com/app-platform/docs/gitea.md
+      - https://techdocs.akamai.com/app-platform/docs/reinstall.md
+      - https://techdocs.akamai.com/app-platform/docs/restore-platform-databases.md
+      - https://techdocs.akamai.com/app-platform/docs/known-issues.md
+      # Team-level usage (key pages only to limit size)
+      - https://techdocs.akamai.com/app-platform/docs/apps.md
+      - https://techdocs.akamai.com/app-platform/docs/team-catalog.md
+      - https://techdocs.akamai.com/app-platform/docs/code-repositories.md
+      - https://techdocs.akamai.com/app-platform/docs/team-workloads.md
+      - https://techdocs.akamai.com/app-platform/docs/team-services.md
+      - https://techdocs.akamai.com/app-platform/docs/team-security-policies.md
+      - https://techdocs.akamai.com/app-platform/docs/team-settings.md
+      - https://techdocs.akamai.com/app-platform/docs/shell-tty.md
+      # Labs (selected tutorials)
+      - https://techdocs.akamai.com/app-platform/docs/labs-overview.md
+      - https://techdocs.akamai.com/app-platform/docs/create-workloads-with-argocd.md
+      - https://techdocs.akamai.com/app-platform/docs/monitor-and-debug-workloads.md
+
+  - id: akamai-application-security-api
+    product: Akamai Application Security API
+    version: latest
+    description: >
+      Official Akamai Application Security API reference — WAF/security API for
+      managing security configurations, policies, rules, rate limiting, custom rules,
+      IP/Geo firewall, malware protection, and bot management. Includes API request
+      constraints, reputation profiles, and activation management.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    # Source index: https://techdocs.akamai.com/application-security/reference/llms.txt
+    # Note: This is a very large API (300+ operations). Including representative
+    # subset focusing on most commonly used operations.
+    # To refresh: fetch the llms.txt and extract .md URLs
+    urls:
+      # API Core
+      - https://techdocs.akamai.com/application-security/reference/api.md
+      - https://techdocs.akamai.com/application-security/reference/api-summary.md
+      - https://techdocs.akamai.com/application-security/reference/getting-started.md
+      - https://techdocs.akamai.com/application-security/reference/api-concepts.md
+      - https://techdocs.akamai.com/application-security/reference/api-workflow.md
+      - https://techdocs.akamai.com/application-security/reference/rate-limiting.md
+      - https://techdocs.akamai.com/application-security/reference/api-errors.md
+      # Workflow Examples
+      - https://techdocs.akamai.com/application-security/reference/activate-with-invalid-hostnames.md
+      - https://techdocs.akamai.com/application-security/reference/modify-and-activate-a-config-version.md
+      - https://techdocs.akamai.com/application-security/reference/add-a-new-custom-rule-to-a-configuration.md
+      - https://techdocs.akamai.com/application-security/reference/export-a-configuration-version.md
+      - https://techdocs.akamai.com/application-security/reference/diff-configuration-versions.md
+      # Reference Values
+      - https://techdocs.akamai.com/application-security/reference/condition-values.md
+      - https://techdocs.akamai.com/application-security/reference/condition-type-values.md
+      - https://techdocs.akamai.com/application-security/reference/deny-name-values.md
+      - https://techdocs.akamai.com/application-security/reference/exception-selector-values.md
+      - https://techdocs.akamai.com/application-security/reference/recommendation-selector-values.md
+      - https://techdocs.akamai.com/application-security/reference/logging-option-values.md
+      - https://techdocs.akamai.com/application-security/reference/siem-action-and-attack-type-exceptions.md
+      - https://techdocs.akamai.com/application-security/reference/protection-categories.md
+      # Configuration settings (key operations)
+      - https://techdocs.akamai.com/application-security/reference/post-config.md
+      - https://techdocs.akamai.com/application-security/reference/get-configs.md
+      - https://techdocs.akamai.com/application-security/reference/get-config.md
+      - https://techdocs.akamai.com/application-security/reference/put-config.md
+      - https://techdocs.akamai.com/application-security/reference/delete-config.md
+      - https://techdocs.akamai.com/application-security/reference/post-config-versions.md
+      - https://techdocs.akamai.com/application-security/reference/get-config-versions.md
+      - https://techdocs.akamai.com/application-security/reference/get-version-number.md
+      - https://techdocs.akamai.com/application-security/reference/get-selected-hostnames.md
+      - https://techdocs.akamai.com/application-security/reference/put-selected-hostnames.md
+      # Security policies (key operations)
+      - https://techdocs.akamai.com/application-security/reference/post-policy.md
+      - https://techdocs.akamai.com/application-security/reference/get-policies.md
+      - https://techdocs.akamai.com/application-security/reference/get-policy.md
+      - https://techdocs.akamai.com/application-security/reference/put-policy.md
+      - https://techdocs.akamai.com/application-security/reference/delete-policy.md
+      - https://techdocs.akamai.com/application-security/reference/get-policy-mode.md
+      - https://techdocs.akamai.com/application-security/reference/put-policy-mode.md
+      - https://techdocs.akamai.com/application-security/reference/get-policy-protections.md
+      - https://techdocs.akamai.com/application-security/reference/put-policy-protections.md
+      # Rate policies
+      - https://techdocs.akamai.com/application-security/reference/post-rate-policies.md
+      - https://techdocs.akamai.com/application-security/reference/get-rate-policies.md
+      - https://techdocs.akamai.com/application-security/reference/get-rate-policy.md
+      - https://techdocs.akamai.com/application-security/reference/put-rate-policy.md
+      - https://techdocs.akamai.com/application-security/reference/delete-rate-policy.md
+      - https://techdocs.akamai.com/application-security/reference/get-rate-policies-actions.md
+      - https://techdocs.akamai.com/application-security/reference/put-rate-policy-action.md
+      # Custom rules
+      - https://techdocs.akamai.com/application-security/reference/post-config-custom-rules.md
+      - https://techdocs.akamai.com/application-security/reference/get-configs-custom-rules.md
+      - https://techdocs.akamai.com/application-security/reference/get-config-custom-rule.md
+      - https://techdocs.akamai.com/application-security/reference/put-config-custom-rule.md
+      - https://techdocs.akamai.com/application-security/reference/delete-config-custom-rule.md
+      - https://techdocs.akamai.com/application-security/reference/get-custom-rules.md
+      - https://techdocs.akamai.com/application-security/reference/put-custom-rule.md
+      # WAF rules
+      - https://techdocs.akamai.com/application-security/reference/get-policy-rules.md
+      - https://techdocs.akamai.com/application-security/reference/put-policy-rules.md
+      - https://techdocs.akamai.com/application-security/reference/get-rule.md
+      - https://techdocs.akamai.com/application-security/reference/put-rule.md
+      - https://techdocs.akamai.com/application-security/reference/get-rules.md
+      - https://techdocs.akamai.com/application-security/reference/get-attack-groups.md
+      - https://techdocs.akamai.com/application-security/reference/get-policy-attack-groups.md
+      - https://techdocs.akamai.com/application-security/reference/get-policy-attack-group.md
+      - https://techdocs.akamai.com/application-security/reference/put-attack-group.md
+      # IP/Geo Firewall
+      - https://techdocs.akamai.com/application-security/reference/get-policy-ip-geo-firewall.md
+      - https://techdocs.akamai.com/application-security/reference/put-policy-ip-geo-firewall.md
+      # Reputation profiles
+      - https://techdocs.akamai.com/application-security/reference/post-reputation-profiles.md
+      - https://techdocs.akamai.com/application-security/reference/get-reputation-profiles.md
+      - https://techdocs.akamai.com/application-security/reference/get-reputation-profile.md
+      - https://techdocs.akamai.com/application-security/reference/put-reputation-profile.md
+      - https://techdocs.akamai.com/application-security/reference/delete-reputation-profile.md
+      - https://techdocs.akamai.com/application-security/reference/get-reputation-profiles-actions.md
+      - https://techdocs.akamai.com/application-security/reference/put-reputation-profile-action.md
+      # Activation
+      - https://techdocs.akamai.com/application-security/reference/post-activations.md
+      - https://techdocs.akamai.com/application-security/reference/get-activation-history.md
+      - https://techdocs.akamai.com/application-security/reference/get-activations-status.md
+      - https://techdocs.akamai.com/application-security/reference/get-activation.md
+      # Utilities
+      - https://techdocs.akamai.com/application-security/reference/get-contracts-groups.md
+      - https://techdocs.akamai.com/application-security/reference/get-hostname-coverage.md
+
+  - id: akamai-guardicore-platform-agent
+    product: Akamai Guardicore Platform Agent
+    version: latest
+    description: >
+      Official Akamai Guardicore Platform Agent documentation — zero-trust client
+      for endpoint microsegmentation. Covers installation, configuration, threat
+      protection, multi-user support, device posture checks, and troubleshooting.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    # Source index: https://techdocs.akamai.com/guardicore-platform-agent/docs/llms.txt
+    # To refresh: fetch the llms.txt and extract .md URLs
+    urls:
+      # Welcome
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/welcome.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/about-aztc.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/zero-trust-client-rollout-process.md
+      # Desktop Agent
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/requirements.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/prepare-for-ztc-setup.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/proxy-support.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/set-threat-protection.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/install-aztc.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/silent-installation.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/access-hook-scripts.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/configure-aztc.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/uninstall-aztc.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/multi-user-support.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/use-guardicore-platform-agent.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/change-display-language.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/service-status-notifications.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/manage-services.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/manage-authentication.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/check-device-posture.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/manage-proxies-and-networks.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/update-guardicore-platform-agent.md
+      # Enterprise Center
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/manage-client-versions.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/configure-threat-protection.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/transparent-traffic-interception.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/aztc-ec-user-inv.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/view-user-and-device-details.md
+      # Troubleshoot
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/troubleshoot-akamai-zero-trust-client.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/installation-and-uninstallation-issues.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/diagnostics-and-agent-logs.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/resolve-access-threat-protection-segmentation-problems.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/check-agent-alerts.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/error-codes.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/collect-logs-with-gpactl.md
+      - https://techdocs.akamai.com/guardicore-platform-agent/docs/known-issues-and-limitations.md
+
+  - id: akamai-edge-dns-api
+    product: Akamai Edge DNS API
+    version: latest
+    description: >
+      Official Akamai Edge DNS API reference — authoritative DNS service API.
+      Covers zone management, record sets, DNSSEC, TSIG keys, change lists,
+      bulk operations, Shield NS53 (DDoS-protected DNS), and zone transfers.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    # Source index: https://techdocs.akamai.com/edge-dns/reference/llms.txt
+    # Note: Large API with 100+ operations. Including key operations.
+    # To refresh: fetch the llms.txt and extract .md URLs
+    urls:
+      # API Core
+      - https://techdocs.akamai.com/edge-dns/reference/edge-dns-api.md
+      - https://techdocs.akamai.com/edge-dns/reference/api-summary.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-started.md
+      - https://techdocs.akamai.com/edge-dns/reference/use-pagination.md
+      - https://techdocs.akamai.com/edge-dns/reference/group-ids-access-level.md
+      - https://techdocs.akamai.com/edge-dns/reference/supported-dns-resource-record-types.md
+      - https://techdocs.akamai.com/edge-dns/reference/use-change-lists.md
+      - https://techdocs.akamai.com/edge-dns/reference/example-create-new-primary-zone.md
+      - https://techdocs.akamai.com/edge-dns/reference/zone-create-failure-vals.md
+      - https://techdocs.akamai.com/edge-dns/reference/subzone-grants.md
+      - https://techdocs.akamai.com/edge-dns/reference/activation-state-definitions.md
+      - https://techdocs.akamai.com/edge-dns/reference/edns-api-troubleshooting.md
+      - https://techdocs.akamai.com/edge-dns/reference/api-errors.md
+      # Zones (key operations)
+      - https://techdocs.akamai.com/edge-dns/reference/post-zone.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zones.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zone.md
+      - https://techdocs.akamai.com/edge-dns/reference/put-zone.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zone-aliases.md
+      - https://techdocs.akamai.com/edge-dns/reference/post-zones-dns-sec-status.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zone-dnskeys.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zones-zone-matching-ds-record-key-tags.md
+      - https://techdocs.akamai.com/edge-dns/reference/post-zones-zone-transfer-status.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zone-contract.md
+      # Zone versions
+      - https://techdocs.akamai.com/edge-dns/reference/get-zone-versions.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zone-versions-diff.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zone-versions-uuid.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zone-versions-recordsets.md
+      - https://techdocs.akamai.com/edge-dns/reference/post-zones-zone-versions-uuid-recordsets-activate.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zones-zone-versions-uuid-zone-file.md
+      # Change lists
+      - https://techdocs.akamai.com/edge-dns/reference/post-changelists.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-changelists.md
+      - https://techdocs.akamai.com/edge-dns/reference/post-changelists-search.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-changelists-zone.md
+      - https://techdocs.akamai.com/edge-dns/reference/delete-changelists-zone.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-changelists-zone-diff.md
+      - https://techdocs.akamai.com/edge-dns/reference/post-changelists-zone-submit.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-changelists-zone-settings.md
+      - https://techdocs.akamai.com/edge-dns/reference/put-changelists-zone-settings.md
+      - https://techdocs.akamai.com/edge-dns/reference/post-changelists-zone-recordsets.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-changelists-zone-recordsets.md
+      # Data services
+      - https://techdocs.akamai.com/edge-dns/reference/get-data-authorities.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-data-contracts.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-data-dns-sec-algorithms.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-data-edgehostnames.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-data-groups.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-data-tsig-algorithms.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-record-set-types.md
+      # Bulk zones (key operations)
+      - https://techdocs.akamai.com/edge-dns/reference/post-zones-create-requests.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zones-create-requests-requestid.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zones-create-requests-requestid-result.md
+      - https://techdocs.akamai.com/edge-dns/reference/post-zones-delete-requests.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zones-delete-requests-requestid.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zones-delete-requests-requestid-result.md
+      # TSIG keys
+      - https://techdocs.akamai.com/edge-dns/reference/get-keys.md
+      - https://techdocs.akamai.com/edge-dns/reference/post-keys-bulk-update.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zones-zone-key.md
+      - https://techdocs.akamai.com/edge-dns/reference/put-zones-zone-key.md
+      - https://techdocs.akamai.com/edge-dns/reference/delete-zones-zone-key.md
+      # Record sets
+      - https://techdocs.akamai.com/edge-dns/reference/get-zone-names.md
+      - https://techdocs.akamai.com/edge-dns/reference/post-zones-zone-zone-file.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zones-zone-zone-file.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zone-name-types.md
+      - https://techdocs.akamai.com/edge-dns/reference/post-zones-zone-names-name-types-type.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zone-name-type.md
+      - https://techdocs.akamai.com/edge-dns/reference/put-zones-zone-names-name-types-type.md
+      - https://techdocs.akamai.com/edge-dns/reference/delete-zone-name-type.md
+      - https://techdocs.akamai.com/edge-dns/reference/post-zones-zone-recordsets.md
+      - https://techdocs.akamai.com/edge-dns/reference/get-zones-zone-recordsets.md
+      - https://techdocs.akamai.com/edge-dns/reference/put-zones-zone-recordsets.md
+
+  - id: akamai-gtm-api
+    product: Akamai Global Traffic Management API
+    version: latest
+    description: >
+      Official Akamai GTM API reference — traffic management and load balancing.
+      Covers domain configuration, properties, data centers, geographic/CIDR/AS maps,
+      liveness tests, traffic targets, and status monitoring.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    # Source index: https://techdocs.akamai.com/gtm/reference/llms.txt
+    # To refresh: fetch the llms.txt and extract .md URLs
+    urls:
+      # API Core
+      - https://techdocs.akamai.com/gtm/reference/api.md
+      - https://techdocs.akamai.com/gtm/reference/api-summary.md
+      - https://techdocs.akamai.com/gtm/reference/get-started.md
+      - https://techdocs.akamai.com/gtm/reference/api-concepts.md
+      - https://techdocs.akamai.com/gtm/reference/api-workflow.md
+      - https://techdocs.akamai.com/gtm/reference/data-conventions.md
+      - https://techdocs.akamai.com/gtm/reference/api-versioning.md
+      - https://techdocs.akamai.com/gtm/reference/domain-object.md
+      - https://techdocs.akamai.com/gtm/reference/property-object.md
+      - https://techdocs.akamai.com/gtm/reference/datacenter-object.md
+      - https://techdocs.akamai.com/gtm/reference/api-hypermedia.md
+      - https://techdocs.akamai.com/gtm/reference/api-errors.md
+      - https://techdocs.akamai.com/gtm/reference/best-practices-interacting-with-gtm-api.md
+      # Identity
+      - https://techdocs.akamai.com/gtm/reference/get-identity.md
+      - https://techdocs.akamai.com/gtm/reference/get-identity-contracts.md
+      - https://techdocs.akamai.com/gtm/reference/get-identity-groups.md
+      # Domains
+      - https://techdocs.akamai.com/gtm/reference/post-domain.md
+      - https://techdocs.akamai.com/gtm/reference/get-domains.md
+      - https://techdocs.akamai.com/gtm/reference/get-domain.md
+      - https://techdocs.akamai.com/gtm/reference/put-domain.md
+      - https://techdocs.akamai.com/gtm/reference/get-domain-history.md
+      - https://techdocs.akamai.com/gtm/reference/get-domain-authorities.md
+      - https://techdocs.akamai.com/gtm/reference/post-domain-delete-requests.md
+      - https://techdocs.akamai.com/gtm/reference/get-domain-delete-request.md
+      - https://techdocs.akamai.com/gtm/reference/get-domain-delete-request-result.md
+      - https://techdocs.akamai.com/gtm/reference/get-domain-features.md
+      - https://techdocs.akamai.com/gtm/reference/get-domain-summary.md
+      # Resources
+      - https://techdocs.akamai.com/gtm/reference/get-resources.md
+      - https://techdocs.akamai.com/gtm/reference/get-resource.md
+      - https://techdocs.akamai.com/gtm/reference/put-resource.md
+      - https://techdocs.akamai.com/gtm/reference/delete-resource.md
+      # Properties
+      - https://techdocs.akamai.com/gtm/reference/get-properties.md
+      - https://techdocs.akamai.com/gtm/reference/get-property.md
+      - https://techdocs.akamai.com/gtm/reference/put-property.md
+      - https://techdocs.akamai.com/gtm/reference/delete-property.md
+      - https://techdocs.akamai.com/gtm/reference/put-properties.md
+      - https://techdocs.akamai.com/gtm/reference/patch-properties.md
+      # Maps
+      - https://techdocs.akamai.com/gtm/reference/get-cidr-maps.md
+      - https://techdocs.akamai.com/gtm/reference/get-cidr-map.md
+      - https://techdocs.akamai.com/gtm/reference/put-cidr-map.md
+      - https://techdocs.akamai.com/gtm/reference/delete-cidr-map.md
+      - https://techdocs.akamai.com/gtm/reference/get-as-maps.md
+      - https://techdocs.akamai.com/gtm/reference/get-as-map.md
+      - https://techdocs.akamai.com/gtm/reference/put-as-map.md
+      - https://techdocs.akamai.com/gtm/reference/delete-as-map.md
+      - https://techdocs.akamai.com/gtm/reference/get-geographic-maps.md
+      - https://techdocs.akamai.com/gtm/reference/get-geographic-map.md
+      - https://techdocs.akamai.com/gtm/reference/put-geographic-map.md
+      - https://techdocs.akamai.com/gtm/reference/delete-geographic-map.md
+      # Data centers
+      - https://techdocs.akamai.com/gtm/reference/post-datacenter.md
+      - https://techdocs.akamai.com/gtm/reference/get-datacenters.md
+      - https://techdocs.akamai.com/gtm/reference/get-datacenter.md
+      - https://techdocs.akamai.com/gtm/reference/put-datacenter.md
+      - https://techdocs.akamai.com/gtm/reference/delete-datacenter.md
+      # Status
+      - https://techdocs.akamai.com/gtm/reference/get-status-current.md
+      - https://techdocs.akamai.com/gtm/reference/get-status.md
+      # Collections
+      - https://techdocs.akamai.com/gtm/reference/get-akamai-cloud-regions.md
+      - https://techdocs.akamai.com/gtm/reference/get-datacenter-ids.md
+      - https://techdocs.akamai.com/gtm/reference/get-supported-geo-codes.md
+      - https://techdocs.akamai.com/gtm/reference/get-recordset-types.md
+
+  - id: akamai-network-lists-api
+    product: Akamai Network Lists API
+    version: latest
+    description: >
+      Official Akamai Network Lists API reference — manage IP/CIDR lists for
+      security policies. Covers list creation, updates, activation, element
+      management, history tracking, and notification subscriptions.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    # Source index: https://techdocs.akamai.com/network-lists/reference/llms.txt
+    # To refresh: fetch the llms.txt and extract .md URLs
+    urls:
+      # API Core
+      - https://techdocs.akamai.com/network-lists/reference/api.md
+      - https://techdocs.akamai.com/network-lists/reference/api-summary.md
+      - https://techdocs.akamai.com/network-lists/reference/api-get-started.md
+      - https://techdocs.akamai.com/network-lists/reference/concurrency-control.md
+      - https://techdocs.akamai.com/network-lists/reference/partial-get-and-put-options.md
+      - https://techdocs.akamai.com/network-lists/reference/api-hypermedia.md
+      - https://techdocs.akamai.com/network-lists/reference/rate-limits.md
+      - https://techdocs.akamai.com/network-lists/reference/activation-states.md
+      - https://techdocs.akamai.com/network-lists/reference/api-errors.md
+      # Network Lists
+      - https://techdocs.akamai.com/network-lists/reference/get-network-lists.md
+      - https://techdocs.akamai.com/network-lists/reference/post-network-lists.md
+      - https://techdocs.akamai.com/network-lists/reference/delete-network-list.md
+      - https://techdocs.akamai.com/network-lists/reference/get-network-list.md
+      - https://techdocs.akamai.com/network-lists/reference/put-network-list.md
+      - https://techdocs.akamai.com/network-lists/reference/post-network-list-append.md
+      - https://techdocs.akamai.com/network-lists/reference/put-network-list-details.md
+      - https://techdocs.akamai.com/network-lists/reference/delete-network-list-elements.md
+      - https://techdocs.akamai.com/network-lists/reference/put-network-list-elements.md
+      - https://techdocs.akamai.com/network-lists/reference/post-network-list-activate.md
+      - https://techdocs.akamai.com/network-lists/reference/get-network-list-status.md
+      - https://techdocs.akamai.com/network-lists/reference/get-network-list-history.md
+      # Activations
+      - https://techdocs.akamai.com/network-lists/reference/get-activation.md
+      # Notifications
+      - https://techdocs.akamai.com/network-lists/reference/post-notifications-subscribe.md
+      - https://techdocs.akamai.com/network-lists/reference/post-notifications-unsubscribe.md
+
+  - id: akamai-firewall-rules-api
+    product: Akamai Firewall Rules API
+    version: latest
+    description: >
+      Official Akamai Firewall Rules API reference — manage edge firewall
+      subscriptions and services. Covers CIDR blocks, service management,
+      and subscription configuration for edge firewall protection.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    # Source index: https://techdocs.akamai.com/firewall-rules/reference/llms.txt
+    # To refresh: fetch the llms.txt and extract .md URLs
+    urls:
+      # API Core
+      - https://techdocs.akamai.com/firewall-rules/reference/api.md
+      - https://techdocs.akamai.com/firewall-rules/reference/api-get-started.md
+      - https://techdocs.akamai.com/firewall-rules/reference/rate-limiting.md
+      - https://techdocs.akamai.com/firewall-rules/reference/concepts.md
+      - https://techdocs.akamai.com/firewall-rules/reference/api-errors.md
+      # CIDR Blocks
+      - https://techdocs.akamai.com/firewall-rules/reference/get-cidr-blocks.md
+      # Services
+      - https://techdocs.akamai.com/firewall-rules/reference/get-services.md
+      - https://techdocs.akamai.com/firewall-rules/reference/get-service.md
+      # Subscriptions
+      - https://techdocs.akamai.com/firewall-rules/reference/get-subscriptions.md
+      - https://techdocs.akamai.com/firewall-rules/reference/patch-subscriptions.md
+      - https://techdocs.akamai.com/firewall-rules/reference/put-subscriptions.md
+
+  - id: akamai-client-access-control-api
+    product: Akamai Client Access Control API
+    version: latest
+    description: >
+      Official Akamai Client Access Control API reference — manage client
+      authentication configurations. Covers configuration retrieval and
+      version acknowledgment for client-side access control policies.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    # Source index: https://techdocs.akamai.com/client-access-control/reference/llms.txt
+    # To refresh: fetch the llms.txt and extract .md URLs
+    urls:
+      # API Core
+      - https://techdocs.akamai.com/client-access-control/reference/api.md
+      - https://techdocs.akamai.com/client-access-control/reference/api-summary.md
+      - https://techdocs.akamai.com/client-access-control/reference/get-started.md
+      - https://techdocs.akamai.com/client-access-control/reference/api-concepts.md
+      - https://techdocs.akamai.com/client-access-control/reference/errors.md
+      # Configurations
+      - https://techdocs.akamai.com/client-access-control/reference/get-configurations.md
+      - https://techdocs.akamai.com/client-access-control/reference/get-configuration.md
+      - https://techdocs.akamai.com/client-access-control/reference/put-configuration-acknowledge-version.md
+
+  - id: akamai-edge-ip-binding
+    product: Akamai Edge IP Binding
+    version: latest
+    description: >
+      Official Akamai Edge IP Binding documentation — assign dedicated IP addresses
+      to edge hostnames. Covers EIPB for Standard/Enhanced TLS, Shared Cert, Custom/
+      Instant Config hostnames, address retrieval, reuse strategies, and optional
+      features (HSAF, ASN split).
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    # Source index: https://techdocs.akamai.com/edge-ip-binding/docs/llms.txt
+    # To refresh: fetch the llms.txt and extract .md URLs
+    urls:
+      # Welcome
+      - https://techdocs.akamai.com/edge-ip-binding/docs/welcome-edge-ip-binding.md
+      - https://techdocs.akamai.com/edge-ip-binding/docs/how-does-eipb-work.md
+      - https://techdocs.akamai.com/edge-ip-binding/docs/before-can-use-eipb.md
+      # Create Edge IP Binding in Property Manager
+      - https://techdocs.akamai.com/edge-ip-binding/docs/eipb-standard-tls-https.md
+      - https://techdocs.akamai.com/edge-ip-binding/docs/eipb-enhanced-tls-https.md
+      - https://techdocs.akamai.com/edge-ip-binding/docs/eipb-shared-cert-hn-https.md
+      - https://techdocs.akamai.com/edge-ip-binding/docs/eipb-custom-edge-hn-http.md
+      - https://techdocs.akamai.com/edge-ip-binding/docs/eipb-instant-config-hn-http.md
+      - https://techdocs.akamai.com/edge-ip-binding/docs/where-my-eipb-addr.md
+      - https://techdocs.akamai.com/edge-ip-binding/docs/reuse-ips.md
+      # The Edge IP Binding Tool
+      - https://techdocs.akamai.com/edge-ip-binding/docs/edge-ip-binding-tool.md
+      - https://techdocs.akamai.com/edge-ip-binding/docs/create-an-edge-ip-binding-configuration.md
+      - https://techdocs.akamai.com/edge-ip-binding/docs/get-eipb-addresses.md
+      - https://techdocs.akamai.com/edge-ip-binding/docs/whats-revealed-eipb-config.md
+      - https://techdocs.akamai.com/edge-ip-binding/docs/edit-eipb-config.md
+      - https://techdocs.akamai.com/edge-ip-binding/docs/delete-deactivate-eipb-config.md
+      # Optional Features
+      - https://techdocs.akamai.com/edge-ip-binding/docs/how-add-hsaf-eipb.md
+      - https://techdocs.akamai.com/edge-ip-binding/docs/how-add-asn-split-eipb.md
+
+  - id: akamai-ip-accelerator
+    product: Akamai IP Accelerator
+    version: latest
+    description: >
+      Official Akamai IP Accelerator documentation — IP protocol optimization
+      and acceleration. Covers key concepts, capabilities, security considerations,
+      configuration, CPE deployments, traffic reports, and alerting.
+    domain: techdocs.akamai.com
+    follow_links: false
+    transport: playwright
+    # Source index: https://techdocs.akamai.com/ip-accelerator/docs/llms.txt
+    # To refresh: fetch the llms.txt and extract .md URLs
+    urls:
+      # Welcome
+      - https://techdocs.akamai.com/ip-accelerator/docs/welcome-ipa.md
+      - https://techdocs.akamai.com/ip-accelerator/docs/prerequisites.md
+      - https://techdocs.akamai.com/ip-accelerator/docs/key-concepts.md
+      # Features and functionality
+      - https://techdocs.akamai.com/ip-accelerator/docs/how-it-works.md
+      - https://techdocs.akamai.com/ip-accelerator/docs/key-capabilities.md
+      - https://techdocs.akamai.com/ip-accelerator/docs/additional-features.md
+      - https://techdocs.akamai.com/ip-accelerator/docs/security-considerations.md
+      # Setup & Administration
+      - https://techdocs.akamai.com/ip-accelerator/docs/configure.md
+      - https://techdocs.akamai.com/ip-accelerator/docs/view-settings.md
+      - https://techdocs.akamai.com/ip-accelerator/docs/security-policy.md
+      - https://techdocs.akamai.com/ip-accelerator/docs/cpe-deployments.md
+      # Monitoring
+      - https://techdocs.akamai.com/ip-accelerator/docs/traffic-reports.md
+      - https://techdocs.akamai.com/ip-accelerator/docs/alerts.md
 
   - id: zuplo-docs
     product: Zuplo API Gateway

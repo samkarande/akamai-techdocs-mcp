@@ -24,7 +24,10 @@ Design principles:
 
 from __future__ import annotations
 
-import fcntl
+try:
+    import fcntl
+except ModuleNotFoundError:  # Windows has no fcntl
+    fcntl = None
 import hashlib
 import json
 import logging
@@ -326,6 +329,9 @@ def _write_local_meta(path: Path, meta: _LocalIndexMeta) -> None:
 @contextmanager
 def _try_lock(lockfile: Path):
     """Yield True if we got the lock, False if another process holds it."""
+    if fcntl is None:  # Windows: skip cross-process locking
+        yield True
+        return
     lockfile.parent.mkdir(parents=True, exist_ok=True)
     with open(lockfile, "wb") as f:
         got = False

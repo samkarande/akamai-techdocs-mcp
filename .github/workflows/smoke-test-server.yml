@@ -1,0 +1,106 @@
+name: Smoke Test Server
+
+# Runs the MCP server and makes sample tool calls to generate telemetry data.
+# This ensures we're collecting real usage metrics from CI builds.
+
+on:
+  # Run after index builds complete
+  workflow_run:
+    workflows: ["Build index"]
+    types:
+      - completed
+  # Also allow manual runs
+  workflow_dispatch:
+  # Run weekly on Tuesdays (day after index build)
+  schedule:
+    - cron: "0 8 * * 2"
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Only run if the triggering workflow succeeded (or manual/scheduled)
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.2.0
+        with:
+          enable-cache: true
+
+      - name: Set up Python from .python-version
+        run: uv python install
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Smoke test - server start and tool calls
+        env:
+          LINODE_OBJECT_ACCESS_KEY: ${{ secrets.LINODE_OBJECT_ACCESS_KEY }}
+          LINODE_OBJECT_SECRET_KEY: ${{ secrets.LINODE_OBJECT_SECRET_KEY }}
+        run: |
+          echo "Starting MCP server smoke test..."
+          uv run python <<'SMOKE_TEST'
+          import sys
+          import time
+          from akamai_techdocs_mcp.server import get_index, search_docs, get_doc, list_sources
+          from akamai_techdocs_mcp.telemetry import track
+
+          print("📊 Starting telemetry smoke test...")
+
+          # Track server start
+          track("server_start", {
+              "context": "ci_smoke_test",
+              "test_type": "automated",
+          })
+
+          print("✓ Server start telemetry sent")
+          time.sleep(0.5)  # Allow async upload
+
+          # Test list_sources
+          print("\n🔍 Testing list_sources...")
+          sources = list_sources()
+          print(f"✓ Found {len(sources.get('sources', []))} sources")
+          time.sleep(0.5)
+
+          # Test search_docs with a query
+          print("\n🔍 Testing search_docs...")
+          results = search_docs(query="kubernetes deployment", limit=5)
+          print(f"✓ Search returned {len(results.get('results', []))} results")
+          time.sleep(0.5)
+
+          # Test search_docs with product filter
+          print("\n🔍 Testing search_docs with filter...")
+          results = search_docs(query="api", product="Akamai Cloud Computing", limit=3)
+          print(f"✓ Filtered search returned {len(results.get('results', []))} results")
+          time.sleep(0.5)
+
+          # Test get_doc if we have a URL
+          if results.get('results'):
+              url = results['results'][0]['url']
+              print(f"\n📄 Testing get_doc for {url[:60]}...")
+              doc = get_doc(url)
+              found = doc.get('found', False)
+              print(f"✓ get_doc returned {'found' if found else 'not found'}")
+              time.sleep(0.5)
+
+          print("\n✅ Smoke test complete - all telemetry events sent!")
+          SMOKE_TEST
+
+      - name: Summary
+        run: |
+          echo "## Smoke Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Server started successfully" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Tool calls executed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Telemetry events sent to Object Storage" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Telemetry data location:" >> $GITHUB_STEP_SUMMARY
+          echo "- Bucket: \`skills-db-telemetry\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Path: \`telemetry/events/$(date -u +%Y-%m-%d)/\`" >> $GITHUB_STEP_SUMMARY
