@@ -946,55 +946,25 @@ sources:
       - https://techdocs.akamai.com/edgeworkers/changelog/onbotsegmentavailable-event-handler.md
       - https://techdocs.akamai.com/edgeworkers/changelog/max-size-response-status-and-headers.md
       - https://techdocs.akamai.com/edgeworkers/changelog/limits-max-body-size.md
+      # Release Notes
+      - https://techdocs.akamai.com/edgeworkers/docs/release-notes
 
   - id: akamai-release-notes
     product: Akamai Release Notes
     version: latest
     description: >
-      Official Akamai product release notes — updated weekly/biweekly for all
-      major products including EdgeWorkers, Cloud Compute, Security products
-      (Application Security, Bot Manager, Prolexic), CDN (Ion, Secure CDN),
-      DNS/Traffic Management, Media, Monitoring, and management tools.
+      Consolidated Akamai release notes page covering multiple products.
+      Individual product release notes have been moved to their respective
+      product sections (akamai-edgeworkers, akamai-edgekv, akamai-functions,
+      akamai-ip-accelerator).
     domain: techdocs.akamai.com
     follow_links: false
     transport: playwright
     # Source index: https://techdocs.akamai.com/release-notes/llms.txt
-    # To refresh: fetch the llms.txt and extract .md URLs
-    # Note: These are living documents - product pages are updated with new releases
-    # rather than creating new dated pages. Weekly CI rebuilds capture updates automatically.
+    # Note: Most products don't have individual /docs/release-notes pages.
+    # This section captures the consolidated release-notes page.
     urls:
-      # Overview
-      - https://techdocs.akamai.com/release-notes/docs/overview.md
-      # Edge Computing & APIs
-      - https://techdocs.akamai.com/release-notes/docs/edgeworkers.md
-      - https://techdocs.akamai.com/release-notes/docs/api-gateway.md
-      # Cloud Infrastructure
-      - https://techdocs.akamai.com/release-notes/docs/cloud-compute.md
-      - https://techdocs.akamai.com/release-notes/docs/netstorage.md
-      # Security Products
-      - https://techdocs.akamai.com/release-notes/docs/application-security.md
-      - https://techdocs.akamai.com/release-notes/docs/bot-manager.md
-      - https://techdocs.akamai.com/release-notes/docs/prolexic.md
-      - https://techdocs.akamai.com/release-notes/docs/site-shield.md
-      - https://techdocs.akamai.com/release-notes/docs/client-side-protection-compliance.md
-      # Content Delivery
-      - https://techdocs.akamai.com/release-notes/docs/ion.md
-      - https://techdocs.akamai.com/release-notes/docs/secure-cdn.md
-      - https://techdocs.akamai.com/release-notes/docs/cloud-wrapper.md
-      - https://techdocs.akamai.com/release-notes/docs/web-performance.md
-      # DNS & Traffic Management
-      - https://techdocs.akamai.com/release-notes/docs/edge-dns.md
-      - https://techdocs.akamai.com/release-notes/docs/gtm.md
-      # Media
-      - https://techdocs.akamai.com/release-notes/docs/ivm.md
-      # Monitoring & Analytics
-      - https://techdocs.akamai.com/release-notes/docs/datastream.md
-      - https://techdocs.akamai.com/release-notes/docs/mpulse.md
-      - https://techdocs.akamai.com/release-notes/docs/reporting-analytics.md
-      # Management & Administration
-      - https://techdocs.akamai.com/release-notes/docs/property-manager.md
-      - https://techdocs.akamai.com/release-notes/docs/iam.md
-      - https://techdocs.akamai.com/release-notes/docs/certificates.md
+      - https://techdocs.akamai.com/release-notes/docs/release-notes
 
   - id: akamai-functions
     product: Akamai Functions
@@ -1042,6 +1012,8 @@ sources:
       - https://techdocs.akamai.com/akamai-functions/changelog/sept-16-2025-spin-aka-v050-updates.md
       - https://techdocs.akamai.com/akamai-functions/changelog/aug-26-2025-spin-aka-v044-updates.md
       - https://techdocs.akamai.com/akamai-functions/changelog/aug-7-2025-spin-aka-v043-updates.md
+      # Release Notes
+      - https://techdocs.akamai.com/akamai-functions/docs/release-notes
 
   - id: akamai-developer-center
     product: Akamai Developer Center
@@ -1377,6 +1349,8 @@ sources:
       # Limitations
       - https://techdocs.akamai.com/edgekv/docs/limits.md
       - https://techdocs.akamai.com/edgekv/docs/known-issues.md
+      # Release Notes
+      - https://techdocs.akamai.com/edgekv/docs/release-notes
 
   - id: akamai-linode-api
     product: Akamai Linode API
@@ -1993,6 +1967,8 @@ sources:
       # Monitoring
       - https://techdocs.akamai.com/ip-accelerator/docs/traffic-reports.md
       - https://techdocs.akamai.com/ip-accelerator/docs/alerts.md
+      # Release Notes
+      - https://techdocs.akamai.com/ip-accelerator/docs/release-notes
 
   - id: zuplo-docs
     product: Zuplo API Gateway
